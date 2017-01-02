@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import mejs from '../core/mejs';
 import {renderer} from '../core/renderer';

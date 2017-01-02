@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 
 /*
@@ -11,7 +11,7 @@ Object.assign(config, {
 		contextMenuItems: [
 			// demo of a fullscreen option
 			{
-				render: (player) => {
+				render: function(player)  {
 
 					// check for fullscreen plugin
 					if (player.enterFullScreen === undefined) {
@@ -24,7 +24,7 @@ Object.assign(config, {
 						return i18n.t('mejs.fullscreen-on');
 					}
 				},
-				click: (player) => {
+				click: function(player)  {
 					if (player.isFullScreen) {
 						player.exitFullScreen();
 					} else {
@@ -34,14 +34,14 @@ Object.assign(config, {
 			},
 			// demo of a mute/unmute button
 			{
-				render: (player) => {
+				render: function(player)  {
 					if (player.media.muted) {
 						return i18n.t('mejs.unmute');
 					} else {
 						return i18n.t('mejs.mute');
 					}
 				},
-				click: (player) => {
+				click: function(player)  {
 					if (player.media.muted) {
 						player.setMuted(false);
 					} else {
@@ -55,10 +55,10 @@ Object.assign(config, {
 			},
 			// demo of simple download video
 			{
-				render: (player) => {
+				render: function(player)  {
 					return i18n.t('mejs.download-video');
 				},
-				click: (player) => {
+				click: function(player)  {
 					window.location.href = player.media.currentSrc;
 				}
 			}
@@ -68,7 +68,7 @@ Object.assign(config, {
 
 
 $.extend(MediaElementPlayer.prototype, {
-	buildcontextmenu: (player, controls, layers, media) => {
+	buildcontextmenu: function(player, controls, layers, media)  {
 
 		// create context menu
 		player.contextMenu = $(`<div class="${t.options.classPrefix}contextmenu"></div>`)
@@ -92,20 +92,20 @@ $.extend(MediaElementPlayer.prototype, {
 		});
 	},
 
-	cleancontextmenu: (player) => {
+	cleancontextmenu: function(player)  {
 		player.contextMenu.remove();
 	},
 
 	isContextMenuEnabled: true,
-	enableContextMenu: () => {
+	enableContextMenu: function()  {
 		this.isContextMenuEnabled = true;
 	},
-	disableContextMenu: () => {
+	disableContextMenu: function()  {
 		this.isContextMenuEnabled = false;
 	},
 
 	contextMenuTimeout: null,
-	startContextMenuTimer: () => {
+	startContextMenuTimer: function()  {
 		let t = this;
 
 		t.killContextMenuTimer();
@@ -115,7 +115,7 @@ $.extend(MediaElementPlayer.prototype, {
 			t.killContextMenuTimer();
 		}, 750);
 	},
-	killContextMenuTimer: () => {
+	killContextMenuTimer: function()  {
 		let timer = this.contextMenuTimer;
 
 		if (timer !== null && timer !== undefined) {
@@ -124,11 +124,11 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 	},
 
-	hideContextMenu: () => {
+	hideContextMenu: function()  {
 		this.contextMenu.hide();
 	},
 
-	renderContextMenu: (x, y) => {
+	renderContextMenu: function(x, y)  {
 
 		// alway re-render the items so that things like "turn fullscreen on" and "turn fullscreen off" are always written correctly
 		let t = this,

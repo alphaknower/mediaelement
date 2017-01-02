@@ -1,9 +1,10 @@
+'use strict';
+
 import window from 'global/window';
 import document from 'global/document';
 import mejs from './mejs';
 import {addProperty} from '../utils/general';
-import {getTypeFromFile, formatType} from '../utils/media';
-import {absolutizeUrl} from '../utils/dom';
+import {getTypeFromFile, formatType, absolutizeUrl} from '../utils/media';
 import {renderer} from './renderer';
 
 /**
@@ -17,7 +18,7 @@ class MediaElement {
 	constructor (idOrNode, options) {
 		
 		let t = this;
-
+		
 		t.defaults = {
 			/**
 			 * List of the renderers to use
@@ -161,7 +162,7 @@ class MediaElement {
 				}
 
 				// turn on the renderer (this checks for the existing renderer already)
-				this.changeRenderer(renderInfo.rendererName, mediaFiles);
+				t.changeRenderer(renderInfo.rendererName, mediaFiles);
 
 				if (t.mediaElement.renderer === undefined || t.mediaElement.renderer === null) {
 					event = document.createEvent("HTMLEvents");
@@ -180,8 +181,8 @@ class MediaElement {
 		let assignMethods = (methodName) => {
 			// run the method on the current renderer
 			t.mediaElement[methodName] = (...args) => {
-				return (renderExists && t.mediaElement.renderer[methodName]) ?
-					t.mediaElement.renderer[methodName](args) : null;
+				return (renderExists && typeof t.mediaElement.renderer[methodName] === 'function') ?
+					t.mediaElement.renderer[methodName].apply(args) : null;
 			};
 
 		};
@@ -302,7 +303,7 @@ class MediaElement {
 		}
 
 		if (t.mediaElement.options.success) {
-			t.mediaElement.options.success(this.mediaElement, this.mediaElement.originalNode);
+			t.mediaElement.options.success(t.mediaElement, t.mediaElement.originalNode);
 		}
 
 		// @todo: Verify if this is needed

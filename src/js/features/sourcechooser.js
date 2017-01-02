@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 import {debounce} from '../utils/general';
 
@@ -30,7 +30,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildsourcechooser: (player, controls, layers, media) => {
+	buildsourcechooser: function(player, controls, layers, media)  {
 
 		let
 			t = this,
@@ -173,7 +173,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {String} type
 	 * @param {Boolean} isCurrent
 	 */
-	addSourceButton: (src, label, type, isCurrent) => {
+	addSourceButton: function(src, label, type, isCurrent)  {
 		let t = this;
 		if (label === '' || label === undefined) {
 			label = src;
@@ -195,7 +195,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	adjustSourcechooserBox: () => {
+	adjustSourcechooserBox: function()  {
 		let t = this;
 		// adjust the size of the outer box
 		t.sourcechooserButton.find(`.${t.options.classPrefix}sourcechooser-selector`).height(
@@ -206,7 +206,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	hideSourcechooserSelector: () => {
+	hideSourcechooserSelector: function()  {
 
 		let t = this;
 
@@ -226,7 +226,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	showSourcechooserSelector: () => {
+	showSourcechooserSelector: function()  {
 
 		let t = this;
 

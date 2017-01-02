@@ -2,7 +2,7 @@
 
 import mejs from '../core/mejs';
 import i18n from '../core/i18n';
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import {secondsToTimeCode, convertSMPTEtoSeconds} from '../utils/time';
 
 /**
@@ -64,7 +64,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildtracks: (player, controls, layers, media) => {
+	buildtracks: function(player, controls, layers, media)  {
 		if (player.tracks.length === 0) {
 			return;
 		}
@@ -248,7 +248,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Always has to be prefixed with `clean` and the name that was used in MepDefaults.features list
 	 * @param {MediaElementPlayer} player
 	 */
-	cleartracks: (player) => {
+	cleartracks: function(player)  {
 		if (player) {
 			if (player.captions) {
 				player.captions.remove();
@@ -265,13 +265,13 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 	},
 
-	rebuildtracks: () => {
+	rebuildtracks: function()  {
 		let t = this;
 		t.findTracks();
 		t.buildtracks(t, t.controls, t.layers, t.media);
 	},
 
-	findTracks: () => {
+	findTracks: function()  {
 		let
 			t = this,
 			tracktags = t.$media.find('track')
@@ -301,7 +301,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {String} trackId, or "none" to disable captions
 	 */
-	setTrack: (trackId) => {
+	setTrack: function(trackId)  {
 		let
 			t = this,
 			i
@@ -340,7 +340,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	loadNextTrack: () => {
+	loadNextTrack: function()  {
 		let t = this;
 
 		t.trackToLoad++;
@@ -359,7 +359,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param index
 	 */
-	loadTrack: (index) => {
+	loadTrack: function(index)  {
 		let
 			t = this,
 			track = t.tracks[index],
@@ -378,7 +378,7 @@ $.extend(MediaElementPlayer.prototype, {
 			$.ajax({
 				url: track.src,
 				dataType: 'text',
-				success: (d) => {
+				success: function(d)  {
 
 					// parse the loaded file
 					if (typeof d === 'string' && (/<tt\s+xml/ig).exec(d)) {
@@ -401,7 +401,7 @@ $.extend(MediaElementPlayer.prototype, {
 						t.setupSlides(track);
 					}
 				},
-				error: () => {
+				error: function()  {
 					t.removeTrackButton(track.trackId);
 					t.loadNextTrack();
 				}
@@ -413,7 +413,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {String} track - The language code
 	 */
-	enableTrackButton: (track) => {
+	enableTrackButton: function(track)  {
 		let
 			t = this,
 			lang = track.srclang,
@@ -440,7 +440,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {String} trackId
 	 */
-	removeTrackButton: (trackId) => {
+	removeTrackButton: function(trackId)  {
 		let t = this;
 
 		t.captionsButton.find(`input[id=${trackId}]`).closest('li').remove();
@@ -454,7 +454,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {String} lang - The language code
 	 * @param {String} label
 	 */
-	addTrackButton: (trackId, lang, label) => {
+	addTrackButton: function(trackId, lang, label)  {
 		let t = this;
 		if (label === '') {
 			label = i18n.t(mejs.language.codes[lang]) || lang;
@@ -480,7 +480,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	adjustLanguageBox: () => {
+	adjustLanguageBox: function()  {
 		let t = this;
 		// adjust the size of the outer box
 		t.captionsButton.find(`.${t.options.classPrefix}captions-selector`).height(
@@ -492,7 +492,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	checkForTracks: () => {
+	checkForTracks: function()  {
 		let
 			t = this,
 			hasSubtitles = false
@@ -518,7 +518,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	displayCaptions: () => {
+	displayCaptions: function()  {
 
 		if (this.tracks === undefined) {
 			return;
@@ -550,7 +550,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {HTMLElement} track
 	 */
-	setupSlides: (track) => {
+	setupSlides: function(track)  {
 		let t = this;
 
 		t.slides = track;
@@ -563,7 +563,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {Number} index
 	 */
-	showSlide: (index) => {
+	showSlide: function(index)  {
 		if (this.tracks === undefined || this.slidesContainer === undefined) {
 			return;
 		}
@@ -598,7 +598,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	displaySlides: () => {
+	displaySlides: function()  {
 
 		if (this.slides === undefined) {
 			return;
@@ -619,7 +619,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	displayChapters: () => {
+	displayChapters: function()  {
 		let
 			t = this,
 			i;
@@ -637,7 +637,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {Object} chapters
 	 */
-	drawChapters: (chapters) => {
+	drawChapters: function(chapters)  {
 		let
 			t = this,
 			i,
@@ -691,7 +691,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {Number} currentTime
 	 * @return {Number}
 	 */
-	searchTrackPosition: (tracks, currentTime) => {
+	searchTrackPosition: function(tracks, currentTime)  {
 		let
 			lo = 0,
 			hi = tracks.length - 1,
@@ -812,7 +812,7 @@ mejs.TrackFormatParser = {
 		 * @param {String} trackText
 		 * @returns {{text: Array, times: Array}}
 		 */
-		parse: (trackText) => {
+		parse: function(trackText)  {
 			let
 				i = 0,
 				lines = mejs.TrackFormatParser.split2(trackText, /\r?\n/),
@@ -856,7 +856,7 @@ mejs.TrackFormatParser = {
 		 * @param {String} trackText
 		 * @returns {{text: Array, times: Array}}
 		 */
-		parse: (trackText) => {
+		parse: function(trackText)  {
 			trackText = $(trackText).filter('tt');
 			let
 				i = 0,
@@ -926,7 +926,7 @@ mejs.TrackFormatParser = {
 	 * @param {String} regex
 	 * @returns {Array}
 	 */
-	split2: (text, regex) => {
+	split2: function(text, regex)  {
 		// normal version for compliant browsers
 		// see below for IE fix
 		return text.split(regex);

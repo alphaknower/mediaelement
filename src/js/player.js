@@ -3,9 +3,19 @@ import document from 'global/document';
 import mejs from './core/mejs';
 import MediaElement from './core/mediaelement';
 import i18n from './core/i18n';
-import {IS_FIREFOX, IS_IPAD, IS_IPHONE, IS_ANDROID, IS_IOS, HAS_TOUCH, HAS_MS_NATIVE_FULLSCREEN, HAS_TRUE_NATIVE_FULLSCREEN} from './utils/constants';
+import {
+	IS_FIREFOX,
+	IS_IPAD,
+	IS_IPHONE,
+	IS_ANDROID,
+	IS_IOS,
+	HAS_TOUCH,
+	HAS_MS_NATIVE_FULLSCREEN,
+	HAS_TRUE_NATIVE_FULLSCREEN
+} from './utils/constants';
 import {splitEvents} from './utils/general';
 import {calculateTimeFormat} from './utils/time';
+import {isNodeAfter} from './utils/dom';
 
 mejs.mepIndex = 0;
 
@@ -236,7 +246,7 @@ export let config = {
  * @param {Object} o
  * @return {?MediaElementPlayer}
  */
-class MediaElementPlayer {
+export class MediaElementPlayer {
 
 	constructor (node, o) {
 
@@ -365,7 +375,7 @@ class MediaElementPlayer {
 								// else send focus to last control button.
 								let btnSelector = `.${t.options.classPrefix}playpause-button > button`;
 
-								if (mejs.Utility.isNodeAfter(e.relatedTarget, t.container[0])) {
+								if (isNodeAfter(e.relatedTarget, t.container[0])) {
 									btnSelector = `.${t.options.classPrefix}controls .${t.options.classPrefix}button:last-child > button`;
 								}
 
@@ -417,8 +427,10 @@ class MediaElementPlayer {
 				 (4) defaultVideoWidth (for unspecified cases)
 				 */
 
-				let tagType = (t.isVideo ? 'video' : 'audio'),
-					capsTagName = tagType.substring(0, 1).toUpperCase() + tagType.substring(1);
+				let
+					tagType = (t.isVideo ? 'video' : 'audio'),
+					capsTagName = tagType.substring(0, 1).toUpperCase() + tagType.substring(1)
+				;
 
 
 				if (t.options[tagType + 'Width'] > 0 || t.options[tagType + 'Width'].toString().indexOf('%') > -1) {
@@ -833,7 +845,7 @@ class MediaElementPlayer {
 			// resize on the first play
 			t.media.addEventListener('loadedmetadata', () => {
 
-				mejs.Utility.calculateTimeFormat(t.duration, t.options, t.options.framesPerSecond || 25);
+				calculateTimeFormat(t.duration, t.options, t.options.framesPerSecond || 25);
 
 				if (t.updateDuration) {
 					t.updateDuration();
@@ -853,7 +865,7 @@ class MediaElementPlayer {
 			t.media.addEventListener('timeupdate', () => {
 				if (duration !== this.duration) {
 					duration = this.duration;
-					mejs.Utility.calculateTimeFormat(duration, t.options, t.options.framesPerSecond || 25);
+					calculateTimeFormat(duration, t.options, t.options.framesPerSecond || 25);
 
 					// make sure to fill in and resize the controls (e.g., 00:00 => 01:13:15
 					if (t.updateDuration) {
@@ -921,7 +933,7 @@ class MediaElementPlayer {
 			// This is a work-around for a bug in the YouTube iFrame player, which means
 			//	we can't use the play() API for the initial playback on iOS or Android;
 			//	user has to start playback directly by tapping on the iFrame.
-			if (t.media.rendererName !== null && t.media.rendererName.match(/youtube/) && (mf.isiOS || mf.isAndroid)) {
+			if (t.media.rendererName !== null && t.media.rendererName.match(/youtube/) && (IS_IOS || IS_ANDROID)) {
 				t.container.find(`.${t.options.classPrefix}overlay-play`).hide();
 				t.container.find(`.${t.options.classPrefix}poster`).hide();
 			}
@@ -1062,7 +1074,7 @@ class MediaElementPlayer {
 		// Use media aspect ratio if received; otherwise, the initially stored initial aspect ratio
 		let
 			aspectRatio = (() => {
-				ratio = 1;
+				let ratio = 1;
 				if (!t.isVideo) {
 					return ratio;
 				}
@@ -1231,12 +1243,11 @@ class MediaElementPlayer {
 		let
 			railMargin = parseFloat(t.rail.css('margin-left')) + parseFloat(t.rail.css('margin-right')),
 			totalMargin = parseFloat(t.total.css('margin-left')) + parseFloat(t.total.css('margin-right')),
-			controlElements = t.controls.children(),
 			siblingsWidth = 0
-			;
+		;
 
-		t.rail.siblings().each(() => {
-			siblingsWidth += parseFloat($(this).outerWidth(true));
+		t.rail.siblings().each((index, object) => {
+			siblingsWidth += parseFloat($(object).outerWidth(true));
 		});
 
 		siblingsWidth += totalMargin + railMargin + 1;
@@ -1372,9 +1383,9 @@ class MediaElementPlayer {
 
 						let
 							button = t.$media.closest(`.${t.options.classPrefix}container`)
-							.find(`.${t.options.classPrefix}overlay-button`),
+								.find(`.${t.options.classPrefix}overlay-button`),
 							pressed = button.attr('aria-pressed')
-							;
+						;
 
 						if (media.paused) {
 							media.play();
@@ -1492,7 +1503,7 @@ class MediaElementPlayer {
 
 	}
 
-	static onkeydown (player, media, e) {
+	onkeydown (player, media, e) {
 		if (player.hasFocus && player.options.enableKeyboard) {
 			// find a matching key
 			for (let i = 0, il = player.options.keyActions.length; i < il; i++) {
@@ -1610,32 +1621,31 @@ class MediaElementPlayer {
 }
 
 // turn into plugin
-if (typeof $ !== 'undefined') {
-	$.fn.mediaelementplayer = (options) => {
-		if (options === false) {
-			this.each((index, object) => {
-				let player = $(object).data('mediaelementplayer');
-				if (player) {
-					player.remove();
-				}
-				$(object).removeData('mediaelementplayer');
-			});
-		}
-		else {
-			this.each((index, object) => {
-				$(object).data('mediaelementplayer', new mejs.MediaElementPlayer(this, options));
-			});
-		}
-		return this;
-	};
+(($) => {
 
+	if (typeof mejs.$ !== 'undefined') {
+		mejs.$.fn.mediaelementplayer = function (options) {
+			if (options === false) {
+				this.each(function() {
+					let player = $(this).data('mediaelementplayer');
+					if (player) {
+						player.remove();
+					}
+					$(this).removeData('mediaelementplayer');
+				});
+			}
+			else {
+				this.each(function() {
+					$(this).data('mediaelementplayer', new MediaElementPlayer(this, options));
+				});
+			}
+			return this;
+		};
 
-	// Auto-init using the configured default settings & JSON attribute
-	$(document).ready(() => {
-		// auto enable using JSON attribute
-		$(`.${mejs.MepDefaults.classPrefix}player`).mediaelementplayer();
-	});
-}
+		$(document).ready(() => {
+			// auto enable using JSON attribute
+			$(`.${config.classPrefix}player`).mediaelementplayer();
+		});
+	}
 
-// push out to window
-window.MediaElementPlayer = MediaElementPlayer;
+})(mejs.$);

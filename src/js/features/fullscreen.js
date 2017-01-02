@@ -4,9 +4,8 @@ import window from 'global/window';
 import document from 'global/document';
 import mejs from '../core/mejs';
 import i18n from '../core/i18n';
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import * as Features from '../utils/constants';
-import $ from 'jquery';
 
 
 /**
@@ -71,7 +70,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildfullscreen: (player, controls, layers, media) => {
+	buildfullscreen: function(player, controls, layers, media)  {
 
 		if (!player.isVideo) {
 			return;
@@ -182,7 +181,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @return {String}
 	 */
-	detectFullscreenMode: () => {
+	detectFullscreenMode: function()  {
 
 		let
 			t = this,
@@ -215,7 +214,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	createPluginClickThrough: () => {
+	createPluginClickThrough: function()  {
 
 		let t = this;
 
@@ -376,14 +375,14 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Always has to be prefixed with `clean` and the name that was used in features list
 	 * @param {MediaElementPlayer} player
 	 */
-	cleanfullscreen: (player) => {
+	cleanfullscreen: function(player)  {
 		player.exitFullScreen();
 	},
 
 	/**
 	 *
 	 */
-	enterFullScreen: () => {
+	enterFullScreen: function()  {
 
 		let
 			t = this,
@@ -462,6 +461,7 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 
 		if (t.options.setDimensions) {
+			console.warn(t.media);
 			t.media.setSize(screen.width, screen.height);
 		}
 
@@ -489,7 +489,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	exitFullScreen: () => {
+	exitFullScreen: function()  {
 
 		let
 			t = this,

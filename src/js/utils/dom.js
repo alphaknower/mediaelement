@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import document from 'global/document';
 import {escapeHTML} from '../utils/general';
@@ -64,22 +64,6 @@ export function removeEvent (obj, type, fn) {
 		obj.detachEvent(`on${type}`, obj[`${type}${fn}`]);
 		obj[`${type}${fn}`] = null;
 	}
-}
-
-/**
- *
- * @param {String} url
- * @return {String}
- */
-export function absolutizeUrl (url) {
-
-	if (typeof url !== 'string') {
-		throw new Error('`url` argument must be a string');
-	}
-
-	let el = document.createElement('div');
-	el.innerHTML = `<a href="${escapeHTML(url)}">x</a>`;
-	return el.firstChild.href;
 }
 
 /**

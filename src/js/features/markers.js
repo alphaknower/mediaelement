@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 
 /**
  * Markers plugin
@@ -26,7 +26,7 @@ Object.assign(config, {
 	/**
 	 * @type {Function}
 	 */
-	markerCallback: () => {
+	markerCallback: function()  {
 	}
 });
 
@@ -40,7 +40,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildmarkers: (player, controls, layers, media) => {
+	buildmarkers: function(player, controls, layers, media)  {
 		let
 			t = this,
 			i = 0,
@@ -83,7 +83,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {$} controls
 	 */
-	setmarkers: (controls) => {
+	setmarkers: function(controls)  {
 		let t = this,
 			i = 0,
 			left;

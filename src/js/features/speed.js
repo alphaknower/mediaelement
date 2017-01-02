@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 
 /**
@@ -45,7 +45,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildspeed: (player, controls, layers, media) => {
+	buildspeed: function(player, controls, layers, media)  {
 		let
 			t = this,
 			isNative = t.media.rendererName !== null && t.media.rendererName.match(/(native|html5)/)
@@ -190,7 +190,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Always has to be prefixed with `clean` and the name that was used in MepDefaults.features list
 	 * @param {MediaElementPlayer} player
 	 */
-	clearspeed: (player) => {
+	clearspeed: function(player)  {
 		if (player) {
 			if (player.speedButton) {
 				player.speedButton.remove();

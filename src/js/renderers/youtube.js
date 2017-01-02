@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import window from 'global/window';
 import document from 'global/document';

@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 
 /**
  * Google Analytics Plugin
@@ -51,7 +51,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildgoogleanalytics: (player, controls, layers, media) => {
+	buildgoogleanalytics: function(player, controls, layers, media)  {
 
 		media.addEventListener('play', () => {
 			if (typeof ga !== 'undefined') {

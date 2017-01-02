@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 
 /**
@@ -32,7 +32,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildjumpforward: (player, controls, layers, media) => {
+	buildjumpforward: function(player, controls, layers, media)  {
 		let
 			t = this,
 			defaultTitle = i18n.t('mejs.time-jump-forward', t.options.jumpForwardInterval),

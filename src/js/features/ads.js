@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 
 // VAST ads plugin
@@ -77,7 +77,7 @@ $.extend(MediaElementPlayer.prototype, {
 	// true when the user clicks play for the first time, or if autoplay is set
 	adsPlayerHasStarted: false,
 
-	buildads: (player, controls, layers, media) => {
+	buildads: function(player, controls, layers, media)  {
 
 		let t = this;
 
@@ -124,7 +124,7 @@ $.extend(MediaElementPlayer.prototype, {
 	},
 
 
-	adsMediaTryingToStart: () => {
+	adsMediaTryingToStart: function()  {
 
 		let t = this;
 
@@ -136,7 +136,7 @@ $.extend(MediaElementPlayer.prototype, {
 		t.adsPlayerHasStarted = true;
 	},
 
-	adsStartPreroll: () => {
+	adsStartPreroll: function()  {
 
 		let t = this;
 
@@ -162,7 +162,7 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 	},
 
-	adsPrerollMeta: () => {
+	adsPrerollMeta: function()  {
 
 		let
 			t = this,
@@ -183,7 +183,7 @@ $.extend(MediaElementPlayer.prototype, {
 		}, 250);
 	},
 
-	adsPrerollStarted: () => {
+	adsPrerollStarted: function()  {
 		let t = this;
 		t.media.removeEventListener('playing', t.adsPrerollStartedProxy);
 
@@ -220,7 +220,7 @@ $.extend(MediaElementPlayer.prototype, {
 		t.container.trigger('mejsprerollstarted');
 	},
 
-	adsPrerollUpdate: () => {
+	adsPrerollUpdate: function()  {
 		let t = this;
 
 		if (t.options.adsPrerollAdEnableSkip && t.options.adsPrerollAdSkipSeconds > 0) {
@@ -237,7 +237,7 @@ $.extend(MediaElementPlayer.prototype, {
 		t.container.trigger('mejsprerolltimeupdate');
 	},
 
-	adsPrerollEnded: () => {
+	adsPrerollEnded: function()  {
 		let t = this;
 
 		t.container.trigger('mejsprerollended');
@@ -250,7 +250,7 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 	},
 
-	adRestoreMainMedia: () => {
+	adRestoreMainMedia: function()  {
 		let t = this;
 
 		t.media.setSrc(t.adsCurrentMediaUrl);
@@ -272,7 +272,7 @@ $.extend(MediaElementPlayer.prototype, {
 
 	},
 
-	adsAdClick: (e) => {
+	adsAdClick: function(e)  {
 		let t = this;
 
 		if (t.media.paused) {
@@ -284,7 +284,7 @@ $.extend(MediaElementPlayer.prototype, {
 		t.container.trigger('mejsprerolladsclicked');
 	},
 
-	adsSkipClick: () => {
+	adsSkipClick: function()  {
 		let t = this;
 
 		t.container.trigger('mejsprerollskipclicked');
@@ -299,13 +299,13 @@ $.extend(MediaElementPlayer.prototype, {
 	},
 
 	// tells calling function if ads have finished running
-	prerollAdsFinished: () => {
+	prerollAdsFinished: function()  {
 		let t = this;
 		return t.options.indexPreroll === t.options.adsPrerollMediaUrl.length;
 	},
 
 	// fires off fake XHR requests
-	adsLoadUrl: (url) => {
+	adsLoadUrl: function(url)  {
 		let
 			img = new Image(),
 			rnd = Math.round(Math.random() * 100000)

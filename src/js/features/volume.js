@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 import {IS_ANDROID, IS_IOS} from '../utils/constants';
 
@@ -48,7 +48,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {HTMLElement} media
 	 * @public
 	 */
-	buildvolume: (player, controls, layers, media) => {
+	buildvolume: function(player, controls, layers, media)  {
 
 		// Android and iOS don't support volume controls
 		if ((IS_ANDROID || IS_IOS) && this.options.hideVolumeOnTouchDevices) {

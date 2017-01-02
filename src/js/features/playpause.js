@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 
 /**
@@ -34,7 +34,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {HTMLElement} media
 	 * @public
 	 */
-	buildplaypause: (player, controls, layers, media) => {
+	buildplaypause: function(player, controls, layers, media)  {
 		let
 			t = this,
 			op = t.options,

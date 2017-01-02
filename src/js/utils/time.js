@@ -9,9 +9,9 @@
  */
 export function secondsToTimeCode (time, forceHours = false, showFrameCount = false, fps = 25) {
 
-	if (typeof time !== 'number') {
-		throw new Error('Time must be a numeric value');
-	}
+	// if (typeof time !== 'number') {
+	// 	throw new Error('Time must be a numeric value');
+	// }
 
 	let hours = Math.floor(time / 3600) % 24;
 	let minutes = Math.floor(time / 60) % 60;
@@ -87,9 +87,9 @@ export function timeCodeToSeconds (time, showFrameCount = false, fps = 25) {
  */
 export function calculateTimeFormat (time, options, fps = 25) {
 
-	if (typeof time !== 'number') {
-		throw new Error('Time must be a numeric value');
-	}
+	// if (typeof time !== 'number') {
+	// 	throw new Error('Time must be a numeric value');
+	// }
 
 	time = time < 0 ? 0 : time;
 

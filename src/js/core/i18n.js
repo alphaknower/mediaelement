@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import mejs from './mejs';
 import {EN as en} from '../languages/en';

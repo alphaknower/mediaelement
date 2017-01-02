@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
 import window from 'global/window';
 import document from 'global/document';
 import mejs from '../core/mejs';
 import i18n from '../core/i18n';
 import {renderer} from '../core/renderer';
-import {createEvent, absolutizeUrl} from '../utils/dom';
+import {createEvent} from '../utils/dom';
 import {NAV, IS_IE} from '../utils/constants';
-import {typeChecks} from '../utils/media';
+import {typeChecks, absolutizeUrl} from '../utils/media';
 
 /**
  * Shim that falls back to Flash if a media type is not supported.

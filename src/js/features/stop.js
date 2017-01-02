@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 import {secondsToTimeCode} from '../utils/time';
 
@@ -31,7 +31,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildstop: (player, controls, layers, media) => {
+	buildstop: function(player, controls, layers, media)  {
 		let
 			t = this,
 			stopTitle = t.options.stopText ? t.options.stopText : i18n.t('mejs.stop');

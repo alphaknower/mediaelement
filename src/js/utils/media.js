@@ -1,4 +1,22 @@
+import {escapeHTML} from './general';
+
 export let typeChecks = [];
+
+/**
+ *
+ * @param {String} url
+ * @return {String}
+ */
+export function absolutizeUrl (url) {
+
+	if (typeof url !== 'string') {
+		throw new Error('`url` argument must be a string');
+	}
+
+	let el = document.createElement('div');
+	el.innerHTML = `<a href="${escapeHTML(url)}">x</a>`;
+	return el.firstChild.href;
+}
 
 /**
  * Get the format of a specific media, based on URL and additionally its mime type

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  *
@@ -36,7 +36,7 @@ class Renderer {
 	 * @return {?Object} The renderer's name and source selected
 	 * @method select
 	 */
-	select (mediaFiles, renderers = []) {
+	select (mediaFiles, renderers) {
 
 		renderers = renderers.length ? renderers: this.order;
 

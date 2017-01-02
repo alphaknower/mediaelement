@@ -1,6 +1,6 @@
 'use strict';
 
-import {config} from '../player';
+import {config, MediaElementPlayer} from '../player';
 import i18n from '../core/i18n';
 import {IS_FIREFOX, HAS_TOUCH} from '../utils/constants';
 import {secondsToTimeCode} from '../utils/time';
@@ -32,7 +32,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildprogress: (player, controls, layers, media) => {
+	buildprogress: function(player, controls, layers, media)  {
 
 		let
 			t = this,
@@ -303,7 +303,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {Event} e
 	 */
-	setProgressRail: (e) => {
+	setProgressRail: function(e)  {
 
 		let
 			t = this,
@@ -340,7 +340,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Update the slider's width depending on the current time
 	 *
 	 */
-	setCurrentRail: () => {
+	setCurrentRail: function()  {
 
 		let t = this;
 

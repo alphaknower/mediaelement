@@ -2,7 +2,7 @@
 
 
 $.extend(MediaElementPlayer.prototype, {
-	buildendedhtml: (player, controls, layers, media) => {
+	buildendedhtml: function(player, controls, layers, media)  {
 		if (!player.isVideo) {
 			return;
 		}

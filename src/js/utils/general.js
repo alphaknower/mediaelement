@@ -89,7 +89,7 @@ export function splitEvents (events, id) {
 	let rwindow = /^((after|before)print|(before)?unload|hashchange|message|o(ff|n)line|page(hide|show)|popstate|resize|storage)\b/;
 	// add player ID as an event namespace so it's easier to unbind them all later
 	let ret = {d: [], w: []};
-	forEach((events || '').split(' '), (k, v) => {
+	$.each((events || '').split(' '), (k, v) => {
 		let eventname = v + '.' + id;
 		if (eventname.indexOf('.') === 0) {
 			ret.d.push(eventname);

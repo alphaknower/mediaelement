@@ -78,23 +78,23 @@ module.exports = function(grunt) {
 					],
 					'tmp/mediaelementplayer.js': [
 						'src/js/library.js',
-						// 'src/js/player.js'
+						'src/js/player.js'
 					].concat(featureSources || [
-						// 'src/js/feature-playpause.js',
-						// 'src/js/features/stop.js',
-						// 'src/js/features/progress.js',
-						// 'src/js/features/time.js',
-						// 'src/js/features/volume.js',
-						// 'src/js/features/fullscreen.js',
-						// 'src/js/features/speed.js',
-						// 'src/js/features/tracks.js',
-						// 'src/js/features/sourcechooser.js',
-						// 'src/js/features/contextmenu.js',
-						// 'src/js/features/skipback.js',
-						// 'src/js/features/jumpforward.js',
-						// 'src/js/features/postroll.js',
-						// 'src/js/features/markers.js'
-					])
+						'src/js/features/playpause.js',
+						'src/js/features/stop.js',
+						'src/js/features/progress.js',
+						'src/js/features/time.js',
+						'src/js/features/volume.js',
+						'src/js/features/fullscreen.js',
+						'src/js/features/speed.js',
+						'src/js/features/tracks.js',
+						'src/js/features/sourcechooser.js',
+						'src/js/features/contextmenu.js',
+						'src/js/features/skipback.js',
+						'src/js/features/jumpforward.js',
+						'src/js/features/postroll.js',
+						'src/js/features/markers.js'
+					]),
 				}
 			}
 		},
@@ -111,22 +111,23 @@ module.exports = function(grunt) {
 					'src/js/header.js',
 					'tmp/mediaelementplayer.js'
 				],
-				dest: 'build/mediaelementplayer.js'
+				dest: 'tmp/mediaelementplayer.js'
 			},
 			bundle: {
 				src: [
-					'build/mediaelement.js',
-					'build/mediaelementplayer.js'
+					'src/js/header.js',
+					'tmp/mediaelement.js',
+					'tmp/mediaelementplayer.js'
 				],
-				dest: 'build/mediaelement-and-player.js'
+				dest: 'tmp/mediaelement-and-player.js'
 			}
 		},
 		removelogging: {
 			dist: {
 				src: [
 					'tmp/mediaelement.js',
-					'build/mediaelementplayer.js',
-					'build/mediaelement-and-player.js'
+					'tmp/mediaelementplayer.js',
+					'tmp/mediaelement-and-player.js'
 				]
 			},
 			options: {
@@ -141,13 +142,13 @@ module.exports = function(grunt) {
 				banner : 'src/js/header.js'
 			},
 			mep: {
-				src	   : ['build/mediaelementplayer.js'],
-				dest   : 'build/mediaelementplayer.min.js',
-				banner : 'src/js/mediaelement-header.js'
+				src	   : ['tmp/mediaelementplayer.js'],
+				dest   : 'tmp/mediaelementplayer.min.js',
+				banner : 'src/js/header.js'
 			},
 			bundle: {
-				src	 : ['build/mediaelement-and-player.js'],
-				dest : 'build/mediaelement-and-player.min.js'
+				src	 : ['tmp/mediaelement-and-player.js'],
+				dest : 'tmp/mediaelement-and-player.min.js'
 			},
 			options: {
 				// Preserve comments that start with a bang (like the file header)
@@ -275,5 +276,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('html5only', ['jshint', 'concat', 'removelogging', 'uglify', 'postcss', 'copy', 'clean:temp']);
 	grunt.registerTask('html5debug', ['jshint', 'concat', 'uglify', 'postcss', 'copy', 'clean:temp']);
 
-	grunt.registerTask('babel', ['jshint', 'browserify', 'concat:me', 'removelogging', 'uglify:me',]);
+	grunt.registerTask('babel', ['jshint', 'browserify', 'concat']);
 };
