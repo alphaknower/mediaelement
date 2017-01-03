@@ -1186,10 +1186,10 @@ export class MediaElementPlayer {
 		// This prevents an issue when displaying poster
 		t.container.find(`.${t.options.classPrefix}poster img`).css('display', 'block');
 
-		targetElement = t.container.find('object, embed, iframe, video');
-
 		// calculate new width and height
-		let initHeight = t.height,
+		let
+			targetElement = t.container.find('object, embed, iframe, video'),
+			initHeight = t.height,
 			initWidth = t.width,
 			// scale to the target width
 			scaleX1 = parentWidth,

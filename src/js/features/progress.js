@@ -80,7 +80,8 @@ $.extend(MediaElementPlayer.prototype, {
 					percentage = 0,
 					newTime = 0,
 					pos = 0,
-					x;
+					x
+				;
 
 				// mouse or touch position relative to the object
 				if (e.originalEvent && e.originalEvent.changedTouches) {

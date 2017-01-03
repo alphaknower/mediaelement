@@ -72,16 +72,12 @@ class MediaElement {
 		t.mediaElement.rendererName = null;
 		t.mediaElement.options = options;
 
+		let renderExists = t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null;
+
 		// add properties get/set
 		const
 			props = mejs.html5media.properties,
-			methods = mejs.html5media.methods
-		;
-
-		let
-			i,
-			il,
-			renderExists = t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null,
+			methods = mejs.html5media.methods,
 			assignGettersSetters = (propName) => {
 				// src is a special one below
 				if (propName !== 'src') {
@@ -108,12 +104,13 @@ class MediaElement {
 				}
 			}
 		;
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// special .src property
-		let
+		const
 			getSrc = () => renderExists ? t.mediaElement.renderer.getSrc() : null,
 			setSrc = (value) => {
 
@@ -129,10 +126,12 @@ class MediaElement {
 						type: value ? getTypeFromFile(value) : ''
 					});
 				} else {
-					for (i = 0, il = value.length; i < il; i++) {
+					for (let val of value) {
 
-						let src = absolutizeUrl(value[i].src),
-							type = value[i].type;
+						let
+							src = absolutizeUrl(val.src),
+							type = val.type
+						;
 
 						mediaFiles.push({
 							src: src,
@@ -154,7 +153,7 @@ class MediaElement {
 
 				// did we find a renderer?
 				if (renderInfo === null) {
-					event = document.createEvent("HTMLEvents");
+					event = document.createEvent('HTMLEvents');
 					event.initEvent('error', false, false);
 					event.message = 'No renderer found';
 					t.mediaElement.dispatchEvent(event);
@@ -165,7 +164,7 @@ class MediaElement {
 				t.changeRenderer(renderInfo.rendererName, mediaFiles);
 
 				if (t.mediaElement.renderer === undefined || t.mediaElement.renderer === null) {
-					event = document.createEvent("HTMLEvents");
+					event = document.createEvent('HTMLEvents');
 					event.initEvent('error', false, false);
 					event.message = 'Error creating renderer';
 					t.mediaElement.dispatchEvent(event);
@@ -178,7 +177,7 @@ class MediaElement {
 		t.mediaElement.setSrc = setSrc;
 
 		// add methods
-		let assignMethods = (methodName) => {
+		const assignMethods = (methodName) => {
 			// run the method on the current renderer
 			t.mediaElement[methodName] = (...args) => {
 				return (renderExists && typeof t.mediaElement.renderer[methodName] === 'function') ?
@@ -187,8 +186,8 @@ class MediaElement {
 
 		};
 
-		for (i = 0, il = methods.length; i < il; i++) {
-			assignMethods(methods[i]);
+		for (let method of methods) {
+			assignMethods(method);
 		}
 
 		// IE && iOS

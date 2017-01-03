@@ -39,8 +39,8 @@ export const SUPPORT_POINTER_EVENTS = (() => {
 // for IE
 let html5Elements = ['source', 'track', 'audio', 'video'], video;
 
-for (let i = 0, il = html5Elements.length; i < il; i++) {
-	video = document.createElement(html5Elements[i]);
+for (let element of html5Elements) {
+	video = document.createElement(element);
 }
 
 // Test if Media Source Extensions are supported by browser

@@ -152,7 +152,7 @@ $.extend(MediaElementPlayer.prototype, {
 				let
 					volume = null,
 					totalOffset = volumeTotal.offset()
-					;
+				;
 
 				// calculate the new volume based on the most recent position
 				if (mode === 'vertical') {
@@ -160,7 +160,7 @@ $.extend(MediaElementPlayer.prototype, {
 					let
 						railHeight = volumeTotal.height(),
 						newY = e.pageY - totalOffset.top
-						;
+					;
 
 					volume = (railHeight - newY) / railHeight;
 
@@ -173,7 +173,7 @@ $.extend(MediaElementPlayer.prototype, {
 					let
 						railWidth = volumeTotal.width(),
 						newX = e.pageX - totalOffset.left
-						;
+					;
 
 					volume = newX / railWidth;
 				}

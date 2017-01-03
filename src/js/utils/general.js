@@ -81,7 +81,7 @@ export function debounce (func, wait, immediate = false) {
  * @return {Boolean}
  */
 export function isObjectEmpty (instance) {
-	return ((Object.getOwnPropertyNames(instance).length > 0) ? false : true);
+	return (Object.getOwnPropertyNames(instance).length > 0);
 }
 
 export function splitEvents (events, id) {
@@ -89,7 +89,7 @@ export function splitEvents (events, id) {
 	let rwindow = /^((after|before)print|(before)?unload|hashchange|message|o(ff|n)line|page(hide|show)|popstate|resize|storage)\b/;
 	// add player ID as an event namespace so it's easier to unbind them all later
 	let ret = {d: [], w: []};
-	$.each((events || '').split(' '), (k, v) => {
+	(events || '').split(' ').forEach((k, v) => {
 		let eventname = v + '.' + id;
 		if (eventname.indexOf('.') === 0) {
 			ret.d.push(eventname);
@@ -99,6 +99,8 @@ export function splitEvents (events, id) {
 			ret[rwindow.test(v) ? 'w' : 'd'].push(eventname);
 		}
 	});
+
+
 	ret.d = ret.d.join(' ');
 	ret.w = ret.w.join(' ');
 	return ret;
