@@ -41,6 +41,8 @@ class MediaElement {
 
 		// create our node (note: older versions of iOS don't support Object.defineProperty on DOM nodes)
 		t.mediaElement = document.createElement(options.fakeNodeName);
+		t.mediaElement.options = options;
+
 		let id = idOrNode;
 
 		if (typeof idOrNode === 'string') {
@@ -70,7 +72,6 @@ class MediaElement {
 		t.mediaElement.renderers = {};
 		t.mediaElement.renderer = null;
 		t.mediaElement.rendererName = null;
-		t.mediaElement.options = options;
 
 		let renderExists = t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null;
 
@@ -82,9 +83,10 @@ class MediaElement {
 				// src is a special one below
 				if (propName !== 'src') {
 
-					let
+					const
 						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`,
 						getFn = () => renderExists ? t.mediaElement.renderer[`get${capName}`]() : null,
+
 						setFn = (value) => {
 							if (renderExists) {
 								t.mediaElement.renderer[`set${capName}`](value);
@@ -103,15 +105,101 @@ class MediaElement {
 			assignGettersSetters(property);
 		}
 
+		/**
+		 * Determine whether the renderer was found or not
+		 *
+		 * @public
+		 * @param {String} rendererName
+		 * @param {Object[]} mediaFiles
+		 * @return {Boolean}
+		 */
+		t.mediaElement.changeRenderer = (rendererName, mediaFiles) => {
+
+			let t = this;
+
+			// check for a match on the current renderer
+			if (t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null &&
+				t.mediaElement.renderer.name === rendererName) {
+				t.mediaElement.renderer.pause();
+				if (t.mediaElement.renderer.stop) {
+					t.mediaElement.renderer.stop();
+				}
+				t.mediaElement.renderer.show();
+				t.mediaElement.renderer.setSrc(mediaFiles[0].src);
+				return true;
+			}
+
+			// if existing renderer is not the right one, then hide it
+			if (t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null) {
+				t.mediaElement.renderer.pause();
+				if (t.mediaElement.renderer.stop) {
+					t.mediaElement.renderer.stop();
+				}
+				t.mediaElement.renderer.hide();
+			}
+
+			// see if we have the renderer already created
+			let newRenderer = t.mediaElement.renderers[rendererName],
+				newRendererType = null;
+
+			if (newRenderer !== undefined && newRenderer !== null) {
+				newRenderer.show();
+				newRenderer.setSrc(mediaFiles[0].src);
+				t.mediaElement.renderer = newRenderer;
+				t.mediaElement.rendererName = rendererName;
+				return true;
+			}
+
+			let rendererArray = t.mediaElement.options.renderers.length ? t.mediaElement.options.renderers :
+				renderer.order;
+
+			// find the desired renderer in the array of possible ones
+			for (let index of rendererArray) {
+
+				if (index === rendererName) {
+
+					// create the renderer
+					const rendererList = renderer.renderers;
+					newRendererType = rendererList[index];
+
+					let renderOptions = Object.assign(newRendererType.options, t.mediaElement.options);
+					newRenderer = newRendererType.create(t.mediaElement, renderOptions, mediaFiles);
+					newRenderer.name = rendererName;
+
+					// store for later
+					t.mediaElement.renderers[newRendererType.name] = newRenderer;
+					t.mediaElement.renderer = newRenderer;
+					t.mediaElement.rendererName = rendererName;
+
+					newRenderer.show();
+
+					return true;
+				}
+			}
+
+			return false;
+		};
+
+		/**
+		 * Set the element dimensions based on selected renderer's setSize method
+		 *
+		 * @public
+		 * @param {number} width
+		 * @param {number} height
+		 */
+		t.mediaElement.setSize = (width, height) => {
+			if (t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null) {
+				t.mediaElement.renderer.setSize(width, height);
+			}
+		};
+
 		// special .src property
 		const
 			getSrc = () => renderExists ? t.mediaElement.renderer.getSrc() : null,
+
 			setSrc = (value) => {
 
-				let
-					renderInfo,
-					mediaFiles = []
-				;
+				let mediaFiles = [];
 
 				// clean up URLs
 				if (typeof value === 'string') {
@@ -137,13 +225,14 @@ class MediaElement {
 				}
 
 				// find a renderer and URL match
-				renderInfo = renderer.select(mediaFiles,
-					(t.mediaElement.options.renderers.length ? t.mediaElement.options.renderers : []));
+				let
+					renderInfo = renderer.select(mediaFiles,
+						(t.mediaElement.options.renderers.length ? t.mediaElement.options.renderers : [])),
+					event
+				;
 
 				// Ensure that the original gets the first source found
 				t.mediaElement.originalNode.setAttribute('src', (mediaFiles[0].src || ''));
-
-				let event;
 
 				// did we find a renderer?
 				if (renderInfo === null) {
@@ -155,7 +244,7 @@ class MediaElement {
 				}
 
 				// turn on the renderer (this checks for the existing renderer already)
-				t.changeRenderer(renderInfo.rendererName, mediaFiles);
+				t.mediaElement.changeRenderer(renderInfo.rendererName, mediaFiles);
 
 				if (t.mediaElement.renderer === undefined || t.mediaElement.renderer === null) {
 					event = document.createEvent('HTMLEvents');
@@ -233,14 +322,11 @@ class MediaElement {
 			 */
 			t.mediaElement.dispatchEvent = (event) => {
 
-				let
-					i,
-					callbacks = t.mediaElement.events[event.type]
-				;
+				let callbacks = t.mediaElement.events[event.type];
 
 				if (callbacks) {
-					for (i = 0, il = callbacks.length; i < il; i++) {
-						callbacks[i].apply(null, [event]);
+					for (let callback of callbacks) {
+						callback.apply(null, [event]);
 					}
 				}
 			};
@@ -305,94 +391,6 @@ class MediaElement {
 		// }
 
 		return t.mediaElement;
-	}
-
-	/**
-	 * Determine whether the renderer was found or not
-	 *
-	 * @public
-	 * @param {String} rendererName
-	 * @param {Object[]} mediaFiles
-	 * @return {Boolean}
-	 */
-	changeRenderer (rendererName, mediaFiles) {
-		
-		let t = this;
-
-		// check for a match on the current renderer
-		if (t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null &&
-			t.mediaElement.renderer.name === rendererName) {
-			t.mediaElement.renderer.pause();
-			if (t.mediaElement.renderer.stop) {
-				t.mediaElement.renderer.stop();
-			}
-			t.mediaElement.renderer.show();
-			t.mediaElement.renderer.setSrc(mediaFiles[0].src);
-			return true;
-		}
-
-		// if existing renderer is not the right one, then hide it
-		if (t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null) {
-			t.mediaElement.renderer.pause();
-			if (t.mediaElement.renderer.stop) {
-				t.mediaElement.renderer.stop();
-			}
-			t.mediaElement.renderer.hide();
-		}
-
-		// see if we have the renderer already created
-		let newRenderer = t.mediaElement.renderers[rendererName],
-			newRendererType = null;
-
-		if (newRenderer !== undefined && newRenderer !== null) {
-			newRenderer.show();
-			newRenderer.setSrc(mediaFiles[0].src);
-			t.mediaElement.renderer = newRenderer;
-			t.mediaElement.rendererName = rendererName;
-			return true;
-		}
-
-		let rendererArray = t.mediaElement.options.renderers.length ? t.mediaElement.options.renderers :
-			renderer.order;
-
-		// find the desired renderer in the array of possible ones
-		for (let index of rendererArray) {
-
-			if (index === rendererName) {
-
-				// create the renderer
-				const rendererList = renderer.renderers;
-				newRendererType = rendererList[index];
-
-				let renderOptions = Object.assign(newRendererType.options, t.mediaElement.options);
-				newRenderer = newRendererType.create(t.mediaElement, renderOptions, mediaFiles);
-				newRenderer.name = rendererName;
-
-				// store for later
-				t.mediaElement.renderers[newRendererType.name] = newRenderer;
-				t.mediaElement.renderer = newRenderer;
-				t.mediaElement.rendererName = rendererName;
-
-				newRenderer.show();
-
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Set the element dimensions based on selected renderer's setSize method
-	 *
-	 * @public
-	 * @param {number} width
-	 * @param {number} height
-	 */
-	setSize (width, height) {
-		if (this.mediaElement.renderer !== undefined && this.mediaElement.renderer !== null) {
-			this.mediaElement.renderer.setSize(width, height);
-		}
 	}
 }
 

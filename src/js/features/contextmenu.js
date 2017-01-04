@@ -135,13 +135,13 @@ $.extend(MediaElementPlayer.prototype, {
 			html = '',
 			items = t.options.contextMenuItems;
 
-		for (let i = 0, il = items.length; i < il; i++) {
+		for (let item of items) {
 
-			if (items[i].isSeparator) {
+			if (item.isSeparator) {
 				html += `<div class="${t.options.classPrefix}contextmenu-separator"></div>`;
 			} else {
 
-				let rendered = items[i].render(t);
+				let rendered = item.render(t);
 
 				// render can return null if the item doesn't need to be used at the moment
 				if (rendered !== null && rendered !== undefined) {

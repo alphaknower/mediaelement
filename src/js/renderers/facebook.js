@@ -53,9 +53,7 @@ const FacebookRenderer = {
 			ended = false,
 			hasStartedPlaying = false,
 			src = '',
-			eventHandler = {},
-			i,
-			il
+			eventHandler = {}
 		;
 
 		options = Object.assign(options, mediaElement.options);
@@ -171,8 +169,8 @@ const FacebookRenderer = {
 			}
 		;
 
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// add wrappers for native methods
@@ -204,8 +202,8 @@ const FacebookRenderer = {
 			}
 		;
 
-		for (i = 0, il = methods.length; i < il; i++) {
-			assignMethods(methods[i]);
+		for (let method of methods) {
+			assignMethods(method);
 		}
 
 
@@ -216,8 +214,8 @@ const FacebookRenderer = {
 		 * @param {Array} events
 		 */
 		function sendEvents (events) {
-			for (let i = 0, il = events.length; i < il; i++) {
-				let event = createEvent(events[i], fbWrapper);
+			for (let initialEvent of events) {
+				let event = createEvent(initialEvent, fbWrapper);
 				mediaElement.dispatchEvent(event);
 			}
 		}
@@ -273,8 +271,8 @@ const FacebookRenderer = {
 
 						// remove previous listeners
 						let fbEvents = ['startedPlaying', 'paused', 'finishedPlaying', 'startedBuffering', 'finishedBuffering'];
-						for (i = 0, il = fbEvents.length; i < il; i++) {
-							let event = fbEvents[i], handler = eventHandler[event];
+						for (let event of fbEvents) {
+							let handler = eventHandler[event];
 							if (handler !== undefined && handler !== null &&
 								!isObjectEmpty(handler) && typeof handler.removeListener === 'function') {
 								handler.removeListener(event);
@@ -282,17 +280,19 @@ const FacebookRenderer = {
 						}
 
 						// do call stack
-						for (let i = 0, il = apiStack.length; i < il; i++) {
+						if (apiStack.length) {
+							for (let stackItem of apiStack) {
+								if (stackItem.type === 'set') {
+									let
+										propName = stackItem.propName,
+										capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`
+									;
 
-							let stackItem = apiStack[i];
+									fbWrapper[`set${capName}`](stackItem.value);
 
-							if (stackItem.type === 'set') {
-								let propName = stackItem.propName,
-									capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
-
-								fbWrapper[`set${capName}`](stackItem.value);
-							} else if (stackItem.type === 'call') {
-								fbWrapper[stackItem.methodName]();
+								} else if (stackItem.type === 'call') {
+									fbWrapper[stackItem.methodName]();
+								}
 							}
 						}
 

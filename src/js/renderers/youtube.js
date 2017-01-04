@@ -120,12 +120,18 @@ const YouTubeApi = {
 	 */
 	getYouTubeIdFromParam: (url) => {
 
-		let youTubeId = '',
-			parts = url.split('?'),
-			parameters = parts[1].split('&');
+		if (url === undefined || url === null || !url.trim().length) {
+			return null;
+		}
 
-		for (let i = 0, il = parameters.length; i < il; i++) {
-			let paramParts = parameters[i].split('=');
+		let
+			youTubeId = '',
+			parts = url.split('?'),
+			parameters = parts[1].split('&')
+		;
+
+		for (let paramParts of parameters) {
+			paramParts = paramParts.split('=');
 			if (paramParts[0] === 'v') {
 				youTubeId = paramParts[1];
 				break;
@@ -144,14 +150,12 @@ const YouTubeApi = {
 	 */
 	getYouTubeIdFromUrl: (url) => {
 
-		if (url === undefined || url === null) {
+		if (url === undefined || url === null || !url.trim().length) {
 			return null;
 		}
 
 		let parts = url.split('?');
-
 		url = parts[0];
-
 		return url.substring(url.lastIndexOf('/') + 1);
 	},
 
@@ -161,7 +165,7 @@ const YouTubeApi = {
 	 * @return {?String}
 	 */
 	getYouTubeNoCookieUrl: (url) => {
-		if (url === undefined || url === null || !url.includes('//www.youtube') || !url.includes('//www.youtube')) {
+		if (url === undefined || url === null || !url.trim().length || !url.includes('//www.youtube')) {
 			return url;
 		}
 
@@ -228,9 +232,7 @@ const YouTubeIframeRenderer = {
 			youTubeApiReady = false,
 			paused = true,
 			ended = false,
-			youTubeIframe = null,
-			i,
-			il
+			youTubeIframe = null
 		;
 
 		// wrappers for get/set
@@ -341,9 +343,10 @@ const YouTubeIframeRenderer = {
 				};
 
 			}
-			;
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+		;
+
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// add wrappers for native methods
@@ -373,9 +376,10 @@ const YouTubeIframeRenderer = {
 				};
 
 			}
-			;
-		for (i = 0, il = methods.length; i < il; i++) {
-			assignMethods(methods[i]);
+		;
+
+		for (let method of methods) {
+			assignMethods(method);
 		}
 
 		// CREATE YouTube
@@ -423,17 +427,18 @@ const YouTubeIframeRenderer = {
 						};
 
 						// do call stack
-						for (i = 0, il = apiStack.length; i < il; i++) {
+						if (apiStack.length) {
+							for (let stackItem of apiStack) {
+								if (stackItem.type === 'set') {
+									let
+										propName = stackItem.propName,
+										capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`
+									;
 
-							let stackItem = apiStack[i];
-
-							if (stackItem.type === 'set') {
-								let propName = stackItem.propName,
-									capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
-
-								youtube[`set${capName}`](stackItem.value);
-							} else if (stackItem.type === 'call') {
-								youtube[stackItem.methodName]();
+									youtube[`set${capName}`](stackItem.value);
+								} else if (stackItem.type === 'call') {
+									youtube[stackItem.methodName]();
+								}
 							}
 						}
 
@@ -447,18 +452,17 @@ const YouTubeIframeRenderer = {
 								let newEvent = createEvent(e.type, youtube);
 								mediaElement.dispatchEvent(newEvent);
 							}
-							;
+						;
 
-						for (let j in events) {
-							let eventName = events[j];
-							addEvent(youTubeIframe, eventName, assignEvents);
+						for (let event of events) {
+							addEvent(youTubeIframe, event, assignEvents);
 						}
 
 						// send init events
 						let initEvents = ['rendererready', 'loadeddata', 'loadedmetadata', 'canplay'];
 
-						for (i = 0, il = initEvents.length; i < il; i++) {
-							let event = createEvent(initEvents[i], youtube);
+						for (let initialEvent of initEvents) {
+							let event = createEvent(initialEvent, youtube);
 							mediaElement.dispatchEvent(event);
 						}
 					},

@@ -116,7 +116,7 @@ export let config = {
 				32, // SPACE
 				179 // GOOGLE play/pause button
 			],
-			action: (player, media, key, event) => {
+			action: (player, media) => {
 
 				if (!IS_FIREFOX) {
 					if (media.paused || media.ended) {
@@ -129,11 +129,11 @@ export let config = {
 		},
 		{
 			keys: [38], // UP
-			action: (player, media, key, event) => {
+			action: (player, media) => {
 
-				if (player.container.find(`.${t.options.classPrefix}volume-button>button`).is(':focus') ||
-					player.container.find(`.${t.options.classPrefix}volume-slider`).is(':focus')) {
-					player.container.find(`.${t.options.classPrefix}volume-slider`).css('display', 'block');
+				if (player.container.find(`.${config.classPrefix}volume-button>button`).is(':focus') ||
+					player.container.find(`.${config.classPrefix}volume-slider`).is(':focus')) {
+					player.container.find(`.${config.classPrefix}volume-slider`).css('display', 'block');
 				}
 				if (player.isVideo) {
 					player.showControls();
@@ -150,10 +150,11 @@ export let config = {
 		},
 		{
 			keys: [40], // DOWN
-			action: (player, media, key, event) => {
-				if (player.container.find(`.${t.options.classPrefix}volume-button>button`).is(':focus') ||
-					player.container.find(`.${t.options.classPrefix}volume-slider`).is(':focus')) {
-					player.container.find(`.${t.options.classPrefix}volume-slider`).css('display', 'block');
+			action: (player, media) => {
+
+				if (player.container.find(`.${config.classPrefix}volume-button>button`).is(':focus') ||
+					player.container.find(`.${config.classPrefix}volume-slider`).is(':focus')) {
+					player.container.find(`.${config.classPrefix}volume-slider`).css('display', 'block');
 				}
 
 				if (player.isVideo) {
@@ -175,7 +176,7 @@ export let config = {
 				37, // LEFT
 				227 // Google TV rewind
 			],
-			action: (player, media, key, event) => {
+			action: (player, media) => {
 				if (!isNaN(media.duration) && media.duration > 0) {
 					if (player.isVideo) {
 						player.showControls();
@@ -193,7 +194,8 @@ export let config = {
 				39, // RIGHT
 				228 // Google TV forward
 			],
-			action: (player, media, key, event) => {
+			action: (player, media) => {
+
 				if (!isNaN(media.duration) && media.duration > 0) {
 					if (player.isVideo) {
 						player.showControls();
@@ -222,8 +224,9 @@ export let config = {
 		},
 		{
 			keys: [77], // M
-			action: (player, media, key, event) => {
-				player.container.find(`.${t.options.classPrefix}volume-slider`).css('display', 'block');
+			action: (player) => {
+
+				player.container.find(`.${config.classPrefix}volume-slider`).css('display', 'block');
 				if (player.isVideo) {
 					player.showControls();
 					player.startControlsTimer();
@@ -333,7 +336,7 @@ export class MediaElementPlayer {
 				t.$media.attr('controls', 'controls');
 
 				// override Apple's autoplay override for iPads
-				if (IS_IPAD && t.media.getAttribute('autoplay') !== null) {
+				if (IS_IPAD && t.media.getAttribute('autoplay')) {
 					t.play();
 				}
 
@@ -437,7 +440,7 @@ export class MediaElementPlayer {
 					t.width = t.options[tagType + 'Width'];
 				} else if (t.media.style.width !== '' && t.media.style.width !== null) {
 					t.width = t.media.style.width;
-				} else if (t.media.getAttribute('width') !== null) {
+				} else if (t.media.getAttribute('width')) {
 					t.width = t.$media.attr('width');
 				} else {
 					t.width = t.options['default' + capsTagName + 'Width'];
@@ -447,7 +450,7 @@ export class MediaElementPlayer {
 					t.height = t.options[tagType + 'Height'];
 				} else if (t.media.style.height !== '' && t.media.style.height !== null) {
 					t.height = t.media.style.height;
-				} else if (t.$media[0].getAttribute('height') !== null) {
+				} else if (t.$media[0].getAttribute('height')) {
 					t.height = t.$media.attr('height');
 				} else {
 					t.height = t.options['default' + capsTagName + 'Height'];
@@ -791,13 +794,10 @@ export class MediaElementPlayer {
 
 			// FOCUS: when a video starts playing, it takes focus from other players (possibly pausing them)
 			t.media.addEventListener('play', () => {
-				let playerIndex;
-
 				t.hasFocus = true;
 
 				// go through all other players
-				for (playerIndex in mejs.players) {
-					let p = mejs.players[playerIndex];
+				for (let p of mejs.players) {
 					if (p.id !== t.id && t.options.pauseOtherPlayers && !p.paused && !p.ended) {
 						p.pause();
 						p.hasFocus = false;
@@ -807,7 +807,7 @@ export class MediaElementPlayer {
 			}, false);
 
 			// ended for all
-			t.media.addEventListener('ended', (e) => {
+			t.media.addEventListener('ended', () => {
 				if (t.options.autoRewind) {
 					try {
 						t.media.setCurrentTime(0);
@@ -1047,7 +1047,7 @@ export class MediaElementPlayer {
 			if (t.isVideo) {
 				if (t.media.videoWidth && t.media.videoWidth > 0) {
 					return t.media.videoWidth;
-				} else if (t.media.getAttribute('width') !== null) {
+				} else if (t.media.getAttribute('width')) {
 					return t.media.getAttribute('width');
 				} else {
 					return t.options.defaultVideoWidth;
@@ -1061,7 +1061,7 @@ export class MediaElementPlayer {
 			if (t.isVideo) {
 				if (t.media.videoHeight && t.media.videoHeight > 0) {
 					return t.media.videoHeight;
-				} else if (t.media.getAttribute('height') !== null) {
+				} else if (t.media.getAttribute('height')) {
 					return t.media.getAttribute('height');
 				} else {
 					return t.options.defaultVideoHeight;
@@ -1303,8 +1303,11 @@ export class MediaElementPlayer {
 	}
 
 	globalUnbind (events, callback) {
-		let t = this;
-		let doc = t.node ? t.node.ownerDocument : document;
+
+		let
+			t = this,
+			doc = t.node ? t.node.ownerDocument : document
+		;
 
 		events = splitEvents(events, t.id);
 		if (events.d) {
@@ -1316,12 +1319,12 @@ export class MediaElementPlayer {
 	}
 
 	buildposter (player, controls, layers, media) {
+
 		let
 			t = this,
-			poster =
-				$(`<div class="${t.options.classPrefix}poster ${t.options.classPrefix}layer"></div>`)
-				.appendTo(layers),
-			posterUrl = player.$media.attr('poster');
+			poster = $(`<div class="${t.options.classPrefix}poster ${t.options.classPrefix}layer"></div>`).appendTo(layers),
+			posterUrl = player.$media.attr('poster')
+		;
 
 		// priority goes to option (this is useful if you need to support iOS 3.x (iOS completely fails with poster)
 		if (player.options.poster !== '') {
@@ -1350,7 +1353,6 @@ export class MediaElementPlayer {
 
 		if (!player.isVideo) {
 			return;
-
 		}
 
 		let
@@ -1503,17 +1505,14 @@ export class MediaElementPlayer {
 
 	}
 
-	onkeydown (player, media, e) {
+	static onkeydown (player, media, e) {
+
 		if (player.hasFocus && player.options.enableKeyboard) {
 			// find a matching key
-			for (let i = 0, il = player.options.keyActions.length; i < il; i++) {
-				let keyAction = player.options.keyActions[i];
+			for (let keyAction of player.options.keyActions) {
 
-				for (let j = 0, jl = keyAction.keys.length; j < jl; j++) {
-					if (e.keyCode === keyAction.keys[j]) {
-						if (typeof(e.preventDefault) === "function") {
-							e.preventDefault();
-						}
+				for (let key of keyAction.keys) {
+					if (e.keyCode === key) {
 						keyAction.action(player, media, e.keyCode, e);
 						return false;
 					}
@@ -1584,7 +1583,7 @@ export class MediaElementPlayer {
 				try {
 					t[`clean${feature}`](t);
 				} catch (e) {
-					// TODO: report control error
+					// @todo: report control error
 					console.log(`error cleaning ${feature}`, e);
 				}
 			}
@@ -1594,8 +1593,7 @@ export class MediaElementPlayer {
 		if (!t.isDynamic) {
 			t.$media.prop('controls', true);
 			// detach events from the video
-			// TODO: detach event listeners better than this;
-			//		 also detach ONLY the events attached by this plugin!
+			// @todo: detach event listeners better than this; also detach ONLY the events attached by this plugin!
 			t.$node.clone().insertBefore(t.container).show();
 			t.$node.remove();
 		} else {

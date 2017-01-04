@@ -62,16 +62,15 @@ $.extend(MediaElementPlayer.prototype, {
 			speeds = [],
 			defaultInArray = false,
 			getSpeedNameFromValue = (value) => {
-				for (let i = 0, len = speeds.length; i < len; i++) {
-					if (speeds[i].value === value) {
-						return speeds[i].name;
+				for (let speed of speeds) {
+					if (speed.value === value) {
+						return speed.name;
 					}
 				}
 			}
 			;
 
-		for (let i = 0, len = t.options.speeds.length; i < len; i++) {
-			let s = t.options.speeds[i];
+		for (let s of t.options.speeds) {
 			if (typeof(s) === 'string') {
 				speeds.push({
 					name: `${s}${t.options.speedChar}`,
@@ -112,18 +111,18 @@ $.extend(MediaElementPlayer.prototype, {
 			</div>`)
 		.appendTo(controls);
 
-		for (i = 0, il = speeds.length; i < il; i++) {
+		for (let speed of speeds) {
 
-			inputId = `${t.id}-speed-${speeds[i].value}`;
+			inputId = `${t.id}-speed-${speed.value}`;
 
 			player.speedButton.find('ul').append(
 				$(`<li class="${t.options.classPrefix}speed-selector-list-item">
 					<input class="${t.options.classPrefix}speed-selector-input" type="radio" name="${t.id}_speed" 
-					disabled="disabled" value="${speeds[i].value}" id="${inputId}"  
-					${(speeds[i].value === t.options.defaultSpeed ? ' checked="checked"' : '')}/>
+					disabled="disabled" value="${speed.value}" id="${inputId}"  
+					${(speed.value === t.options.defaultSpeed ? ' checked="checked"' : '')}/>
 					<label class="${t.options.classPrefix}speed-selector-label
-						${(speeds[i].value === t.options.defaultSpeed ? ` ${t.options.classPrefix}speed-selected` : '')}">
-						${speeds[i].name}</label>
+						${(speed.value === t.options.defaultSpeed ? ` ${t.options.classPrefix}speed-selected` : '')}">
+						${speed.name}</label>
 				</li>`)
 			);
 		}

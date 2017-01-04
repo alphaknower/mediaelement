@@ -106,11 +106,11 @@ const DailyMotionApi = {
 	getDailyMotionId: (url) => {
 		let
 			parts = url.split('/'),
-			last_part = parts[parts.length - 1],
-			dash_parts = last_part.split('_')
+			lastPart = parts[parts.length - 1],
+			dashParts = lastPart.split('_')
 		;
 
-		return dash_parts[0];
+		return dashParts[0];
 	}
 };
 
@@ -162,8 +162,6 @@ const DailyMotionIframeRenderer = {
 			dmPlayerReady = false,
 			dmPlayer = null,
 			dmIframe = null,
-			i,
-			il,
 			events
 		;
 
@@ -269,8 +267,9 @@ const DailyMotionIframeRenderer = {
 
 			}
 		;
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// add wrappers for native methods
@@ -300,8 +299,9 @@ const DailyMotionIframeRenderer = {
 
 			}
 		;
-		for (i = 0, il = methods.length; i < il; i++) {
-			assignMethods(methods[i]);
+
+		for (let method of methods) {
+			assignMethods(method);
 		}
 
 		// Initial method to register all DailyMotion events when initializing <iframe>
@@ -311,17 +311,19 @@ const DailyMotionIframeRenderer = {
 			mediaElement.dmPlayer = dmPlayer = _dmPlayer;
 
 			// do call stack
-			for (i = 0, il = apiStack.length; i < il; i++) {
+			if (apiStack.length) {
+				for (let stackItem of apiStack) {
+					if (stackItem.type === 'set') {
+						let
+							propName = stackItem.propName,
+							capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`
+							;
 
-				let stackItem = apiStack[i];
+						dm[`set${capName}`](stackItem.value);
 
-				if (stackItem.type === 'set') {
-					let propName = stackItem.propName,
-						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
-
-					dm[`set${capName}`](stackItem.value);
-				} else if (stackItem.type === 'call') {
-					dm[stackItem.methodName]();
+					} else if (stackItem.type === 'call') {
+						dm[stackItem.methodName]();
+					}
 				}
 			}
 
@@ -334,9 +336,8 @@ const DailyMotionIframeRenderer = {
 				mediaElement.dispatchEvent(event);
 			};
 
-			for (let j in events) {
-				let eventName = events[j];
-				addEvent(dmIframe, eventName, assignEvent);
+			for (let event of events) {
+				addEvent(dmIframe, event, assignEvent);
 			}
 
 			// BUBBLE EVENTS up
@@ -355,8 +356,8 @@ const DailyMotionIframeRenderer = {
 
 			};
 
-			for (i = 0, il = events.length; i < il; i++) {
-				assignNativeEvents(events[i]);
+			for (let event of events) {
+				assignNativeEvents(event);
 			}
 
 			// Custom DailyMotion events
@@ -406,8 +407,8 @@ const DailyMotionIframeRenderer = {
 			// give initial events
 			let initEvents = ['rendererready', 'loadeddata', 'loadedmetadata', 'canplay'];
 
-			for (let i = 0, il = initEvents.length; i < il; i++) {
-				let event = createEvent(initEvents[i], dm);
+			for (let initialEvent of initEvents) {
+				let event = createEvent(initialEvent, dm);
 				mediaElement.dispatchEvent(event);
 			}
 		};

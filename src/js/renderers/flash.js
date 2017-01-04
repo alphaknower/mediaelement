@@ -69,17 +69,16 @@ export const PluginDetector = {
 		let
 			version = [0, 0, 0],
 			description,
-			i,
 			ax
 		;
 
 		// Firefox, Webkit, Opera
 		if (NAV.plugins !== undefined && typeof NAV.plugins[pluginName] === 'object') {
 			description = NAV.plugins[pluginName].description;
-			if (description && !(NAV.mimeTypes !== undefined && NAV.mimeTypes[mimeType] && !NAV.mimeTypes[mimeType].enabledPlugin)) {
+			if (description && !(typeof NAV.mimeTypes !== 'undefined' && NAV.mimeTypes[mimeType] && !NAV.mimeTypes[mimeType].enabledPlugin)) {
 				version = description.replace(pluginName, '').replace(/^\s+/, '').replace(/\sr/gi, '.').split('.');
-				for (i = 0; i < version.length; i++) {
-					version[i] = parseInt(version[i].match(/\d+/), 10);
+				for (let part of version) {
+					part = parseInt(part.match(/\d+/), 10);
 				}
 			}
 			// Internet Explorer / ActiveX
@@ -124,11 +123,7 @@ const FlashMediaElementRenderer = {
 	 */
 	create: (mediaElement, options, mediaFiles) => {
 
-		let
-			flash = {},
-			i,
-			il
-		;
+		let flash = {};
 
 		// store main variable
 		flash.options = options;
@@ -199,9 +194,10 @@ const FlashMediaElementRenderer = {
 				};
 
 			}
-			;
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+		;
+
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// add mediaElements for native methods
@@ -237,8 +233,8 @@ const FlashMediaElementRenderer = {
 			}
 			;
 		methods.push('stop');
-		for (i = 0, il = methods.length; i < il; i++) {
-			assignMethods(methods[i]);
+		for (let method of methods) {
+			assignMethods(method);
 		}
 
 		// add a ready method that Flash can call to
@@ -251,17 +247,18 @@ const FlashMediaElementRenderer = {
 			mediaElement.dispatchEvent(event);
 
 			// do call stack
-			for (let i = 0, il = flash.flashApiStack.length; i < il; i++) {
+			if (flash.flashApiStack.length) {
+				for (let stackItem of flash.flashApiStack) {
+					if (stackItem.type === 'set') {
+						let
+							propName = stackItem.propName,
+							capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`
+							;
 
-				let stackItem = flash.flashApiStack[i];
-
-				if (stackItem.type === 'set') {
-					let propName = stackItem.propName,
-						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
-
-					flash[`set${capName}`](stackItem.value);
-				} else if (stackItem.type === 'call') {
-					flash[stackItem.methodName]();
+						flash[`set${capName}`](stackItem.value);
+					} else if (stackItem.type === 'call') {
+						flash[stackItem.methodName]();
+					}
 				}
 			}
 		};
@@ -389,11 +386,9 @@ const FlashMediaElementRenderer = {
 
 
 		if (mediaFiles && mediaFiles.length > 0) {
-
-			for (i = 0, il = mediaFiles.length; i < il; i++) {
-				if (renderer.renderers[options.prefix].canPlayType(mediaFiles[i].type)) {
-					flash.setSrc(mediaFiles[i].src);
-					flash.load();
+			for (let file of mediaFiles) {
+				if (renderer.renderers[options.prefix].canPlayType(file.type)) {
+					node.src = file.src;
 					break;
 				}
 			}
@@ -540,6 +535,6 @@ if (hasFlash) {
 	renderer.add(FlashMediaElementAudioOggRenderer);
 
 	// Register Flash renderer if Flash was found
-	window.FlashMediaElementRenderer = mejs.FlashMediaElementRenderer = FlashMediaElementRenderer;
+	// window.FlashMediaElementRenderer = mejs.FlashMediaElementRenderer = FlashMediaElementRenderer;
 
 }

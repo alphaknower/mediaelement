@@ -66,10 +66,8 @@ const HtmlMediaElement = {
 		node.setAttribute('id', id);
 
 		// WRAPPERS for PROPs
-		let
+		const
 			props = mejs.html5media.properties,
-			i,
-			il,
 			assignGettersSetters = (propName) => {
 				const capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
 
@@ -78,15 +76,15 @@ const HtmlMediaElement = {
 				node[`set${capName}`] = (value) => {
 					node[propName] = value;
 				};
-
 			}
 		;
+
 		for (let property of props) {
 			assignGettersSetters(property);
 		}
 
-		let
-			events = mejs.html5media.events,
+		const
+			events = mejs.html5media.events.concat(['click', 'mouseover', 'mouseout']),
 			assignEvents = (eventName) => {
 
 				node.addEventListener(eventName, (e) => {
@@ -100,11 +98,10 @@ const HtmlMediaElement = {
 				});
 
 			}
-			;
-		events = events.concat(['click', 'mouseover', 'mouseout']);
+		;
 
-		for (i = 0, il = events.length; i < il; i++) {
-			assignEvents(events[i]);
+		for (let event of events) {
+			assignEvents(event);
 		}
 
 		// HELPER METHODS
@@ -128,9 +125,9 @@ const HtmlMediaElement = {
 		};
 
 		if (mediaFiles && mediaFiles.length > 0) {
-			for (i = 0, il = mediaFiles.length; i < il; i++) {
-				if (renderer.renderers[options.prefix].canPlayType(mediaFiles[i].type)) {
-					node.src = mediaFiles[i].src;
+			for (let file of mediaFiles) {
+				if (renderer.renderers[options.prefix].canPlayType(file.type)) {
+					node.src = file.src;
 					break;
 				}
 			}
@@ -143,6 +140,6 @@ const HtmlMediaElement = {
 	}
 };
 
-window.HtmlMediaElement = mejs.HtmlMediaElement = HtmlMediaElement;
+// window.HtmlMediaElement = mejs.HtmlMediaElement = HtmlMediaElement;
 
 renderer.add(HtmlMediaElement);

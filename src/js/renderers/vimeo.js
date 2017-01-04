@@ -319,9 +319,10 @@ const vimeoIframeRenderer = {
 				};
 
 			}
-			;
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+		;
+
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// add wrappers for native methods
@@ -351,9 +352,10 @@ const vimeoIframeRenderer = {
 				};
 
 			}
-			;
-		for (i = 0, il = methods.length; i < il; i++) {
-			assignMethods(methods[i]);
+		;
+
+		for (let method of methods) {
+			assignMethods(method);
 		}
 
 		// Initial method to register all Vimeo events when initializing <iframe>
@@ -363,17 +365,16 @@ const vimeoIframeRenderer = {
 			mediaElement.vimeoPlayer = vimeoPlayer = _vimeoPlayer;
 
 			// do call stack
-			for (i = 0, il = apiStack.length; i < il; i++) {
+			if (apiStack.length) {
+				for (let stackItem of apiStack) {
+					if (stackItem.type === 'set') {
+						let propName = stackItem.propName,
+							capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
 
-				let stackItem = apiStack[i];
-
-				if (stackItem.type === 'set') {
-					let propName = stackItem.propName,
-						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
-
-					vimeo[`set${capName}`](stackItem.value);
-				} else if (stackItem.type === 'call') {
-					vimeo[stackItem.methodName]();
+						vimeo[`set${capName}`](stackItem.value);
+					} else if (stackItem.type === 'call') {
+						vimeo[stackItem.methodName]();
+					}
 				}
 			}
 
@@ -382,14 +383,13 @@ const vimeoIframeRenderer = {
 			// a few more events
 			events = ['mouseover', 'mouseout'];
 
-			let assignEvents = (e) => {
+			const assignEvents = (e) => {
 				let event = createEvent(e.type, vimeo);
 				mediaElement.dispatchEvent(event);
 			};
 
-			for (let j in events) {
-				let eventName = events[j];
-				addEvent(vimeoIframe, eventName, assignEvents);
+			for (let event of events) {
+				addEvent(vimeoIframe, event, assignEvents);
 			}
 
 			// Vimeo events

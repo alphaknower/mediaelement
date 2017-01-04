@@ -157,8 +157,7 @@ $.extend(MediaElementPlayer.prototype, {
 				}
 			});
 
-		for (let i in sources) {
-			let src = sources[i];
+		for (let src of sources) {
 			if (src.type !== undefined && src.nodeName === 'SOURCE' && media.canPlayType !== null) {
 				player.addSourceButton(src.src, src.title, src.type, media.src === src.src);
 			}

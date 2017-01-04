@@ -115,8 +115,8 @@ $.extend(MediaElementPlayer.prototype, {
 
 
 		let subtitleCount = 0;
-		for (i = 0; i < player.tracks.length; i++) {
-			kind = player.tracks[i].kind;
+		for (let track of player.tracks) {
+			kind = track.kind;
 			if (kind === 'subtitles' || kind === 'captions') {
 				subtitleCount++;
 			}
@@ -185,10 +185,8 @@ $.extend(MediaElementPlayer.prototype, {
 		player.isLoadingTrack = false;
 
 		// add to list
-		let total = player.tracks.length;
-
-		for (i = 0; i < total; i++) {
-			kind = player.tracks[i].kind;
+		for (let track of player.tracks) {
+			kind = track.kind;
 			if (kind === 'subtitles' || kind === 'captions') {
 				player.addTrackButton(player.tracks[i].trackId, player.tracks[i].srclang, player.tracks[i].label);
 			}
@@ -324,12 +322,12 @@ $.extend(MediaElementPlayer.prototype, {
 			return;
 		}
 
-		for (i = 0; i < t.tracks.length; i++) {
-			if (t.tracks[i].trackId === trackId) {
+		for (let track of t.tracks) {
+			if (track.trackId === trackId) {
 				if (t.selectedTrack === null) {
 					t.captionsButton.addClass(`${t.options.classPrefix}captions-enabled`);
 				}
-				t.selectedTrack = t.tracks[i];
+				t.selectedTrack = track;
 				t.captions.attr('lang', t.selectedTrack.srclang);
 				t.displayCaptions();
 				break;
@@ -500,9 +498,9 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// check if any subtitles
 		if (t.options.hideCaptionsButtonWhenEmpty) {
-			for (let i = 0; i < t.tracks.length; i++) {
-				let kind = t.tracks[i].kind;
-				if ((kind === 'subtitles' || kind === 'captions') && t.tracks[i].isLoaded) {
+			for (let track of t.tracks) {
+				let kind = track.kind;
+				if ((kind === 'subtitles' || kind === 'captions') && track.isLoaded) {
 					hasSubtitles = true;
 					break;
 				}
@@ -620,13 +618,11 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 */
 	displayChapters: function()  {
-		let
-			t = this,
-			i;
+		let t = this;
 
-		for (i = 0; i < t.tracks.length; i++) {
-			if (t.tracks[i].kind === 'chapters' && t.tracks[i].isLoaded) {
-				t.drawChapters(t.tracks[i]);
+		for (let track of t.tracks) {
+			if (track.kind === 'chapters' && track.isLoaded) {
+				t.drawChapters(track);
 				t.hasChapters = true;
 				break;
 			}
@@ -872,8 +868,8 @@ mejs.TrackFormatParser = {
 				let attributes = styleNode.removeAttr('id').get(0).attributes;
 				if (attributes.length) {
 					styles = {};
-					for (i = 0; i < attributes.length; i++) {
-						styles[attributes[i].name.split(':')[1]] = attributes[i].value;
+					for (let attribute of attributes) {
+						styles[attribute.name.split(':')[1]] = attribute.value;
 					}
 				}
 			}

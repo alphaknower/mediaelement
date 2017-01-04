@@ -43,15 +43,15 @@ $.extend(MediaElementPlayer.prototype, {
 	buildmarkers: function(player, controls, layers, media)  {
 		let
 			t = this,
-			i = 0,
 			currentPos = -1,
 			currentMarker = -1,
-			lastPlayPos = -1, //Track backward seek
-			lastMarkerCallBack = -1; //Prevents successive firing of callbacks
+			lastPlayPos = -1, // Track backward seek
+			lastMarkerCallBack = -1 // Prevents successive firing of callbacks
+		;
 
 		for (i = 0; i < player.options.markers.length; ++i) {
 			controls.find(`.${t.options.classPrefix}time-total`)
-			.append('<span class="' + `${t.options.classPrefix}time-marker"></span>`);
+				.append('<span class="' + `${t.options.classPrefix}time-marker"></span>`);
 		}
 
 		media.addEventListener('durationchange', (e) => {
@@ -67,11 +67,13 @@ $.extend(MediaElementPlayer.prototype, {
 				lastPlayPos = currentPos;
 			}
 
-			for (i = 0; i < player.options.markers.length; ++i) {
-				currentMarker = Math.floor(player.options.markers[i]);
-				if (currentPos === currentMarker && currentMarker !== lastMarkerCallBack) {
-					player.options.markerCallback(media, media.currentTime); //Fires the callback function
-					lastMarkerCallBack = currentMarker;
+			if (player.options.markers.length) {
+				for (let marker of player.options.markers) {
+					currentMarker = Math.floor(marker);
+					if (currentPos === currentMarker && currentMarker !== lastMarkerCallBack) {
+						player.options.markerCallback(media, media.currentTime); //Fires the callback function
+						lastMarkerCallBack = currentMarker;
+					}
 				}
 			}
 
@@ -84,18 +86,21 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} controls
 	 */
 	setmarkers: function(controls)  {
-		let t = this,
-			i = 0,
-			left;
+		let
+			t = this,
+			left
+		;
 
-		for (i = 0; i < t.options.markers.length; ++i) {
-			if (Math.floor(t.options.markers[i]) <= t.media.duration && Math.floor(t.options.markers[i]) >= 0) {
-				left = 100 * Math.floor(t.options.markers[i]) / t.media.duration;
-				$(controls.find(`.${t.options.classPrefix}time-marker`)[i]).css({
-					"width": '1px',
-					"left": `${left}%`,
-					"background": t.options.markerColor
-				});
+		if (t.options.markers.length) {
+			for (let marker of t.options.markers) {
+				if (Math.floor(marker) <= t.media.duration && Math.floor(marker) >= 0) {
+					left = 100 * Math.floor(marker) / t.media.duration;
+					$(controls.find(`.${t.options.classPrefix}time-marker`)[i]).css({
+						"width": '1px',
+						"left": `${left}%`,
+						"background": t.options.markerColor
+					});
+				}
 			}
 		}
 

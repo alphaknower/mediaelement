@@ -92,6 +92,10 @@
 		enableKeyboard: true,
 		// when this player starts, it will pause other players
 		pauseOtherPlayers: true,
+		// when setting to true, enable HC settings to make sure control bar items are visible
+		enableHighContrastMode: true,
+		// location of icons SVG sprite to be used for high contrast mode workflow
+		cssIconSpritePath: 'build/',
 		// array of keyboard actions such as play/pause
 		keyActions: [
 			{
@@ -1385,7 +1389,9 @@
 					$('<div class="' + t.options.classPrefix + 'overlay ' +
 					                   t.options.classPrefix + 'layer">' +
 						'<div class="' + t.options.classPrefix + 'overlay-loading">' +
-							'<span class="' + t.options.classPrefix + 'overlay-loading-bg-img"></span>' +
+							'<span class="' + t.options.classPrefix + 'overlay-loading-bg-img">' +
+						(t.options.enableHighContrastMode ? '<img src="' + t.options.cssIconSpritePath + 'mejs-controls.svg">' : '') +
+						'</span>' +
 						'</div>' +
 					'</div>')
 					.hide() // start out hidden
@@ -1404,7 +1410,9 @@
 									   t.options.classPrefix + 'overlay-play">' +
 						'<div class="' + t.options.classPrefix + 'overlay-button" ' +
 							'role="button" aria-label="' + mejs.i18n.t('mejs.play') +
-							'" aria-pressed="false"></div>' +
+							'" aria-pressed="false">' +
+						(t.options.enableHighContrastMode ? '<img src="' + t.options.cssIconSpritePath + 'mejs-controls.svg">' : '') +
+						'</div>' +
 						'</div>')
 					.appendTo(layers)
 					.on('click', function () {	 // Removed 'touchstart' due issues on Samsung Android devices where a tap on bigPlay started and immediately stopped the video

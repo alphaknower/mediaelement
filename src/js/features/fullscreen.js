@@ -235,8 +235,8 @@ $.extend(MediaElementPlayer.prototype, {
 			restoreControls = () => {
 				if (fullscreenIsDisabled) {
 					// hide the hovers
-					for (let i in hoverDivs) {
-						hoverDivs[i].hide();
+					for (let hover of hoverDivs) {
+						hover.hide();
 					}
 
 					// restore the control bar
@@ -261,8 +261,8 @@ $.extend(MediaElementPlayer.prototype, {
 					containerWidth = t.container.width(),
 					containerHeight = t.container.height();
 
-				for (i in hoverDivs) {
-					hoverDivs[i].css({position: 'absolute', top: 0, left: 0}); //, backgroundColor: '#f00'});
+				for (let hover in hoverDivs) {
+					hover.css({position: 'absolute', top: 0, left: 0}); //, backgroundColor: '#f00'});
 				}
 
 				// over video, but not controls
@@ -296,9 +296,9 @@ $.extend(MediaElementPlayer.prototype, {
 			positionHoverDivs();
 		});
 
-		for (i = 0, len = hoverDivNames.length; i < len; i++) {
-			hoverDivs[hoverDivNames[i]] = $(`<div class="${t.options.classPrefix}fullscreen-hover" />`)
-			.appendTo(t.container).mouseover(restoreControls).hide();
+		for (let hover of hoverDivNames) {
+			hoverDivs[hover] = $(`<div class="${t.options.classPrefix}fullscreen-hover" />`)
+				.appendTo(t.container).mouseover(restoreControls).hide();
 		}
 
 		// on hover, kill the fullscreen button's HTML handling, allowing clicks down to Flash
@@ -320,8 +320,8 @@ $.extend(MediaElementPlayer.prototype, {
 				t.media.addEventListener('click', t.clickToPlayPauseCallback);
 
 				// show the divs that will restore things
-				for (i in hoverDivs) {
-					hoverDivs[i].show();
+				for (let hover of hoverDivs) {
+					hover.show();
 				}
 
 				positionHoverDivs();
@@ -461,7 +461,6 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 
 		if (t.options.setDimensions) {
-			console.warn(t.media);
 			t.media.setSize(screen.width, screen.height);
 		}
 

@@ -142,9 +142,7 @@ const SoundCloudIframeRenderer = {
 			paused = true,
 			volume = 1,
 			muted = false,
-			ended = false,
-			i,
-			il
+			ended = false
 		;
 
 		// wrappers for get/set
@@ -250,8 +248,8 @@ const SoundCloudIframeRenderer = {
 			}
 		;
 
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// add wrappers for native methods
@@ -283,8 +281,8 @@ const SoundCloudIframeRenderer = {
 			}
 		;
 
-		for (i = 0, il = methods.length; i < il; i++) {
-			assignMethods(methods[i]);
+		for (let method of methods) {
+			assignMethods(method);
 		}
 
 		// add a ready method that SC can fire
@@ -294,17 +292,16 @@ const SoundCloudIframeRenderer = {
 			mediaElement.scPlayer = scPlayer = _scPlayer;
 
 			// do call stack
-			for (i = 0, il = apiStack.length; i < il; i++) {
+			if (apiStack.length) {
+				for (let stackItem of apiStack) {
+					if (stackItem.type === 'set') {
+						let propName = stackItem.propName,
+							capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
 
-				let stackItem = apiStack[i];
-
-				if (stackItem.type === 'set') {
-					let propName = stackItem.propName,
-						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
-
-					sc[`set${capName}`](stackItem.value);
-				} else if (stackItem.type === 'call') {
-					sc[stackItem.methodName]();
+						sc[`set${capName}`](stackItem.value);
+					} else if (stackItem.type === 'call') {
+						sc[stackItem.methodName]();
+					}
 				}
 			}
 
@@ -368,8 +365,8 @@ const SoundCloudIframeRenderer = {
 			// give initial events
 			let initEvents = ['rendererready', 'loadeddata', 'loadedmetadata', 'canplay'];
 
-			for (let i = 0, il = initEvents.length; i < il; i++) {
-				let event = createEvent(initEvents[i], sc);
+			for (let initialEvent of initEvents) {
+				let event = createEvent(initialEvent, sc);
 				mediaElement.dispatchEvent(event);
 			}
 		};

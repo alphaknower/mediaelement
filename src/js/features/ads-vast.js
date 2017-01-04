@@ -80,8 +80,8 @@ $.extend(MediaElementPlayer.prototype, {
 				// only do impressions once
 				if (!adTag.shown && adTag.impressions.length > 0) {
 
-					for (let i = 0, il = adTag.impressions.length; i < il; i++) {
-						t.adsLoadUrl(adTag.impressions[i]);
+					for (let impression of adTag.impressions) {
+						t.adsLoadUrl(impression);
 					}
 				}
 

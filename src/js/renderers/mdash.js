@@ -129,12 +129,10 @@ let DashNativeRenderer = {
 		let
 			node = null,
 			originalNode = mediaElement.originalNode,
-			i,
-			il,
 			id = mediaElement.id + '_' + options.prefix,
 			dashPlayer,
 			stack = {}
-			;
+		;
 
 		node = originalNode.cloneNode(true);
 		options = Object.assign(options, mediaElement.options);
@@ -166,9 +164,10 @@ let DashNativeRenderer = {
 				};
 
 			}
-			;
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+		;
+
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		// Initial method to register all M-Dash events
@@ -180,17 +179,16 @@ let DashNativeRenderer = {
 			dashPlayer.getDebug().setLogToBrowserConsole(options.dash.debug);
 
 			// do call stack
-			for (i = 0, il = stack.length; i < il; i++) {
+			if (stack.length) {
+				for (let stackItem of stack) {
+					if (stackItem.type === 'set') {
+						let propName = stackItem.propName,
+							capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
 
-				let stackItem = stack[i];
-
-				if (stackItem.type === 'set') {
-					let propName = stackItem.propName,
-						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
-
-					node[`set${capName}`](stackItem.value);
-				} else if (stackItem.type === 'call') {
-					node[stackItem.methodName]();
+						node[`set${capName}`](stackItem.value);
+					} else if (stackItem.type === 'call') {
+						node[stackItem.methodName]();
+					}
 				}
 			}
 
@@ -214,12 +212,12 @@ let DashNativeRenderer = {
 					});
 
 				}
-				;
+			;
 
 			events = events.concat(['click', 'mouseover', 'mouseout']);
 
-			for (i = 0, il = events.length; i < il; i++) {
-				assignEvents(events[i]);
+			for (let event of events) {
+				assignEvents(event);
 			}
 
 			/**
@@ -246,8 +244,7 @@ let DashNativeRenderer = {
 		};
 
 		let filteredAttributes = ['id', 'src', 'style'];
-		for (let j = 0, total = originalNode.attributes.length; j < total; j++) {
-			let attribute = originalNode.attributes[j];
+		for (let attribute of originalNode.attributes) {
 			if (attribute.specified && !filteredAttributes.includes(attribute.name)) {
 				node.setAttribute(attribute.name, attribute.value);
 			}
@@ -256,9 +253,9 @@ let DashNativeRenderer = {
 		node.setAttribute('id', id);
 
 		if (mediaFiles && mediaFiles.length > 0) {
-			for (i = 0, il = mediaFiles.length; i < il; i++) {
-				if (renderer.renderers[options.prefix].canPlayType(mediaFiles[i].type)) {
-					node.setAttribute('src', mediaFiles[i].src);
+			for (let file of mediaFiles) {
+				if (renderer.renderers[options.prefix].canPlayType(file.type)) {
+					node.src = file.src;
 					break;
 				}
 			}

@@ -1,24 +1,38 @@
 import document from 'global/document';
 
+/**
+ *
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} onGet
+ * @param {Function} onSet
+ */
 export function addProperty (obj, name, onGet, onSet) {
 
 	// wrapper functions
 	let oldValue = obj[name];
-	let getFn = () => onGet.apply(obj, [oldValue]);
-	let setFn = (newValue) => {
-		oldValue = onSet.apply(obj, [newValue]);
-		return oldValue;
-	};
+	const
+		getFn = () => onGet.apply(obj, [oldValue]),
+		setFn = (newValue) => {
+			oldValue = onSet.apply(obj, [newValue]);
+			return oldValue;
+		};
 
 	// Modern browsers, IE9+ (IE8 only works on DOM objects, not normal JS objects)
 	if (Object.defineProperty) {
+
 		Object.defineProperty(obj, name, {
 			get: getFn,
 			set: setFn
 		});
+
+		// Older Firefox
+	} else if (obj.__defineGetter__) {
+
+		obj.__defineGetter__(name, getFn);
+		obj.__defineSetter__(name, setFn);
 	}
 }
-
 
 /**
  *
@@ -131,7 +145,7 @@ mejs.getElementsByClassName = (className, node, tag) => {
 		teststr,
 		els = node.getElementsByTagName(tag),
 		elsLen = els.length
-	;
+		;
 
 	for (i = 0; i < elsLen; i++) {
 		if (els[i].className.indexOf(className) > -1) {
