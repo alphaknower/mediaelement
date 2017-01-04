@@ -84,19 +84,13 @@ class MediaElement {
 
 					let
 						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`,
-						getFn = () => {
-							if (renderExists) {
-								return t.mediaElement.renderer[`get${capName}`]();
-							} else {
-								return null;
-							}
-						},
+						getFn = () => renderExists ? t.mediaElement.renderer[`get${capName}`]() : null,
 						setFn = (value) => {
 							if (renderExists) {
 								t.mediaElement.renderer[`set${capName}`](value);
 							}
 						};
-
+					
 					addProperty(t.mediaElement, propName, getFn, setFn);
 
 					t.mediaElement[`get${capName}`] = getFn;

@@ -95,6 +95,39 @@ module.exports = function(grunt) {
 						'src/js/features/postroll.js',
 						'src/js/features/markers.js'
 					]),
+					'tmp/mediaelement-and-player.js': [
+						'src/js/utils/legacy.js',
+						'src/js/core/mediaelement.js',
+						'src/js/renderers/html5.js',
+						'src/js/renderers/hls.js',
+						'src/js/renderers/mdash.js',
+						'src/js/renderers/flv.js',
+						'src/js/renderers/youtube.js',
+						'src/js/renderers/vimeo.js',
+						'src/js/renderers/dailymotion.js',
+						'src/js/renderers/facebook.js',
+						'src/js/renderers/soundcloud.js',
+						'src/js/renderers/flash.js',
+						'src/js/core/i18n.js',
+						'src/js/languages/en.js',
+						'src/js/library.js',
+						'src/js/player.js'
+					].concat(featureSources || [
+						'src/js/features/playpause.js',
+						'src/js/features/stop.js',
+						'src/js/features/progress.js',
+						'src/js/features/time.js',
+						'src/js/features/volume.js',
+						'src/js/features/fullscreen.js',
+						'src/js/features/speed.js',
+						'src/js/features/tracks.js',
+						'src/js/features/sourcechooser.js',
+						'src/js/features/contextmenu.js',
+						'src/js/features/skipback.js',
+						'src/js/features/jumpforward.js',
+						'src/js/features/postroll.js',
+						'src/js/features/markers.js'
+					]),
 				}
 			}
 		},
@@ -116,8 +149,7 @@ module.exports = function(grunt) {
 			bundle: {
 				src: [
 					'src/js/header.js',
-					'tmp/mediaelement.js',
-					'tmp/mediaelementplayer.js'
+					'tmp/mediaelement-and-player.js'
 				],
 				dest: 'tmp/mediaelement-and-player.js'
 			}

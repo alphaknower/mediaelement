@@ -73,18 +73,16 @@ const HtmlMediaElement = {
 			assignGettersSetters = (propName) => {
 				const capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`;
 
-				node[`get${capName}`] = () => {
-					return node[propName];
-				};
+				node[`get${capName}`] = () => node[propName];
 
 				node[`set${capName}`] = (value) => {
 					node[propName] = value;
 				};
 
 			}
-			;
-		for (i = 0, il = props.length; i < il; i++) {
-			assignGettersSetters(props[i]);
+		;
+		for (let property of props) {
+			assignGettersSetters(property);
 		}
 
 		let
