@@ -533,8 +533,4 @@ if (hasFlash) {
 		create: FlashMediaElementRenderer.create
 	};
 	renderer.add(FlashMediaElementAudioOggRenderer);
-
-	// Register Flash renderer if Flash was found
-	// window.FlashMediaElementRenderer = mejs.FlashMediaElementRenderer = FlashMediaElementRenderer;
-
 }

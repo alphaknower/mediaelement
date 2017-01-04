@@ -140,6 +140,4 @@ const HtmlMediaElement = {
 	}
 };
 
-// window.HtmlMediaElement = mejs.HtmlMediaElement = HtmlMediaElement;
-
 renderer.add(HtmlMediaElement);
