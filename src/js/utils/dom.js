@@ -88,7 +88,7 @@ export function isNodeAfter (sourceNode, targetNode) {
  * @returns {Boolean}
  */
 export function isScriptLoaded (url) {
-	const scripts = doc.getElementsByTagName('script');
+	const scripts = document.getElementsByTagName('script');
 	for (let script of scripts) {
 		if (script.src.indexOf(url) > -1) {
 			return true;
