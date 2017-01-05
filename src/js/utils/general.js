@@ -95,11 +95,10 @@ export function debounce (func, wait, immediate = false) {
  * @return {Boolean}
  */
 export function isObjectEmpty (instance) {
-	return (Object.getOwnPropertyNames(instance).length > 0);
+	return !(Object.getOwnPropertyNames(instance).length > 0);
 }
 
 export function splitEvents (events, id) {
-
 	let rwindow = /^((after|before)print|(before)?unload|hashchange|message|o(ff|n)line|page(hide|show)|popstate|resize|storage)\b/;
 	// add player ID as an event namespace so it's easier to unbind them all later
 	let ret = {d: [], w: []};
