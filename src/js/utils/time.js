@@ -1,17 +1,15 @@
 /**
  * Format a numeric time in format '00:00:00'
  *
- * @param {number} time
+ * @param {Number} time - Ideally a number, but if not or less than zero, is defaulted to zero
  * @param {Boolean} forceHours
  * @param {Boolean} showFrameCount
- * @param {number} fps - Frames per second
+ * @param {Number} fps - Frames per second
  * @return {String}
  */
 export function secondsToTimeCode (time, forceHours = false, showFrameCount = false, fps = 25) {
 
-	// if (typeof time !== 'number') {
-	// 	throw new Error('Time must be a numeric value');
-	// }
+	time = !time || typeof time !== 'number' || time < 0 ? 0 : time;
 
 	let hours = Math.floor(time / 3600) % 24;
 	let minutes = Math.floor(time / 60) % 60;
@@ -31,8 +29,8 @@ export function secondsToTimeCode (time, forceHours = false, showFrameCount = fa
  *
  * @param {String} time
  * @param {Boolean} showFrameCount
- * @param {number} fps - Frames per second
- * @return {number}
+ * @param {Number} fps - Frames per second
+ * @return {Number}
  */
 export function timeCodeToSeconds (time, showFrameCount = false, fps = 25) {
 
@@ -81,17 +79,13 @@ export function timeCodeToSeconds (time, showFrameCount = false, fps = 25) {
  *
  * There is a default format set in the options but it can be incomplete, so it is adjusted according to the media
  * duration. Format: 'hh:mm:ss:ff'
- * @param {number} time
+ * @param {*} time - Ideally a number, but if not or less than zero, is defaulted to zero
  * @param {Object} options
- * @param {number} fps - Frames per second
+ * @param {Number} fps - Frames per second
  */
 export function calculateTimeFormat (time, options, fps = 25) {
 
-	// if (typeof time !== 'number') {
-	// 	throw new Error('Time must be a numeric value');
-	// }
-
-	time = time < 0 ? 0 : time;
+	time = !time || typeof time !== 'number' || time < 0 ? 0 : time;
 
 	let
 		required = false,
@@ -147,7 +141,7 @@ export function calculateTimeFormat (time, options, fps = 25) {
  * Convert Society of Motion Picture and Television Engineers (SMTPE) time code into seconds
  *
  * @param {String} SMPTE
- * @return {number|Boolean}
+ * @return {Number}
  */
 export function convertSMPTEtoSeconds (SMPTE) {
 
