@@ -72,39 +72,6 @@ class MediaElement {
 		t.mediaElement.renderers = {};
 		t.mediaElement.renderer = null;
 		t.mediaElement.rendererName = null;
-
-		let renderExists = t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null;
-
-		// add properties get/set
-		const
-			props = mejs.html5media.properties,
-			methods = mejs.html5media.methods,
-			assignGettersSetters = (propName) => {
-				// src is a special one below
-				if (propName !== 'src') {
-
-					const
-						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`,
-						getFn = () => renderExists ? t.mediaElement.renderer[`get${capName}`]() : null,
-
-						setFn = (value) => {
-							if (renderExists) {
-								t.mediaElement.renderer[`set${capName}`](value);
-							}
-						};
-					
-					addProperty(t.mediaElement, propName, getFn, setFn);
-
-					t.mediaElement[`get${capName}`] = getFn;
-					t.mediaElement[`set${capName}`] = setFn;
-				}
-			}
-		;
-
-		for (let property of props) {
-			assignGettersSetters(property);
-		}
-
 		/**
 		 * Determine whether the renderer was found or not
 		 *
@@ -193,10 +160,27 @@ class MediaElement {
 			}
 		};
 
-		// special .src property
 		const
-			getSrc = () => renderExists ? t.mediaElement.renderer.getSrc() : null,
+			props = mejs.html5media.properties,
+			methods = mejs.html5media.methods,
+			assignGettersSetters = (propName) => {
+				if (propName !== 'src') {
 
+					const
+						capName = `${propName.substring(0, 1).toUpperCase()}${propName.substring(1)}`,
+						getFn = () => t.mediaElement.renderer[`get${capName}`](),
+						setFn = (value) => {
+							t.mediaElement.renderer[`set${capName}`](value);
+						};
+
+					addProperty(t.mediaElement, propName, getFn, setFn);
+					t.mediaElement[`get${capName}`] = getFn;
+					t.mediaElement[`set${capName}`] = setFn;
+				}
+			},
+			// `src` is a property separated from the others since it carries the logic to set the proper renderer
+			// based on the media files detected
+			getSrc = () => t.mediaElement.renderer.getSrc(),
 			setSrc = (value) => {
 
 				let mediaFiles = [];
@@ -252,22 +236,24 @@ class MediaElement {
 					event.message = 'Error creating renderer';
 					t.mediaElement.dispatchEvent(event);
 				}
-			}
-		;
+			},
+			assignMethods = (methodName) => {
+				// run the method on the current renderer
+				t.mediaElement[methodName] = (...args) => {
+					return (typeof t.mediaElement.renderer[methodName] === 'function') ?
+						t.mediaElement.renderer[methodName](args) : null;
+				};
 
+			};
+
+		// Assign all methods/properties/events to fake node if renderer was found
 		addProperty(t.mediaElement, 'src', getSrc, setSrc);
 		t.mediaElement.getSrc = getSrc;
 		t.mediaElement.setSrc = setSrc;
 
-		// add methods
-		const assignMethods = (methodName) => {
-			// run the method on the current renderer
-			t.mediaElement[methodName] = (...args) => {
-				return (renderExists && typeof t.mediaElement.renderer[methodName] === 'function') ?
-					t.mediaElement.renderer[methodName].apply(args) : null;
-			};
-
-		};
+		for (let property of props) {
+			assignGettersSetters(property);
+		}
 
 		for (let method of methods) {
 			assignMethods(method);
@@ -389,6 +375,8 @@ class MediaElement {
 		// if (t.mediaElement.options.error) {
 		// 	t.mediaElement.options.error(this.mediaElement, this.mediaElement.originalNode);
 		// }
+
+		console.log(t);
 
 		return t.mediaElement;
 	}

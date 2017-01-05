@@ -310,52 +310,50 @@ export class MediaElementPlayer {
 		mejs.players[t.id] = t;
 
 		// start up
-		const _init = () => {
+		let
 
-			let
-				t = this,
-				meOptions = Object.assign({}, t.options, {
-					success: (media, domNode) => {
-						t._meReady(media, domNode);
-					},
-					error: (e) => {
-						t._handleError(e);
-					}
-				}),
-				tagName = t.media.tagName.toLowerCase()
+			meOptions = Object.assign({}, t.options, {
+				success: (media, domNode) => {
+					t._meReady(media, domNode);
+				},
+				error: (e) => {
+					t._handleError(e);
+				}
+			}),
+			tagName = t.media.tagName.toLowerCase()
 			;
 
-			// get video from src or href?
-			t.isDynamic = (tagName !== 'audio' && tagName !== 'video');
-			t.isVideo = (t.isDynamic) ? t.options.isVideo : (tagName !== 'audio' && t.options.isVideo);
+		// get video from src or href?
+		t.isDynamic = (tagName !== 'audio' && tagName !== 'video');
+		t.isVideo = (t.isDynamic) ? t.options.isVideo : (tagName !== 'audio' && t.options.isVideo);
 
-			// use native controls in iPad, iPhone, and Android
-			if ((IS_IPAD && t.options.iPadUseNativeControls) || (IS_IPHONE && t.options.iPhoneUseNativeControls)) {
+		// use native controls in iPad, iPhone, and Android
+		if ((IS_IPAD && t.options.iPadUseNativeControls) || (IS_IPHONE && t.options.iPhoneUseNativeControls)) {
 
-				// add controls and stop
-				t.$media.attr('controls', 'controls');
+			// add controls and stop
+			t.$media.attr('controls', 'controls');
 
-				// override Apple's autoplay override for iPads
-				if (IS_IPAD && t.media.getAttribute('autoplay')) {
-					t.play();
-				}
+			// override Apple's autoplay override for iPads
+			if (IS_IPAD && t.media.getAttribute('autoplay')) {
+				t.play();
+			}
 
-			} else if (IS_ANDROID && t.options.AndroidUseNativeControls) {
+		} else if (IS_ANDROID && t.options.AndroidUseNativeControls) {
 
-				// leave default player
+			// leave default player
 
-			} else if (t.isVideo || (!t.isVideo && t.options.features.length)) {
+		} else if (t.isVideo || (!t.isVideo && t.options.features.length)) {
 
-				// DESKTOP: use MediaElementPlayer controls
+			// DESKTOP: use MediaElementPlayer controls
 
-				// remove native controls
-				t.$media.removeAttr('controls');
-				let videoPlayerTitle = t.isVideo ? i18n.t('mejs.video-player') : i18n.t('mejs.audio-player');
-				// insert description for screen readers
-				$(`<span class="${t.options.classPrefix}offscreen">${videoPlayerTitle}</span>`).insertBefore(t.$media);
-				// build container
-				t.container =
-					$(`<div id="${t.id}" class="${t.options.classPrefix}container 
+			// remove native controls
+			t.$media.removeAttr('controls');
+			let videoPlayerTitle = t.isVideo ? i18n.t('mejs.video-player') : i18n.t('mejs.audio-player');
+			// insert description for screen readers
+			$(`<span class="${t.options.classPrefix}offscreen">${videoPlayerTitle}</span>`).insertBefore(t.$media);
+			// build container
+			t.container =
+				$(`<div id="${t.id}" class="${t.options.classPrefix}container 
 							${t.options.classPrefix}container-keyboard-inactive" tabindex="0" role="application" 
 							aria-label="${videoPlayerTitle}">
 							<div class="${t.options.classPrefix}inner">
@@ -365,121 +363,118 @@ export class MediaElementPlayer {
 								<div class="${t.options.classPrefix}clear"></div>
 							</div>
 						</div>`)
-					.addClass(t.$media[0].className)
-					.insertBefore(t.$media)
-					.focus((e) => {
-						if (!t.controlsAreVisible && !t.hasFocus && t.controlsEnabled) {
-							t.showControls(true);
-							// In versions older than IE11, the focus causes the playbar to be displayed
-							// if user clicks on the Play/Pause button in the control bar once it attempts
-							// to hide it
-							if (!HAS_MS_NATIVE_FULLSCREEN) {
-								// If e.relatedTarget appears before container, send focus to play button,
-								// else send focus to last control button.
-								let btnSelector = `.${t.options.classPrefix}playpause-button > button`;
+				.addClass(t.$media[0].className)
+				.insertBefore(t.$media)
+				.focus((e) => {
+					if (!t.controlsAreVisible && !t.hasFocus && t.controlsEnabled) {
+						t.showControls(true);
+						// In versions older than IE11, the focus causes the playbar to be displayed
+						// if user clicks on the Play/Pause button in the control bar once it attempts
+						// to hide it
+						if (!HAS_MS_NATIVE_FULLSCREEN) {
+							// If e.relatedTarget appears before container, send focus to play button,
+							// else send focus to last control button.
+							let btnSelector = `.${t.options.classPrefix}playpause-button > button`;
 
-								if (isNodeAfter(e.relatedTarget, t.container[0])) {
-									btnSelector = `.${t.options.classPrefix}controls .${t.options.classPrefix}button:last-child > button`;
-								}
-
-								let button = t.container.find(btnSelector);
-								button.focus();
+							if (isNodeAfter(e.relatedTarget, t.container[0])) {
+								btnSelector = `.${t.options.classPrefix}controls .${t.options.classPrefix}button:last-child > button`;
 							}
+
+							let button = t.container.find(btnSelector);
+							button.focus();
 						}
-					});
+					}
+				});
 
-				// When no elements in controls, hide bar completely
-				if (!t.options.features.length) {
-					t.container.css('background', 'transparent')
-					.find(`.${t.options.classPrefix}controls`)
-					.hide();
-				}
-
-				if (t.isVideo && t.options.stretching === 'fill' && !t.container.parent(`.${t.options.classPrefix}fill-container`).length) {
-					// outer container
-					t.outerContainer = t.$media.parent();
-					t.container.wrap(`<div class="${t.options.classPrefix}fill-container"/>`);
-				}
-
-				// add classes for user and content
-				t.container.addClass(
-					(IS_ANDROID ? `${t.options.classPrefix}android ` : '') +
-					(IS_IOS ? `${t.options.classPrefix}ios ` : '') +
-					(IS_IPAD ? `${t.options.classPrefix}ipad ` : '') +
-					(IS_IPHONE ? `${t.options.classPrefix}iphone ` : '') +
-					(t.isVideo ? `${t.options.classPrefix}video ` : `${t.options.classPrefix}audio `)
-				);
-
-
-				// move the <video/video> tag into the right spot
-				t.container.find(`.${t.options.classPrefix}mediaelement`).append(t.$media);
-
-				// needs to be assigned here, after iOS remap
-				t.node.player = t;
-
-				// find parts
-				t.controls = t.container.find(`.${t.options.classPrefix}controls`);
-				t.layers = t.container.find(`.${t.options.classPrefix}layers`);
-
-				// determine the size
-
-				/* size priority:
-				 (1) videoWidth (forced),
-				 (2) style="width;height;"
-				 (3) width attribute,
-				 (4) defaultVideoWidth (for unspecified cases)
-				 */
-
-				let
-					tagType = (t.isVideo ? 'video' : 'audio'),
-					capsTagName = tagType.substring(0, 1).toUpperCase() + tagType.substring(1)
-				;
-
-
-				if (t.options[tagType + 'Width'] > 0 || t.options[tagType + 'Width'].toString().indexOf('%') > -1) {
-					t.width = t.options[tagType + 'Width'];
-				} else if (t.media.style.width !== '' && t.media.style.width !== null) {
-					t.width = t.media.style.width;
-				} else if (t.media.getAttribute('width')) {
-					t.width = t.$media.attr('width');
-				} else {
-					t.width = t.options['default' + capsTagName + 'Width'];
-				}
-
-				if (t.options[tagType + 'Height'] > 0 || t.options[tagType + 'Height'].toString().indexOf('%') > -1) {
-					t.height = t.options[tagType + 'Height'];
-				} else if (t.media.style.height !== '' && t.media.style.height !== null) {
-					t.height = t.media.style.height;
-				} else if (t.$media[0].getAttribute('height')) {
-					t.height = t.$media.attr('height');
-				} else {
-					t.height = t.options['default' + capsTagName + 'Height'];
-				}
-
-				t.initialAspectRatio = (t.height >= t.width) ? t.width / t.height : t.height / t.width;
-
-				// set the size, while we wait for the plugins to load below
-				t.setPlayerSize(t.width, t.height);
-
-				// create MediaElementShim
-				meOptions.pluginWidth = t.width;
-				meOptions.pluginHeight = t.height;
-			}
-			// Hide media completely for audio that doesn't have any features
-			else if (!t.isVideo && !t.options.features.length) {
-				t.$media.hide();
+			// When no elements in controls, hide bar completely
+			if (!t.options.features.length) {
+				t.container.css('background', 'transparent')
+				.find(`.${t.options.classPrefix}controls`)
+				.hide();
 			}
 
-			// create MediaElement shim
-			new MediaElement(t.$media[0], meOptions);
-
-			if (t.container !== undefined && t.options.features.length && t.controlsAreVisible && !t.options.hideVideoControlsOnLoad) {
-				// controls are shown when loaded
-				t.container.trigger('controlsshown');
+			if (t.isVideo && t.options.stretching === 'fill' && !t.container.parent(`.${t.options.classPrefix}fill-container`).length) {
+				// outer container
+				t.outerContainer = t.$media.parent();
+				t.container.wrap(`<div class="${t.options.classPrefix}fill-container"/>`);
 			}
-		};
 
-		_init();
+			// add classes for user and content
+			t.container.addClass(
+				(IS_ANDROID ? `${t.options.classPrefix}android ` : '') +
+				(IS_IOS ? `${t.options.classPrefix}ios ` : '') +
+				(IS_IPAD ? `${t.options.classPrefix}ipad ` : '') +
+				(IS_IPHONE ? `${t.options.classPrefix}iphone ` : '') +
+				(t.isVideo ? `${t.options.classPrefix}video ` : `${t.options.classPrefix}audio `)
+			);
+
+
+			// move the <video/video> tag into the right spot
+			t.container.find(`.${t.options.classPrefix}mediaelement`).append(t.$media);
+
+			// needs to be assigned here, after iOS remap
+			t.node.player = t;
+
+			// find parts
+			t.controls = t.container.find(`.${t.options.classPrefix}controls`);
+			t.layers = t.container.find(`.${t.options.classPrefix}layers`);
+
+			// determine the size
+
+			/* size priority:
+			 (1) videoWidth (forced),
+			 (2) style="width;height;"
+			 (3) width attribute,
+			 (4) defaultVideoWidth (for unspecified cases)
+			 */
+
+			let
+				tagType = (t.isVideo ? 'video' : 'audio'),
+				capsTagName = tagType.substring(0, 1).toUpperCase() + tagType.substring(1)
+			;
+
+
+			if (t.options[tagType + 'Width'] > 0 || t.options[tagType + 'Width'].toString().indexOf('%') > -1) {
+				t.width = t.options[tagType + 'Width'];
+			} else if (t.media.style.width !== '' && t.media.style.width !== null) {
+				t.width = t.media.style.width;
+			} else if (t.media.getAttribute('width')) {
+				t.width = t.$media.attr('width');
+			} else {
+				t.width = t.options['default' + capsTagName + 'Width'];
+			}
+
+			if (t.options[tagType + 'Height'] > 0 || t.options[tagType + 'Height'].toString().indexOf('%') > -1) {
+				t.height = t.options[tagType + 'Height'];
+			} else if (t.media.style.height !== '' && t.media.style.height !== null) {
+				t.height = t.media.style.height;
+			} else if (t.$media[0].getAttribute('height')) {
+				t.height = t.$media.attr('height');
+			} else {
+				t.height = t.options['default' + capsTagName + 'Height'];
+			}
+
+			t.initialAspectRatio = (t.height >= t.width) ? t.width / t.height : t.height / t.width;
+
+			// set the size, while we wait for the plugins to load below
+			t.setPlayerSize(t.width, t.height);
+
+			// create MediaElementShim
+			meOptions.pluginWidth = t.width;
+			meOptions.pluginHeight = t.height;
+		}
+		// Hide media completely for audio that doesn't have any features
+		else if (!t.isVideo && !t.options.features.length) {
+			t.$media.hide();
+		}
+
+		// create MediaElement shim
+		new MediaElement(t.$media[0], meOptions);
+
+		if (t.container !== undefined && t.options.features.length && t.controlsAreVisible && !t.options.hideVideoControlsOnLoad) {
+			// controls are shown when loaded
+			t.container.trigger('controlsshown');
+		}
 
 		return t;
 	}
@@ -627,7 +622,7 @@ export class MediaElementPlayer {
 			autoplayAttr = domNode.getAttribute('autoplay'),
 			autoplay = !(autoplayAttr === undefined || autoplayAttr === null || autoplayAttr === 'false'),
 			isNative = media.rendererName !== null && media.rendererName.match(/(native|html5)/)
-		;
+			;
 
 		// make sure it can't create itself again if a plugin reloads
 		if (t.created) {
@@ -638,8 +633,7 @@ export class MediaElementPlayer {
 		t.media = media;
 		t.domNode = domNode;
 
-		if (!(IS_ANDROID && t.options.AndroidUseNativeControls) && !(IS_IPAD && t.options.iPadUseNativeControls) &&
-			!(IS_IPHONE && t.options.iPhoneUseNativeControls)) {
+		if (!(IS_ANDROID && t.options.AndroidUseNativeControls) && !(IS_IPAD && t.options.iPadUseNativeControls) && !(IS_IPHONE && t.options.iPhoneUseNativeControls)) {
 
 			// In the event that no features are specified for audio,
 			// create only MediaElement instance rather than
@@ -1244,7 +1238,7 @@ export class MediaElementPlayer {
 			railMargin = parseFloat(t.rail.css('margin-left')) + parseFloat(t.rail.css('margin-right')),
 			totalMargin = parseFloat(t.total.css('margin-left')) + parseFloat(t.total.css('margin-right')),
 			siblingsWidth = 0
-		;
+			;
 
 		t.rail.siblings().each((index, object) => {
 			siblingsWidth += parseFloat($(object).outerWidth(true));
@@ -1307,7 +1301,7 @@ export class MediaElementPlayer {
 		let
 			t = this,
 			doc = t.node ? t.node.ownerDocument : document
-		;
+			;
 
 		events = splitEvents(events, t.id);
 		if (events.d) {
@@ -1324,7 +1318,7 @@ export class MediaElementPlayer {
 			t = this,
 			poster = $(`<div class="${t.options.classPrefix}poster ${t.options.classPrefix}layer"></div>`).appendTo(layers),
 			posterUrl = player.$media.attr('poster')
-		;
+			;
 
 		// priority goes to option (this is useful if you need to support iOS 3.x (iOS completely fails with poster)
 		if (player.options.poster !== '') {
@@ -1385,9 +1379,9 @@ export class MediaElementPlayer {
 
 						let
 							button = t.$media.closest(`.${t.options.classPrefix}container`)
-								.find(`.${t.options.classPrefix}overlay-button`),
+							.find(`.${t.options.classPrefix}overlay-button`),
 							pressed = button.attr('aria-pressed')
-						;
+							;
 
 						if (media.paused) {
 							media.play();
@@ -1618,13 +1612,15 @@ export class MediaElementPlayer {
 	}
 }
 
+window.MediaElementPlayer = MediaElementPlayer;
+
 // turn into plugin
 (($) => {
 
 	if (typeof mejs.$ !== 'undefined') {
 		mejs.$.fn.mediaelementplayer = function (options) {
 			if (options === false) {
-				this.each(function() {
+				this.each(function () {
 					let player = $(this).data('mediaelementplayer');
 					if (player) {
 						player.remove();
@@ -1633,7 +1629,7 @@ export class MediaElementPlayer {
 				});
 			}
 			else {
-				this.each(function() {
+				this.each(function () {
 					$(this).data('mediaelementplayer', new MediaElementPlayer(this, options));
 				});
 			}

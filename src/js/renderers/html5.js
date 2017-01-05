@@ -76,6 +76,8 @@ const HtmlMediaElement = {
 				node[`set${capName}`] = (value) => {
 					node[propName] = value;
 				};
+
+				console.log(node.paused);
 			}
 		;
 
@@ -139,5 +141,7 @@ const HtmlMediaElement = {
 		return node;
 	}
 };
+
+window.HtmlMediaElement = mejs.HtmlMediaElement = HtmlMediaElement;
 
 renderer.add(HtmlMediaElement);
