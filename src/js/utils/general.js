@@ -95,7 +95,7 @@ export function debounce (func, wait, immediate = false) {
  * @return {Boolean}
  */
 export function isObjectEmpty (instance) {
-	return !(Object.getOwnPropertyNames(instance).length > 0);
+	return (Object.getOwnPropertyNames(instance).length <= 0);
 }
 
 export function splitEvents (events, id) {

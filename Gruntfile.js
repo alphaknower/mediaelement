@@ -76,6 +76,7 @@ module.exports = function(grunt) {
 						'src/js/core/i18n.js',
 						'src/js/languages/en.js'
 					],
+					// just player
 					'tmp/mediaelementplayer.js': [
 						'src/js/library.js',
 						'src/js/player.js'
@@ -95,6 +96,7 @@ module.exports = function(grunt) {
 						'src/js/features/postroll.js',
 						'src/js/features/markers.js'
 					]),
+					// all bundle
 					'tmp/mediaelement-and-player.js': [
 						'src/js/utils/legacy.js',
 						'src/js/core/mediaelement.js',
@@ -128,6 +130,26 @@ module.exports = function(grunt) {
 						'src/js/features/postroll.js',
 						'src/js/features/markers.js'
 					]),
+
+					//languages
+					'tmp/ca.js': ['src/js/languages/ca.js'],
+					'tmp/cs.js': ['src/js/languages/cs.js'],
+					'tmp/de.js': ['src/js/languages/de.js'],
+					'tmp/es.js': ['src/js/languages/es.js'],
+					'tmp/fr.js': ['src/js/languages/fr.js'],
+					'tmp/hu.js': ['src/js/languages/hu.js'],
+					'tmp/it.js': ['src/js/languages/it.js'],
+					'tmp/ja.js': ['src/js/languages/ja.js'],
+					'tmp/ko.js': ['src/js/languages/ko.js'],
+					'tmp/nl.js': ['src/js/languages/nl.js'],
+					'tmp/pl.js': ['src/js/languages/pl.js'],
+					'tmp/pt.js': ['src/js/languages/pt.js'],
+					'tmp/pt-br.js': ['src/js/languages/pt-br.js'],
+					'tmp/ro.js': ['src/js/languages/ro.js'],
+					'tmp/ru.js': ['src/js/languages/ru.js'],
+					'tmp/sk.js': ['src/js/languages/sk.js'],
+					'tmp/zh.js': ['src/js/languages/zh.js'],
+					'tmp/zh-cn.js': ['src/js/languages/zh-cn.js'],
 				}
 			}
 		},
@@ -170,17 +192,18 @@ module.exports = function(grunt) {
 		uglify: {
 			me: {
 				src	   : ['tmp/mediaelement.js'],
-				dest   : 'tmp/mediaelement.min.js',
+				dest   : 'build/mediaelement.min.js',
 				banner : 'src/js/header.js'
 			},
 			mep: {
 				src	   : ['tmp/mediaelementplayer.js'],
-				dest   : 'tmp/mediaelementplayer.min.js',
+				dest   : 'build/mediaelementplayer.min.js',
 				banner : 'src/js/header.js'
 			},
 			bundle: {
 				src	 : ['tmp/mediaelement-and-player.js'],
-				dest : 'tmp/mediaelement-and-player.min.js'
+				dest : 'build/mediaelement-and-player.min.js',
+				banner : 'src/js/header.js'
 			},
 			options: {
 				// Preserve comments that start with a bang (like the file header)
@@ -216,14 +239,11 @@ module.exports = function(grunt) {
 			},
 			translation: {
 				expand  : true,
-				cwd     : 'src/js/',
-				src     : ['mediaelement-i18n-locale-*.js'],
+				cwd     : 'tmp/languages/',
+				src     : ['*.js'],
 				dest    : 'build/lang/',
 				flatten : true,
-				filter  : 'isFile',
-				rename: function(dest, src) {
-					return dest + src.replace('mediaelement-i18n-locale-', '');
-				}
+				filter  : 'isFile'
 			}
 		},
 		clean: {
@@ -304,9 +324,8 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.registerTask('default', ['jshint', 'concat', 'removelogging', 'uglify', 'postcss', 'shell', 'copy', 'clean:temp']);
-	grunt.registerTask('html5only', ['jshint', 'concat', 'removelogging', 'uglify', 'postcss', 'copy', 'clean:temp']);
-	grunt.registerTask('html5debug', ['jshint', 'concat', 'uglify', 'postcss', 'copy', 'clean:temp']);
-
-	grunt.registerTask('babel', ['jshint', 'browserify', 'concat']);
+	grunt.registerTask('default', ['jshint', 'browserify', 'concat', 'removelogging', 'uglify', 'postcss', 'shell', 'copy', 'clean:temp']);
+	grunt.registerTask('html5only', ['jshint', 'browserify', 'concat', 'removelogging', 'uglify', 'postcss', 'copy', 'clean:temp']);
+	grunt.registerTask('html5debug', ['jshint', 'browserify', 'concat', 'uglify', 'postcss', 'copy', 'clean:temp']);
+	grunt.registerTask('develop', ['jshint', 'browserify', 'concat']);
 };
