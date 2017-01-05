@@ -388,7 +388,8 @@ const FlashMediaElementRenderer = {
 		if (mediaFiles && mediaFiles.length > 0) {
 			for (let file of mediaFiles) {
 				if (renderer.renderers[options.prefix].canPlayType(file.type)) {
-					node.src = file.src;
+					flash.setSrc(file.src);
+					flash.load();
 					break;
 				}
 			}

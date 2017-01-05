@@ -76,8 +76,6 @@ const HtmlMediaElement = {
 				node[`set${capName}`] = (value) => {
 					node[propName] = value;
 				};
-
-				console.log(node.paused);
 			}
 		;
 

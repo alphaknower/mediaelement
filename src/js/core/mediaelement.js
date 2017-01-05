@@ -376,8 +376,6 @@ class MediaElement {
 		// 	t.mediaElement.options.error(this.mediaElement, this.mediaElement.originalNode);
 		// }
 
-		console.log(t);
-
 		return t.mediaElement;
 	}
 }

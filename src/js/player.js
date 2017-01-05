@@ -431,7 +431,7 @@ export class MediaElementPlayer {
 			let
 				tagType = (t.isVideo ? 'video' : 'audio'),
 				capsTagName = tagType.substring(0, 1).toUpperCase() + tagType.substring(1)
-			;
+				;
 
 
 			if (t.options[tagType + 'Width'] > 0 || t.options[tagType + 'Width'].toString().indexOf('%') > -1) {
@@ -791,7 +791,8 @@ export class MediaElementPlayer {
 				t.hasFocus = true;
 
 				// go through all other players
-				for (let p of mejs.players) {
+				for (let playerIndex in mejs.players) {
+					let p = mejs.players[playerIndex];
 					if (p.id !== t.id && t.options.pauseOtherPlayers && !p.paused && !p.ended) {
 						p.pause();
 						p.hasFocus = false;
@@ -1611,8 +1612,6 @@ export class MediaElementPlayer {
 		delete t.node.player;
 	}
 }
-
-window.MediaElementPlayer = MediaElementPlayer;
 
 // turn into plugin
 (($) => {
