@@ -31,7 +31,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildstop: function(player, controls, layers, media)  {
+	buildstop: function (player, controls, layers, media)  {
 		let
 			t = this,
 			stopTitle = t.options.stopText ? t.options.stopText : i18n.t('mejs.stop');

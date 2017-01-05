@@ -31,7 +31,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildpostroll: function(player, controls, layers, media)  {
+	buildpostroll: function (player, controls, layers, media)  {
 		let
 			t = this,
 			postrollTitle = t.options.postrollCloseText ? t.options.postrollCloseText : i18n.t('mejs.close'),
@@ -51,7 +51,7 @@ $.extend(MediaElementPlayer.prototype, {
 				$.ajax({
 					dataType: 'html',
 					url: postrollLink,
-					success: function(data, textStatus)  {
+					success: function (data, textStatus)  {
 						layers.find(`.${t.options.classPrefix}postroll-layer-content`).html(data);
 					}
 				});

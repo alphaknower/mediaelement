@@ -30,7 +30,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildsourcechooser: function(player, controls, layers, media)  {
+	buildsourcechooser: function (player, controls, layers, media)  {
 
 		let
 			t = this,
@@ -172,7 +172,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {String} type
 	 * @param {Boolean} isCurrent
 	 */
-	addSourceButton: function(src, label, type, isCurrent)  {
+	addSourceButton: function (src, label, type, isCurrent)  {
 		let t = this;
 		if (label === '' || label === undefined) {
 			label = src;
@@ -194,7 +194,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	adjustSourcechooserBox: function()  {
+	adjustSourcechooserBox: function ()  {
 		let t = this;
 		// adjust the size of the outer box
 		t.sourcechooserButton.find(`.${t.options.classPrefix}sourcechooser-selector`).height(
@@ -205,7 +205,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	hideSourcechooserSelector: function()  {
+	hideSourcechooserSelector: function ()  {
 
 		let t = this;
 
@@ -225,7 +225,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	showSourcechooserSelector: function()  {
+	showSourcechooserSelector: function ()  {
 
 		let t = this;
 

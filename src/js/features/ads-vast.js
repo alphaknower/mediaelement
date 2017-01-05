@@ -46,7 +46,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildvast: function(player, controls, layers, media)  {
+	buildvast: function (player, controls, layers, media)  {
 
 		let t = this;
 
@@ -61,7 +61,7 @@ $.extend(MediaElementPlayer.prototype, {
 		t.vastSetupEvents();
 	},
 
-	vastSetupEvents: function()  {
+	vastSetupEvents: function ()  {
 		let t = this;
 
 
@@ -106,7 +106,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {String} url
 	 */
-	vastSetAdTagUrl: function(url)  {
+	vastSetAdTagUrl: function (url)  {
 
 		let t = this;
 
@@ -120,7 +120,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	vastLoadAdTagInfo: function()  {
+	vastLoadAdTagInfo: function ()  {
 		let t = this;
 
 		// set this to stop playback
@@ -134,16 +134,16 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	loadAdTagInfoDirect: function()  {
+	loadAdTagInfoDirect: function ()  {
 		let t = this;
 
 		$.ajax({
 			url: t.options.vastAdTagUrl,
 			crossDomain: true,
-			success: function(data)  {
+			success: function (data)  {
 				t.vastParseVastData(data);
 			},
-			error: function(err)  {
+			error: function (err)  {
 				console.log('vast3:direct:error', err);
 
 				// fallback to Yahoo proxy
@@ -155,7 +155,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	loadAdTagInfoProxy: function()  {
+	loadAdTagInfoProxy: function ()  {
 		let t = this,
 			protocol = location.protocol,
 			hostname = location.hostname,
@@ -166,10 +166,10 @@ $.extend(MediaElementPlayer.prototype, {
 		$.ajax({
 			url: yahooUrl,
 			crossDomain: true,
-			success: function(data)  {
+			success: function (data)  {
 				t.vastParseVastData(data);
 			},
-			error: function(err)  {
+			error: function (err)  {
 				console.log('vast:proxy:yahoo:error', err);
 			}
 		});
@@ -179,7 +179,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {jQuery} data
 	 */
-	vastParseVastData: function(data)  {
+	vastParseVastData: function (data)  {
 
 		let t = this;
 
@@ -249,7 +249,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	vastLoaded: function()  {
+	vastLoaded: function ()  {
 		let t = this;
 
 		t.vastAdTagIsLoaded = true;
@@ -262,7 +262,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	vastStartPreroll: function()  {
+	vastStartPreroll: function ()  {
 		let t = this;
 
 		// if we have a media URL, then send it up to the ads plugin as a preroll

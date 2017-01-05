@@ -32,7 +32,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildjumpforward: function(player, controls, layers, media)  {
+	buildjumpforward: function (player, controls, layers, media)  {
 		let
 			t = this,
 			defaultTitle = i18n.t('mejs.time-jump-forward', t.options.jumpForwardInterval),

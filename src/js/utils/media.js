@@ -66,7 +66,7 @@ export function getTypeFromFile (url) {
 	}
 
 	if (typeChecks.length) {
-		for (let type of types) {
+		for (let type of typeChecks) {
 			if (typeof type !== 'function') {
 				throw new Error('Element in array must be a function');
 			}

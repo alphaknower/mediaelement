@@ -32,7 +32,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildprogress: function(player, controls, layers, media)  {
+	buildprogress: function (player, controls, layers, media)  {
 
 		let
 			t = this,
@@ -304,7 +304,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {Event} e
 	 */
-	setProgressRail: function(e)  {
+	setProgressRail: function (e)  {
 
 		let
 			t = this,
@@ -341,7 +341,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Update the slider's width depending on the current time
 	 *
 	 */
-	setCurrentRail: function()  {
+	setCurrentRail: function ()  {
 
 		let t = this;
 

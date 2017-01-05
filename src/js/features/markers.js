@@ -26,7 +26,7 @@ Object.assign(config, {
 	/**
 	 * @type {Function}
 	 */
-	markerCallback: function()  {
+	markerCallback: function ()  {
 	}
 });
 
@@ -40,7 +40,12 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildmarkers: function(player, controls, layers, media)  {
+	buildmarkers: function (player, controls, layers, media)  {
+
+		if (!player.options.markers.length) {
+			return;
+		}
+
 		let
 			t = this,
 			currentPos = -1,
@@ -49,7 +54,7 @@ $.extend(MediaElementPlayer.prototype, {
 			lastMarkerCallBack = -1 // Prevents successive firing of callbacks
 		;
 
-		for (i = 0; i < player.options.markers.length; ++i) {
+		for (let i = 0, total = player.options.markers.length; i < total; ++i) {
 			controls.find(`.${t.options.classPrefix}time-total`)
 				.append('<span class="' + `${t.options.classPrefix}time-marker"></span>`);
 		}
@@ -85,22 +90,20 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {$} controls
 	 */
-	setmarkers: function(controls)  {
+	setmarkers: function (controls)  {
 		let
 			t = this,
 			left
 		;
 
-		if (t.options.markers.length) {
-			for (let marker of t.options.markers) {
-				if (Math.floor(marker) <= t.media.duration && Math.floor(marker) >= 0) {
-					left = 100 * Math.floor(marker) / t.media.duration;
-					$(controls.find(`.${t.options.classPrefix}time-marker`)[i]).css({
-						"width": '1px',
-						"left": `${left}%`,
-						"background": t.options.markerColor
-					});
-				}
+		for (let i = 0, total = t.options.markers.length; i < total; ++i) {
+			if (Math.floor(t.options.markers[i]) <= t.media.duration && Math.floor(t.options.markers[i]) >= 0) {
+				left = 100 * Math.floor(t.options.markers[i]) / t.media.duration;
+				$(controls.find(`.${t.options.classPrefix}time-marker`)[i]).css({
+					"width": '1px',
+					"left": `${left}%`,
+					"background": t.options.markerColor
+				});
 			}
 		}
 

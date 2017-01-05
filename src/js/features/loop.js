@@ -29,7 +29,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildloop: function(player, controls, layers, media)  {
+	buildloop: function (player, controls, layers, media)  {
 		let
 			t = this,
 			loopTitle = t.options.loopText ? t.options.loopText : i18n.t('mejs.loop'),

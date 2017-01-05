@@ -64,7 +64,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildtracks: function(player, controls, layers, media)  {
+	buildtracks: function (player, controls, layers, media)  {
 		if (player.tracks.length === 0) {
 			return;
 		}
@@ -188,7 +188,7 @@ $.extend(MediaElementPlayer.prototype, {
 		for (let track of player.tracks) {
 			kind = track.kind;
 			if (kind === 'subtitles' || kind === 'captions') {
-				player.addTrackButton(player.tracks[i].trackId, player.tracks[i].srclang, player.tracks[i].label);
+				player.addTrackButton(track.trackId, track.srclang, track.label);
 			}
 		}
 
@@ -246,7 +246,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Always has to be prefixed with `clean` and the name that was used in MepDefaults.features list
 	 * @param {MediaElementPlayer} player
 	 */
-	cleartracks: function(player)  {
+	cleartracks: function (player)  {
 		if (player) {
 			if (player.captions) {
 				player.captions.remove();
@@ -263,13 +263,13 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 	},
 
-	rebuildtracks: function()  {
+	rebuildtracks: function ()  {
 		let t = this;
 		t.findTracks();
 		t.buildtracks(t, t.controls, t.layers, t.media);
 	},
 
-	findTracks: function()  {
+	findTracks: function ()  {
 		let
 			t = this,
 			tracktags = t.$media.find('track')
@@ -299,7 +299,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {String} trackId, or "none" to disable captions
 	 */
-	setTrack: function(trackId)  {
+	setTrack: function (trackId)  {
 		let
 			t = this,
 			i
@@ -338,7 +338,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	loadNextTrack: function()  {
+	loadNextTrack: function ()  {
 		let t = this;
 
 		t.trackToLoad++;
@@ -357,7 +357,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param index
 	 */
-	loadTrack: function(index)  {
+	loadTrack: function (index)  {
 		let
 			t = this,
 			track = t.tracks[index],
@@ -376,7 +376,7 @@ $.extend(MediaElementPlayer.prototype, {
 			$.ajax({
 				url: track.src,
 				dataType: 'text',
-				success: function(d)  {
+				success: function (d)  {
 
 					// parse the loaded file
 					if (typeof d === 'string' && (/<tt\s+xml/ig).exec(d)) {
@@ -399,7 +399,7 @@ $.extend(MediaElementPlayer.prototype, {
 						t.setupSlides(track);
 					}
 				},
-				error: function()  {
+				error: function ()  {
 					t.removeTrackButton(track.trackId);
 					t.loadNextTrack();
 				}
@@ -411,7 +411,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {String} track - The language code
 	 */
-	enableTrackButton: function(track)  {
+	enableTrackButton: function (track)  {
 		let
 			t = this,
 			lang = track.srclang,
@@ -438,7 +438,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {String} trackId
 	 */
-	removeTrackButton: function(trackId)  {
+	removeTrackButton: function (trackId)  {
 		let t = this;
 
 		t.captionsButton.find(`input[id=${trackId}]`).closest('li').remove();
@@ -452,7 +452,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {String} lang - The language code
 	 * @param {String} label
 	 */
-	addTrackButton: function(trackId, lang, label)  {
+	addTrackButton: function (trackId, lang, label)  {
 		let t = this;
 		if (label === '') {
 			label = i18n.t(mejs.language.codes[lang]) || lang;
@@ -478,7 +478,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	adjustLanguageBox: function()  {
+	adjustLanguageBox: function ()  {
 		let t = this;
 		// adjust the size of the outer box
 		t.captionsButton.find(`.${t.options.classPrefix}captions-selector`).height(
@@ -490,7 +490,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	checkForTracks: function()  {
+	checkForTracks: function ()  {
 		let
 			t = this,
 			hasSubtitles = false
@@ -516,7 +516,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	displayCaptions: function()  {
+	displayCaptions: function ()  {
 
 		if (this.tracks === undefined) {
 			return;
@@ -548,7 +548,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {HTMLElement} track
 	 */
-	setupSlides: function(track)  {
+	setupSlides: function (track)  {
 		let t = this;
 
 		t.slides = track;
@@ -561,7 +561,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {Number} index
 	 */
-	showSlide: function(index)  {
+	showSlide: function (index)  {
 		if (this.tracks === undefined || this.slidesContainer === undefined) {
 			return;
 		}
@@ -596,7 +596,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	displaySlides: function()  {
+	displaySlides: function ()  {
 
 		if (this.slides === undefined) {
 			return;
@@ -617,7 +617,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	displayChapters: function()  {
+	displayChapters: function ()  {
 		let t = this;
 
 		for (let track of t.tracks) {
@@ -633,7 +633,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @param {Object} chapters
 	 */
-	drawChapters: function(chapters)  {
+	drawChapters: function (chapters)  {
 		let
 			t = this,
 			i,
@@ -687,7 +687,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {Number} currentTime
 	 * @return {Number}
 	 */
-	searchTrackPosition: function(tracks, currentTime)  {
+	searchTrackPosition: function (tracks, currentTime)  {
 		let
 			lo = 0,
 			hi = tracks.length - 1,
@@ -808,7 +808,7 @@ mejs.TrackFormatParser = {
 		 * @param {String} trackText
 		 * @returns {{text: Array, times: Array}}
 		 */
-		parse: function(trackText)  {
+		parse: function (trackText)  {
 			let
 				i = 0,
 				lines = mejs.TrackFormatParser.split2(trackText, /\r?\n/),
@@ -834,8 +834,8 @@ mejs.TrackFormatParser = {
 					text = $.trim(text).replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1' target='_blank'>$1</a>");
 					entries.push({
 						identifier: identifier,
-						start: (mejs.Utility.convertSMPTEtoSeconds(timecode[1]) === 0) ? 0.200 : mejs.Utility.convertSMPTEtoSeconds(timecode[1]),
-						stop: mejs.Utility.convertSMPTEtoSeconds(timecode[3]),
+						start: (convertSMPTEtoSeconds(timecode[1]) === 0) ? 0.200 : convertSMPTEtoSeconds(timecode[1]),
+						stop: convertSMPTEtoSeconds(timecode[3]),
 						text: text,
 						settings: timecode[5]
 					});
@@ -852,10 +852,9 @@ mejs.TrackFormatParser = {
 		 * @param {String} trackText
 		 * @returns {{text: Array, times: Array}}
 		 */
-		parse: function(trackText)  {
+		parse: function (trackText)  {
 			trackText = $(trackText).filter('tt');
 			let
-				i = 0,
 				container = trackText.children('div').eq(0),
 				lines = container.find('p'),
 				styleNode = trackText.find(`#${container.attr('style')}`),
@@ -922,7 +921,7 @@ mejs.TrackFormatParser = {
 	 * @param {String} regex
 	 * @returns {Array}
 	 */
-	split2: function(text, regex)  {
+	split2: function (text, regex)  {
 		// normal version for compliant browsers
 		// see below for IE fix
 		return text.split(regex);

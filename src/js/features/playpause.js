@@ -34,7 +34,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {HTMLElement} media
 	 * @public
 	 */
-	buildplaypause: function(player, controls, layers, media)  {
+	buildplaypause: function (player, controls, layers, media)  {
 		let
 			t = this,
 			op = t.options,

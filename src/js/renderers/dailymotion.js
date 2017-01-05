@@ -479,7 +479,7 @@ const DailyMotionIframeRenderer = {
  */
 typeChecks.push((url) => {
 	url = url.toLowerCase();
-	return (url.includes('//dailymotion.com') || url.includes('//dai.ly')) ? 'video/x-dailymotion' : null;
+	return (url.includes('//dailymotion.com') || url.includes('www.dailymotion.com') || url.includes('//dai.ly')) ? 'video/x-dailymotion' : null;
 });
 
 window.dmAsyncInit = () => {

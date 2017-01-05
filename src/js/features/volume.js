@@ -48,7 +48,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {HTMLElement} media
 	 * @public
 	 */
-	buildvolume: function(player, controls, layers, media)  {
+	buildvolume: function (player, controls, layers, media)  {
 
 		// Android and iOS don't support volume controls
 		if ((IS_ANDROID || IS_IOS) && this.options.hideVolumeOnTouchDevices) {

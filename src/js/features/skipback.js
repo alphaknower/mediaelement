@@ -33,7 +33,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildskipback: function(player, controls, layers, media)  {
+	buildskipback: function (player, controls, layers, media)  {
 		let
 			t = this,
 			defaultTitle = i18n.t('mejs.time-skip-back', t.options.skipBackInterval),

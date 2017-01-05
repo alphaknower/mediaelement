@@ -35,7 +35,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildcurrent: function(player, controls, layers, media)  {
+	buildcurrent: function (player, controls, layers, media)  {
 		let t = this;
 
 		$(`<div class="${t.options.classPrefix}time" role="timer" aria-live="off">
@@ -62,7 +62,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildduration: function(player, controls, layers, media)  {
+	buildduration: function (player, controls, layers, media)  {
 		let t = this;
 
 		if (controls.children().last().find(`.${t.options.classPrefix}currenttime`).length > 0) {
@@ -95,7 +95,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Update the current time and output it in format 00:00
 	 *
 	 */
-	updateCurrent: function()  {
+	updateCurrent: function ()  {
 		let t = this;
 
 		let currentTime = t.media.currentTime;
@@ -113,7 +113,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Update the duration time and output it in format 00:00
 	 *
 	 */
-	updateDuration: function()  {
+	updateDuration: function ()  {
 		let t = this;
 
 		let duration = t.media.duration;

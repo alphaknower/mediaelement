@@ -1285,8 +1285,10 @@ export class MediaElementPlayer {
 	}
 
 	globalBind (events, data, callback) {
-		let t = this;
-		let doc = t.node ? t.node.ownerDocument : document;
+		let
+			t = this,
+			doc = t.node ? t.node.ownerDocument : document
+		;
 
 		events = splitEvents(events, t.id);
 		if (events.d) {
@@ -1302,14 +1304,14 @@ export class MediaElementPlayer {
 		let
 			t = this,
 			doc = t.node ? t.node.ownerDocument : document
-			;
+		;
 
 		events = splitEvents(events, t.id);
 		if (events.d) {
-			$(doc).unbind(events.d, callback);
+			$(doc).off(events.d, callback);
 		}
 		if (events.w) {
-			$(window).unbind(events.w, callback);
+			$(window).off(events.w, callback);
 		}
 	}
 
@@ -1464,7 +1466,7 @@ export class MediaElementPlayer {
 
 		// error handling
 		media.addEventListener('error', (e) => {
-			t.handleError(e);
+			t._handleError(e);
 			loading.hide();
 			bigPlay.hide();
 			error.show();
@@ -1505,7 +1507,6 @@ export class MediaElementPlayer {
 		if (player.hasFocus && player.options.enableKeyboard) {
 			// find a matching key
 			for (let keyAction of player.options.keyActions) {
-
 				for (let key of keyAction.keys) {
 					if (e.keyCode === key) {
 						keyAction.action(player, media, e.keyCode, e);

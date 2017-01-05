@@ -70,7 +70,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 * @param {$} layers
 	 * @param {HTMLElement} media
 	 */
-	buildfullscreen: function(player, controls, layers, media)  {
+	buildfullscreen: function (player, controls, layers, media)  {
 
 		if (!player.isVideo) {
 			return;
@@ -181,7 +181,7 @@ $.extend(MediaElementPlayer.prototype, {
 	 *
 	 * @return {String}
 	 */
-	detectFullscreenMode: function()  {
+	detectFullscreenMode: function ()  {
 
 		let
 			t = this,
@@ -214,7 +214,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	createPluginClickThrough: function()  {
+	createPluginClickThrough: function ()  {
 
 		let t = this;
 
@@ -375,14 +375,14 @@ $.extend(MediaElementPlayer.prototype, {
 	 * Always has to be prefixed with `clean` and the name that was used in features list
 	 * @param {MediaElementPlayer} player
 	 */
-	cleanfullscreen: function(player)  {
+	cleanfullscreen: function (player)  {
 		player.exitFullScreen();
 	},
 
 	/**
 	 *
 	 */
-	enterFullScreen: function()  {
+	enterFullScreen: function ()  {
 
 		let
 			t = this,
@@ -488,7 +488,7 @@ $.extend(MediaElementPlayer.prototype, {
 	/**
 	 *
 	 */
-	exitFullScreen: function()  {
+	exitFullScreen: function ()  {
 
 		let
 			t = this,
