@@ -4,7 +4,7 @@ import window from 'global/window';
 import document from 'global/document';
 import mejs from '../core/mejs';
 import {renderer} from '../core/renderer';
-import {createEvent} from '../utils/dom';
+import {createEvent, isScriptLoaded} from '../utils/dom';
 import {HAS_MSE} from '../utils/constants';
 import {typeChecks} from '../utils/media';
 
@@ -33,13 +33,14 @@ const NativeHls = {
 
 	/**
 	 * Create a queue to prepare the loading of an HLS source
+	 *
 	 * @param {Object} settings - an object with settings needed to load an HLS player instance
 	 */
 	prepareSettings: (settings) => {
 		if (NativeHls.isLoaded) {
 			NativeHls.createInstance(settings);
 		} else {
-			NativeHls.loadScript(settings.options.path);
+			NativeHls.loadScript(settings);
 			NativeHls.creationQueue.push(settings);
 		}
 	},
@@ -47,29 +48,35 @@ const NativeHls = {
 	/**
 	 * Load hls.js script on the header of the document
 	 *
-	 * @param {String} path - The local path or URL of the library
+	 * @param {Object} settings - an object with settings needed to load an HLS player instance
 	 */
-	loadScript: (path) => {
+	loadScript: (settings) => {
 		if (!NativeHls.isMediaStarted) {
 
-			let
-				script = document.createElement('script'),
-				firstScriptTag = document.getElementsByTagName('script')[0],
-				done = false;
+			settings.options.path = settings.options.path || '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
 
-			script.src = path || '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
+			if (isScriptLoaded(settings.options.path)) {
+				NativeHls.createInstance(settings);
+			} else {
+				let
+					script = document.createElement('script'),
+					firstScriptTag = document.getElementsByTagName('script')[0],
+					done = false;
 
-			// Attach handlers for all browsers
-			script.onload = script.onreadystatechange = () => {
-				if (!done && (!NativeHls.readyState || NativeHls.readyState === undefined ||
-					NativeHls.readyState === 'loaded' || NativeHls.readyState === 'complete')) {
-					done = true;
-					NativeHls.mediaReady();
-					script.onload = script.onreadystatechange = null;
-				}
-			};
+				script.src = settings.options.path;
 
-			firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
+				// Attach handlers for all browsers
+				script.onload = script.onreadystatechange = () => {
+					if (!done && (!NativeHls.readyState || NativeHls.readyState === undefined ||
+						NativeHls.readyState === 'loaded' || NativeHls.readyState === 'complete')) {
+						done = true;
+						NativeHls.mediaReady();
+						script.onload = script.onreadystatechange = null;
+					}
+				};
+
+				firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
+			}
 			NativeHls.isMediaStarted = true;
 		}
 	},

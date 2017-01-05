@@ -4,7 +4,7 @@ import window from 'global/window';
 import document from 'global/document';
 import mejs from '../core/mejs';
 import {renderer} from '../core/renderer';
-import {createEvent} from '../utils/dom';
+import {createEvent, isScriptLoaded} from '../utils/dom';
 import {HAS_MSE} from '../utils/constants';
 import {typeChecks} from '../utils/media';
 
@@ -40,7 +40,7 @@ const NativeFlv = {
 		if (NativeFlv.isLoaded) {
 			NativeFlv.createInstance(settings);
 		} else {
-			NativeFlv.loadScript(settings.options.path);
+			NativeFlv.loadScript(settings);
 			NativeFlv.creationQueue.push(settings);
 		}
 	},
@@ -48,29 +48,35 @@ const NativeFlv = {
 	/**
 	 * Load flv.js script on the header of the document
 	 *
-	 * @param {String} path - The local path or URL of the library
+	 * @param {Object} settings - an object with settings needed to load an FLV player instance
 	 */
-	loadScript: (path) => {
+	loadScript: (settings) => {
 		if (!NativeFlv.isMediaStarted) {
 
-			let
-				script = document.createElement('script'),
-				firstScriptTag = document.getElementsByTagName('script')[0],
-				done = false;
+			settings.options.path = settings.options.path || '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.1.0/flv.min.js';
 
-			script.src = path || '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.1.0/flv.min.js';
+			if (isScriptLoaded(settings.options.path)) {
+				NativeFlv.createInstance(settings);
+			} else {
+				let
+					script = document.createElement('script'),
+					firstScriptTag = document.getElementsByTagName('script')[0],
+					done = false;
 
-			// Attach handlers for all browsers
-			script.onload = script.onreadystatechange = () => {
-				if (!done && (!NativeFlv.readyState || NativeFlv.readyState === undefined ||
-					NativeFlv.readyState === 'loaded' || NativeFlv.readyState === 'complete')) {
-					done = true;
-					NativeFlv.mediaReady();
-					script.onload = script.onreadystatechange = null;
-				}
-			};
+				script.src = settings.options.path;
 
-			firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
+				// Attach handlers for all browsers
+				script.onload = script.onreadystatechange = () => {
+					if (!done && (!NativeFlv.readyState || NativeFlv.readyState === undefined ||
+						NativeFlv.readyState === 'loaded' || NativeFlv.readyState === 'complete')) {
+						done = true;
+						NativeFlv.mediaReady();
+						script.onload = script.onreadystatechange = null;
+					}
+				};
+
+				firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
+			}
 			NativeFlv.isMediaStarted = true;
 		}
 	},
