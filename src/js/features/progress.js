@@ -169,11 +169,13 @@ $.extend(MediaElementPlayer.prototype, {
 
 			if (t.options.keyActions.length) {
 
-				let keyCode = e.keyCode,
+				let
+					keyCode = e.which || e.keyCode || 0,
 					duration = media.duration,
 					seekTime = media.currentTime,
 					seekForward = player.options.defaultSeekForwardInterval(media),
-					seekBackward = player.options.defaultSeekBackwardInterval(media);
+					seekBackward = player.options.defaultSeekBackwardInterval(media)
+				;
 
 				switch (keyCode) {
 					case 37: // left

@@ -75,7 +75,7 @@ $.extend(MediaElementPlayer.prototype, {
 
 			// keyboard menu activation
 			.on('keydown', function(e) {
-				let keyCode = e.keyCode;
+				let keyCode = e.which || e.keyCode || 0;
 
 				switch (keyCode) {
 					case 32: // space

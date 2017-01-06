@@ -138,7 +138,8 @@ $.extend(MediaElementPlayer.prototype, {
 		player.fullscreenBtn = fullscreenBtn;
 
 		t.globalBind('keydown', (e) => {
-			if (e.keyCode === 27 && ((Features.HAS_TRUE_NATIVE_FULLSCREEN && Features.IS_FULLSCREEN) || t.isFullScreen)) {
+			let key = e.which || e.keyCode || 0;
+			if (key === 27 && ((Features.HAS_TRUE_NATIVE_FULLSCREEN && Features.IS_FULLSCREEN) || t.isFullScreen)) {
 				player.exitFullScreen();
 			}
 		});
@@ -158,7 +159,7 @@ $.extend(MediaElementPlayer.prototype, {
 			 */
 			const fullscreenChanged = () => {
 				if (player.isFullScreen) {
-					if (Features.IS_FULLSCREEN) {
+					if (Features.isFullScreen()) {
 						player.isNativeFullScreen = true;
 						// reset the controls once we are fully in full screen
 						player.setControlsSize();
@@ -171,7 +172,7 @@ $.extend(MediaElementPlayer.prototype, {
 				}
 			};
 
-			player.globalBind(Features.fullScreenEventName, fullscreenChanged);
+			player.globalBind(Features.FULLSCREEN_EVENT_NAME, fullscreenChanged);
 		}
 
 	},
@@ -187,7 +188,7 @@ $.extend(MediaElementPlayer.prototype, {
 			t = this,
 			mode = '',
 			isNative = t.media.rendererName !== null && t.media.rendererName.match(/(native|html5)/)
-			;
+		;
 
 		if (Features.HAS_TRUE_NATIVE_FULLSCREEN && isNative) {
 			mode = 'native-native';
@@ -252,7 +253,6 @@ $.extend(MediaElementPlayer.prototype, {
 			},
 			hoverDivs = {},
 			hoverDivNames = ['top', 'left', 'right', 'bottom'],
-			i, len,
 			positionHoverDivs = () => {
 				let fullScreenBtnOffsetLeft = fullscreenBtn.offset().left - t.container.offset().left,
 					fullScreenBtnOffsetTop = fullscreenBtn.offset().top - t.container.offset().top,
@@ -267,29 +267,29 @@ $.extend(MediaElementPlayer.prototype, {
 
 				// over video, but not controls
 				hoverDivs.top
-				.width(containerWidth)
-				.height(fullScreenBtnOffsetTop);
+					.width(containerWidth)
+					.height(fullScreenBtnOffsetTop);
 
 				// over controls, but not the fullscreen button
 				hoverDivs.left
-				.width(fullScreenBtnOffsetLeft)
-				.height(fullScreenBtnHeight)
-				.css({top: fullScreenBtnOffsetTop});
+					.width(fullScreenBtnOffsetLeft)
+					.height(fullScreenBtnHeight)
+					.css({top: fullScreenBtnOffsetTop});
 
 				// after the fullscreen button
 				hoverDivs.right
-				.width(containerWidth - fullScreenBtnOffsetLeft - fullScreenBtnWidth)
-				.height(fullScreenBtnHeight)
-				.css({
-					top: fullScreenBtnOffsetTop,
-					left: fullScreenBtnOffsetLeft + fullScreenBtnWidth
-				});
+					.width(containerWidth - fullScreenBtnOffsetLeft - fullScreenBtnWidth)
+					.height(fullScreenBtnHeight)
+					.css({
+						top: fullScreenBtnOffsetTop,
+						left: fullScreenBtnOffsetLeft + fullScreenBtnWidth
+					});
 
 				// under the fullscreen button
 				hoverDivs.bottom
-				.width(containerWidth)
-				.height(containerHeight - fullScreenBtnHeight - fullScreenBtnOffsetTop)
-				.css({top: fullScreenBtnOffsetTop + fullScreenBtnHeight});
+					.width(containerWidth)
+					.height(containerHeight - fullScreenBtnHeight - fullScreenBtnOffsetTop)
+					.css({top: fullScreenBtnOffsetTop + fullScreenBtnHeight});
 			};
 
 		t.globalBind('resize', () => {
@@ -387,7 +387,7 @@ $.extend(MediaElementPlayer.prototype, {
 		let
 			t = this,
 			isNative = t.media.rendererName !== null && t.media.rendererName.match(/(html5|native)/)
-			;
+		;
 
 		if (Features.IS_IOS && Features.HAS_IOS_FULLSCREEN && typeof t.media.webkitEnterFullscreen === 'function') {
 			t.media.webkitEnterFullscreen();
@@ -439,9 +439,9 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// make full size
 		t.container
-		.addClass(`${t.options.classPrefix}container-fullscreen`)
-		.width('100%')
-		.height('100%');
+			.addClass(`${t.options.classPrefix}container-fullscreen`)
+			.width('100%')
+			.height('100%');
 
 		// Only needed for safari 5.1 native full screen, can cause display issues elsewhere
 		// Actually, it seems to be needed for IE8, too
@@ -452,12 +452,12 @@ $.extend(MediaElementPlayer.prototype, {
 
 		if (isNative) {
 			t.$media
-			.width('100%')
-			.height('100%');
+				.width('100%')
+				.height('100%');
 		} else {
 			t.container.find('iframe, embed, object, video')
-			.width('100%')
-			.height('100%');
+				.width('100%')
+				.height('100%');
 		}
 
 		if (t.options.setDimensions) {
@@ -465,13 +465,13 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 
 		t.layers.children('div')
-		.width('100%')
-		.height('100%');
+			.width('100%')
+			.height('100%');
 
 		if (t.fullscreenBtn) {
 			t.fullscreenBtn
-			.removeClass(`${t.options.classPrefix}fullscreen`)
-			.addClass(`${t.options.classPrefix}unfullscreen`);
+				.removeClass(`${t.options.classPrefix}fullscreen`)
+				.addClass(`${t.options.classPrefix}unfullscreen`);
 		}
 
 		t.setControlsSize();
@@ -510,28 +510,28 @@ $.extend(MediaElementPlayer.prototype, {
 
 		if (t.options.setDimensions) {
 			t.container
-			.width(t.normalWidth)
-			.height(t.normalHeight);
+				.width(t.normalWidth)
+				.height(t.normalHeight);
 			if (isNative) {
 				t.$media
 				.width(t.normalWidth)
 				.height(t.normalHeight);
 			} else {
 				t.container.find('iframe, embed, object, video')
-				.width(t.normalWidth)
-				.height(t.normalHeight);
+					.width(t.normalWidth)
+					.height(t.normalHeight);
 			}
 
 			t.media.setSize(t.normalWidth, t.normalHeight);
 
 			t.layers.children('div')
-			.width(t.normalWidth)
-			.height(t.normalHeight);
+				.width(t.normalWidth)
+				.height(t.normalHeight);
 		}
 
 		t.fullscreenBtn
-		.removeClass(`${t.options.classPrefix}unfullscreen`)
-		.addClass(`${t.options.classPrefix}fullscreen`);
+			.removeClass(`${t.options.classPrefix}unfullscreen`)
+			.addClass(`${t.options.classPrefix}fullscreen`);
 
 		t.setControlsSize();
 		t.isFullScreen = false;

@@ -549,13 +549,13 @@ export class MediaElementPlayer {
 
 			// hide main controls
 			t.controls
-			.addClass(`${t.options.classPrefix}offscreen`)
-			.css('display', 'block');
+				.addClass(`${t.options.classPrefix}offscreen`)
+				.css('display', 'block');
 
 			// hide others
 			t.container.find(`.${t.options.classPrefix}control`)
-			.addClass(`${t.options.classPrefix}offscreen`)
-			.css('display', 'block');
+				.addClass(`${t.options.classPrefix}offscreen`)
+				.css('display', 'block');
 
 			t.controlsAreVisible = false;
 			t.container.trigger('controlshidden');
@@ -1487,6 +1487,7 @@ export class MediaElementPlayer {
 			let $container = $(event.target).closest(`.${t.options.classPrefix}container`);
 			player.hasFocus = $container.length !== 0 &&
 				$container.attr('id') === player.$media.closest(`.${t.options.classPrefix}container`).attr('id');
+			console.log(2);
 			return t.onkeydown(player, media, event);
 		});
 
@@ -1504,7 +1505,8 @@ export class MediaElementPlayer {
 			// find a matching key
 			for (let keyAction of player.options.keyActions) {
 				for (let key of keyAction.keys) {
-					if (e.keyCode === key) {
+					let pressedKey = e.which || e.keyCode || 0;
+					if (pressedKey === key) {
 						keyAction.action(player, media, e.keyCode, e);
 						return false;
 					}
@@ -1616,7 +1618,7 @@ export class MediaElementPlayer {
 	if (typeof mejs.$ !== 'undefined') {
 		mejs.$.fn.mediaelementplayer = function (options) {
 			if (options === false) {
-				this.each(function() {
+				this.each(function () {
 					let player = $(this).data('mediaelementplayer');
 					if (player) {
 						player.remove();
@@ -1625,7 +1627,7 @@ export class MediaElementPlayer {
 				});
 			}
 			else {
-				this.each(function() {
+				this.each(function () {
 					$(this).data('mediaelementplayer', new MediaElementPlayer(this, options));
 				});
 			}

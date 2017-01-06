@@ -255,9 +255,9 @@ $.extend(MediaElementPlayer.prototype, {
 
 				if (t.options.keyActions.length) {
 					let
-						keyCode = e.keyCode,
+						keyCode = e.which || e.keyCode || 0,
 						volume = media.volume
-						;
+					;
 					switch (keyCode) {
 						case 38: // Up
 							volume = Math.min(volume + 0.1, 1);
