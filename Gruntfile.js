@@ -219,9 +219,9 @@ module.exports = function(grunt) {
 			},
 			translation: {
 				expand  : true,
-				cwd     : 'src/js/lang/',
+				cwd     : 'src/js/languages/',
 				src     : ['*.js'],
-				dest    : 'build/lang/',
+				dest    : 'tmp/lang/',
 				flatten : true,
 				filter  : 'isFile'
 			}
@@ -307,5 +307,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['jshint', 'browserify', 'concat', 'removelogging', 'uglify', 'postcss', 'shell', 'copy', 'clean:temp']);
 	grunt.registerTask('html5only', ['jshint', 'browserify', 'concat', 'removelogging', 'uglify', 'postcss', 'copy', 'clean:temp']);
 	grunt.registerTask('html5debug', ['jshint', 'browserify', 'concat', 'uglify', 'postcss', 'copy', 'clean:temp']);
-	grunt.registerTask('develop', ['jshint', 'browserify', 'concat']);
+	grunt.registerTask('develop', ['jshint', 'browserify', 'concat', 'copy:translation']);
 };
