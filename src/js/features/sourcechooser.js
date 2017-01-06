@@ -74,7 +74,7 @@ $.extend(MediaElementPlayer.prototype, {
 			})
 
 			// keyboard menu activation
-			.on('keydown', (e) => {
+			.on('keydown', function(e) {
 				let keyCode = e.keyCode;
 
 				switch (keyCode) {
@@ -100,7 +100,7 @@ $.extend(MediaElementPlayer.prototype, {
 			})
 
 			// close menu when tabbing away
-			.on('focusout', debounce((e) => { // Safari triggers focusout multiple times
+			.on('focusout', debounce(() => { // Safari triggers focusout multiple times
 				// Firefox does NOT support e.relatedTarget to see which element
 				// just lost focus, so wait to find the next focused element
 				setTimeout(() => {
@@ -113,7 +113,7 @@ $.extend(MediaElementPlayer.prototype, {
 			}, 100))
 
 			// handle clicks to the source radio buttons
-			.on('click', 'input[type=radio]', () => {
+			.on('click', 'input[type=radio]', function() {
 				// set aria states
 				$(this).attr('aria-selected', true).attr('checked', 'checked');
 				$(this).closest(`.${t.options.classPrefix}sourcechooser-selector`)
@@ -147,7 +147,7 @@ $.extend(MediaElementPlayer.prototype, {
 			})
 
 			// Handle click so that screen readers can toggle the menu
-			.on('click', 'button', (e) => {
+			.on('click', 'button', function() {
 				if ($(this).siblings(`.${t.options.classPrefix}sourcechooser-selector`).hasClass(`${t.options.classPrefix}offscreen`)) {
 					player.showSourcechooserSelector();
 					$(this).siblings(`.${t.options.classPrefix}sourcechooser-selector`)

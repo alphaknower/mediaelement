@@ -108,17 +108,17 @@ $.extend(MediaElementPlayer.prototype, {
 
 				// adjust mute button style
 				if (volume === 0) {
-					mute.removeClass(`${t.options.classPrefix}mute`)
-					.addClass(`${t.options.classPrefix}unmute`);
-					mute.children('button')
-					.attr('title', i18n.t('mejs.unmute'))
-					.attr('aria-label', i18n.t('mejs.unmute'));
+					mute.removeClass(`${t.options.classPrefix}mute`).addClass(`${t.options.classPrefix}unmute`);
+					mute.children('button').attr({
+						title: i18n.t('mejs.unmute'),
+						'aria-label': i18n.t('mejs.unmute')
+					});
 				} else {
-					mute.removeClass(`${t.options.classPrefix}unmute`)
-					.addClass(`${t.options.classPrefix}mute`);
-					mute.children('button')
-					.attr('title', i18n.t('mejs.mute'))
-					.attr('aria-label', i18n.t('mejs.mute'));
+					mute.removeClass(`${t.options.classPrefix}unmute`).addClass(`${t.options.classPrefix}mute`);
+					mute.children('button').attr({
+						title: i18n.t('mejs.mute'),
+						'aria-label': i18n.t('mejs.mute')
+					});
 				}
 
 				let volumePercentage = `${(volume * 100)}%`;
@@ -198,17 +198,17 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// SLIDER
 		mute
-		.on('mouseenter focusin', () => {
-			volumeSlider.show();
-			mouseIsOver = true;
-		})
-		.on('mouseleave focusout', () => {
-			mouseIsOver = false;
+			.on('mouseenter focusin', () => {
+				volumeSlider.show();
+				mouseIsOver = true;
+			})
+			.on('mouseleave focusout', () => {
+				mouseIsOver = false;
 
-			if (!mouseIsDown && mode === 'vertical') {
-				volumeSlider.hide();
-			}
-		});
+				if (!mouseIsDown && mode === 'vertical') {
+					volumeSlider.hide();
+				}
+			});
 
 		/**
 		 * @private
@@ -231,50 +231,50 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// Events
 		volumeSlider
-		.on('mouseover', () => {
-			mouseIsOver = true;
-		})
-		.on('mousedown', (e) => {
-			handleVolumeMove(e);
-			t.globalBind('mousemove.vol', (e) => {
+			.on('mouseover', () => {
+				mouseIsOver = true;
+			})
+			.on('mousedown', (e) => {
 				handleVolumeMove(e);
-			});
-			t.globalBind('mouseup.vol', () => {
-				mouseIsDown = false;
-				t.globalUnbind('.vol');
+				t.globalBind('mousemove.vol', (e) => {
+					handleVolumeMove(e);
+				});
+				t.globalBind('mouseup.vol', () => {
+					mouseIsDown = false;
+					t.globalUnbind('mousemove.vol mouseup.vol');
 
-				if (!mouseIsOver && mode === 'vertical') {
-					volumeSlider.hide();
-				}
-			});
-			mouseIsDown = true;
+					if (!mouseIsOver && mode === 'vertical') {
+						volumeSlider.hide();
+					}
+				});
+				mouseIsDown = true;
 
-			return false;
-		})
-		.on('keydown', (e) => {
-
-			if (t.options.keyActions.length) {
-				let
-					keyCode = e.keyCode,
-					volume = media.volume
-					;
-				switch (keyCode) {
-					case 38: // Up
-						volume = Math.min(volume + 0.1, 1);
-						break;
-					case 40: // Down
-						volume = Math.max(0, volume - 0.1);
-						break;
-					default:
-						return true;
-				}
-
-				mouseIsDown = false;
-				positionVolumeHandle(volume);
-				media.setVolume(volume);
 				return false;
-			}
-		});
+			})
+			.on('keydown', (e) => {
+
+				if (t.options.keyActions.length) {
+					let
+						keyCode = e.keyCode,
+						volume = media.volume
+						;
+					switch (keyCode) {
+						case 38: // Up
+							volume = Math.min(volume + 0.1, 1);
+							break;
+						case 40: // Down
+							volume = Math.max(0, volume - 0.1);
+							break;
+						default:
+							return true;
+					}
+
+					mouseIsDown = false;
+					positionVolumeHandle(volume);
+					media.setVolume(volume);
+					return false;
+				}
+			});
 
 		// MUTE button
 		mute.find('button').click(() => {
@@ -297,12 +297,10 @@ $.extend(MediaElementPlayer.prototype, {
 			if (!mouseIsDown) {
 				if (media.muted) {
 					positionVolumeHandle(0);
-					mute.removeClass(`${t.options.classPrefix}mute`)
-					.addClass(`${t.options.classPrefix}unmute`);
+					mute.removeClass(`${t.options.classPrefix}mute`).addClass(`${t.options.classPrefix}unmute`);
 				} else {
 					positionVolumeHandle(media.volume);
-					mute.removeClass(`${t.options.classPrefix}unmute`)
-					.addClass(`${t.options.classPrefix}mute`);
+					mute.removeClass(`${t.options.classPrefix}unmute`).addClass(`${t.options.classPrefix}mute`);
 				}
 			}
 			updateVolumeSlider(e);

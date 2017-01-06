@@ -210,7 +210,7 @@ $.extend(MediaElementPlayer.prototype, {
 
 
 			// parse all needed nodes
-			adNode.find('Impression').each(() => {
+			adNode.find('Impression').each(function() {
 				adTag.impressions.push($.trim($(this).text()));
 			});
 

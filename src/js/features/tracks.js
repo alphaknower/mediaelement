@@ -135,28 +135,28 @@ $.extend(MediaElementPlayer.prototype, {
 		} else {
 			// hover or keyboard focus
 			player.captionsButton
-			.on('mouseenter focusin', () => {
-				$(this).find(`.${t.options.classPrefix}captions-selector`)
-				.removeClass(`${t.options.classPrefix}offscreen`);
-			})
-			.on('mouseleave focusout', () => {
-				$(this).find(`.${t.options.classPrefix}captions-selector`)
-				.addClass(`${t.options.classPrefix}offscreen`);
-			})
-			// handle clicks to the language radio buttons
-			.on('click', 'input[type=radio]', () => {
-				// value is trackId, same as the actual id, and we're using it here
-				// because the "none" checkbox doesn't have a trackId
-				// to use, but we want to know when "none" is clicked
-				player.setTrack(this.value);
-			})
-			.on('click', `.${t.options.classPrefix}captions-selector-label`, () => {
-				$(this).siblings('input[type="radio"]').trigger('click');
-			})
-			//Allow up/down arrow to change the selected radio without changing the volume.
-			.on('keydown', (e) => {
-				e.stopPropagation();
-			});
+				.on('mouseenter focusin', function() {
+					$(this).find(`.${t.options.classPrefix}captions-selector`)
+						.removeClass(`${t.options.classPrefix}offscreen`);
+				})
+				.on('mouseleave focusout', function() {
+					$(this).find(`.${t.options.classPrefix}captions-selector`)
+						.addClass(`${t.options.classPrefix}offscreen`);
+				})
+				// handle clicks to the language radio buttons
+				.on('click', 'input[type=radio]', function() {
+					// value is trackId, same as the actual id, and we're using it here
+					// because the "none" checkbox doesn't have a trackId
+					// to use, but we want to know when "none" is clicked
+					player.setTrack(this.value);
+				})
+				.on('click', `.${t.options.classPrefix}captions-selector-label`, function() {
+					$(this).siblings('input[type="radio"]').trigger('click');
+				})
+				//Allow up/down arrow to change the selected radio without changing the volume.
+				.on('keydown', (e) => {
+					e.stopPropagation();
+				});
 		}
 
 		if (!player.options.alwaysShowControls) {
@@ -223,7 +223,7 @@ $.extend(MediaElementPlayer.prototype, {
 			},
 			() => {
 				if (player.hasChapters && !media.paused) {
-					player.chapters.fadeOut(200, () => {
+					player.chapters.fadeOut(200, function() {
 						$(this).addClass(`${t.options.classPrefix}offscreen`);
 						$(this).css('display', 'block');
 					});
@@ -671,7 +671,7 @@ $.extend(MediaElementPlayer.prototype, {
 			usedPercent += percent;
 		}
 
-		t.chapters.find(`.${t.options.classPrefix}chapter`).click(() => {
+		t.chapters.find(`.${t.options.classPrefix}chapter`).click(function() {
 			t.media.setCurrentTime(parseFloat($(this).attr('rel')));
 			if (t.media.paused) {
 				t.media.play();

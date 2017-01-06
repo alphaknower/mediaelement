@@ -102,14 +102,15 @@ export function splitEvents (events, id) {
 	let rwindow = /^((after|before)print|(before)?unload|hashchange|message|o(ff|n)line|page(hide|show)|popstate|resize|storage)\b/;
 	// add player ID as an event namespace so it's easier to unbind them all later
 	let ret = {d: [], w: []};
-	(events || '').split(' ').forEach((k, v) => {
-		let eventname = v + '.' + id;
-		if (eventname.indexOf('.') === 0) {
-			ret.d.push(eventname);
-			ret.w.push(eventname);
+	(events || '').split(' ').forEach((v) => {
+		const eventName = v + '.' + id;
+
+		if (eventName.startsWith('.')) {
+			ret.d.push(eventName);
+			ret.w.push(eventName);
 		}
 		else {
-			ret[rwindow.test(v) ? 'w' : 'd'].push(eventname);
+			ret[rwindow.test(v) ? 'w' : 'd'].push(eventName);
 		}
 	});
 

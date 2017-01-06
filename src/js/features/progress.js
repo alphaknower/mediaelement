@@ -157,9 +157,9 @@ $.extend(MediaElementPlayer.prototype, {
 			};
 
 		// Events
-		t.slider.on('focus', (e) => {
+		t.slider.on('focus', () => {
 			player.options.autoRewind = false;
-		}).on('blur', (e) => {
+		}).on('blur', () => {
 			player.options.autoRewind = autoRewindInitial;
 		}).on('keydown', (e) => {
 
@@ -254,12 +254,12 @@ $.extend(MediaElementPlayer.prototype, {
 				t.globalBind('mousemove.dur touchmove.dur', (e) => {
 					handleMouseMove(e);
 				});
-				t.globalBind('mouseup.dur touchend.dur', (e) => {
+				t.globalBind('mouseup.dur touchend.dur', () => {
 					mouseIsDown = false;
 					if (t.timefloat !== undefined) {
 						t.timefloat.hide();
 					}
-					t.globalUnbind('.dur');
+					t.globalUnbind('mousemove.dur touchmove.dur mouseup.dur touchend.dur');
 				});
 			}
 		}).on('mouseenter', (e) => {
@@ -270,10 +270,10 @@ $.extend(MediaElementPlayer.prototype, {
 			if (t.timefloat !== undefined && !HAS_TOUCH) {
 				t.timefloat.show();
 			}
-		}).on('mouseleave', (e) => {
+		}).on('mouseleave', () => {
 			mouseIsOver = false;
 			if (!mouseIsDown) {
-				t.globalUnbind('.dur');
+				t.globalUnbind('mousemove.dur');
 				if (t.timefloat !== undefined) {
 					t.timefloat.hide();
 				}

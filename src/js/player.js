@@ -353,16 +353,15 @@ export class MediaElementPlayer {
 			$(`<span class="${t.options.classPrefix}offscreen">${videoPlayerTitle}</span>`).insertBefore(t.$media);
 			// build container
 			t.container =
-				$(`<div id="${t.id}" class="${t.options.classPrefix}container 
-							${t.options.classPrefix}container-keyboard-inactive" tabindex="0" role="application" 
-							aria-label="${videoPlayerTitle}">
-							<div class="${t.options.classPrefix}inner">
-								<div class="${t.options.classPrefix}mediaelement"></div>
-								<div class="${t.options.classPrefix}layers"></div>
-								<div class="${t.options.classPrefix}controls"></div>
-								<div class="${t.options.classPrefix}clear"></div>
-							</div>
-						</div>`)
+				$(`<div id="${t.id}" class="${t.options.classPrefix}container ${t.options.classPrefix}container-keyboard-inactive" 
+					tabindex="0" role="application" aria-label="${videoPlayerTitle}">
+					<div class="${t.options.classPrefix}inner">
+						<div class="${t.options.classPrefix}mediaelement"></div>
+						<div class="${t.options.classPrefix}layers"></div>
+						<div class="${t.options.classPrefix}controls"></div>
+						<div class="${t.options.classPrefix}clear"></div>
+					</div>
+				</div>`)
 				.addClass(t.$media[0].className)
 				.insertBefore(t.$media)
 				.focus((e) => {
@@ -535,20 +534,16 @@ export class MediaElementPlayer {
 
 		if (doAnimation) {
 			// fade out main controls
-			t.controls.stop(true, true).fadeOut(200, () => {
-				$(this)
-				.addClass(`${t.options.classPrefix}offscreen`)
-				.css('display', 'block');
+			t.controls.stop(true, true).fadeOut(200, function() {
+				$(this).addClass(`${t.options.classPrefix}offscreen`).css('display', 'block');
 
 				t.controlsAreVisible = false;
 				t.container.trigger('controlshidden');
 			});
 
 			// any additional controls people might add and want to hide
-			t.container.find(`.${t.options.classPrefix}control`)
-			.stop(true, true).fadeOut(200, () => {
-				$(this).addClass(`${t.options.classPrefix}offscreen`)
-				.css('display', 'block');
+			t.container.find(`.${t.options.classPrefix}control`).stop(true, true).fadeOut(200, function() {
+				$(this).addClass(`${t.options.classPrefix}offscreen`).css('display', 'block');
 			});
 		} else {
 
@@ -1321,7 +1316,7 @@ export class MediaElementPlayer {
 			t = this,
 			poster = $(`<div class="${t.options.classPrefix}poster ${t.options.classPrefix}layer"></div>`).appendTo(layers),
 			posterUrl = player.$media.attr('poster')
-			;
+		;
 
 		// priority goes to option (this is useful if you need to support iOS 3.x (iOS completely fails with poster)
 		if (player.options.poster !== '') {
@@ -1370,21 +1365,22 @@ export class MediaElementPlayer {
 				.appendTo(layers),
 			// this needs to come last so it's on top
 			bigPlay =
-				$(`<div class="${t.options.classPrefix}overlay ${t.options.classPrefix}layer 
-					${t.options.classPrefix}overlay-play">
+				$(`<div class="${t.options.classPrefix}overlay ${t.options.classPrefix}layer ${t.options.classPrefix}overlay-play">
 					<div class="${t.options.classPrefix}overlay-button" role="button" 
 						aria-label="${i18n.t('mejs.play')}" aria-pressed="false">
 					</div>
 				</div>`)
 				.appendTo(layers)
-				.on('click', () => {	 // Removed 'touchstart' due issues on Samsung Android devices where a tap on bigPlay started and immediately stopped the video
+				.on('click', () => {
+					// Removed 'touchstart' due issues on Samsung Android devices where a tap on bigPlay
+					// started and immediately stopped the video
 					if (t.options.clickToPlayPause) {
 
 						let
 							button = t.$media.closest(`.${t.options.classPrefix}container`)
 							.find(`.${t.options.classPrefix}overlay-button`),
 							pressed = button.attr('aria-pressed')
-							;
+						;
 
 						if (media.paused) {
 							media.play();
@@ -1502,7 +1498,7 @@ export class MediaElementPlayer {
 
 	}
 
-	static onkeydown (player, media, e) {
+	onkeydown (player, media, e) {
 
 		if (player.hasFocus && player.options.enableKeyboard) {
 			// find a matching key
@@ -1620,7 +1616,7 @@ export class MediaElementPlayer {
 	if (typeof mejs.$ !== 'undefined') {
 		mejs.$.fn.mediaelementplayer = function (options) {
 			if (options === false) {
-				this.each(function () {
+				this.each(function() {
 					let player = $(this).data('mediaelementplayer');
 					if (player) {
 						player.remove();
@@ -1629,7 +1625,7 @@ export class MediaElementPlayer {
 				});
 			}
 			else {
-				this.each(function () {
+				this.each(function() {
 					$(this).data('mediaelementplayer', new MediaElementPlayer(this, options));
 				});
 			}

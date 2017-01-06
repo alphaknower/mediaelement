@@ -159,7 +159,7 @@ $.extend(MediaElementPlayer.prototype, {
 			.show();
 
 		// bind events
-		t.contextMenu.find(`.${t.options.classPrefix}contextmenu-item`).each(() => {
+		t.contextMenu.find(`.${t.options.classPrefix}contextmenu-item`).each(function() {
 
 			// which one is this?
 			let $dom = $(this),

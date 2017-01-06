@@ -46,7 +46,7 @@ $.extend(MediaElementPlayer.prototype, {
 				// append it to the toolbar
 				.appendTo(controls)
 				// add a click toggle event
-				.click(() => {
+				.click(function() {
 					if (media.duration) {
 						media.setCurrentTime(Math.min(media.currentTime + t.options.jumpForwardInterval, media.duration));
 						$(this).find('button').blur();

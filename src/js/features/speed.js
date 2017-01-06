@@ -130,7 +130,7 @@ $.extend(MediaElementPlayer.prototype, {
 		playbackSpeed = t.options.defaultSpeed;
 
 		// Enable inputs after they have been appended to controls to avoid tab and up/down arrow focus issues
-		$.each(player.speedButton.find('input[type="radio"]'), () => {
+		$.each(player.speedButton.find('input[type="radio"]'), function() {
 			$(this).prop('disabled', false);
 		});
 
@@ -138,17 +138,17 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// hover or keyboard focus
 		player.speedButton
-		.on('mouseenter focusin', (e) => {
+		.on('mouseenter focusin', () => {
 			player.speedSelector.removeClass(`${t.options.classPrefix}offscreen`)
-			.height(player.speedSelector.find('ul').outerHeight(true))
-			.css('top', (-1 * player.speedSelector.height()) + 'px')
+				.height(player.speedSelector.find('ul').outerHeight(true))
+				.css('top', (-1 * player.speedSelector.height()) + 'px')
 			;
 		})
 		.on('mouseleave focusout', (e) => {
 			player.speedSelector.addClass(`${t.options.classPrefix}offscreen`);
 		})
 		// handle clicks to the language radio buttons
-		.on('click', 'input[type=radio]', () => {
+		.on('click', 'input[type=radio]', function() {
 			let
 				self = $(this),
 				newSpeed = self.val()
@@ -169,7 +169,7 @@ $.extend(MediaElementPlayer.prototype, {
 				.siblings(`.${t.options.classPrefix}speed-selector-label`)
 				.addClass(`${t.options.classPrefix}speed-selected`);
 		})
-		.on('click', `.${t.options.classPrefix}speed-selector-label`, () => {
+		.on('click', `.${t.options.classPrefix}speed-selector-label`, function() {
 			$(this).siblings('input[type="radio"]').trigger('click');
 		})
 		//Allow up/down arrow to change the selected radio without changing the volume.
