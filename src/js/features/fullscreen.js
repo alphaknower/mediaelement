@@ -504,7 +504,7 @@ $.extend(MediaElementPlayer.prototype, {
 		}
 
 		// restore scroll bars to document
-		$(document.documentElement).removeClass(`${t.options.classPrefix}container-fullscreen`);
+		$(document.documentElement).removeClass(`${t.options.classPrefix}fullscreen`);
 
 		t.container.removeClass(`${t.options.classPrefix}container-fullscreen`);
 
