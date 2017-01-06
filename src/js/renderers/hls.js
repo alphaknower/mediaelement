@@ -53,7 +53,8 @@ const NativeHls = {
 	loadScript: (settings) => {
 		if (!NativeHls.isMediaStarted) {
 
-			settings.options.path = settings.options.path || '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
+			settings.options.path = settings.options.path !== undefined || settings.options.path !== null ?
+				settings.options.path : '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
 
 			if (typeof Hls !== 'undefined') {
 				NativeHls.createInstance(settings);
