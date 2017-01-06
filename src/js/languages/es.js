@@ -9,12 +9,12 @@
  *   Rafael Miranda (GitHub: @ron666)
  *
  * @see
- *   mediaelement-i18n.js
+ *   core/i18n.js
  *
  * @params
  *  - exports - CommonJS, window ..
  */
-export const ES = {
+mejs.i18n.es = {
 	"mejs.plural-form": 1,
 
 	// me-shim

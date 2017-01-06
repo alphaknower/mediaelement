@@ -10,12 +10,12 @@
  *   Sascha "SoftCreatR" Greuel
  *
  * @see
- *   mediaelement-i18n.js
+ *   core/i18n.js
  *
  * @params
  *  - exports - CommonJS, window ..
  */
-export const KO = {
+mejs.i18n.ko = {
 	"mejs.plural-form": 0,
 
 	// me-shim

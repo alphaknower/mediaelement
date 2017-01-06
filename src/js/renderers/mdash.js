@@ -4,7 +4,7 @@ import window from 'global/window';
 import document from 'global/document';
 import mejs from '../core/mejs';
 import {renderer} from '../core/renderer';
-import {createEvent, isScriptLoaded} from '../utils/dom';
+import {createEvent} from '../utils/dom';
 import {typeChecks} from '../utils/media';
 import {HAS_MSE} from '../utils/constants';
 
@@ -51,7 +51,7 @@ const NativeDash = {
 
 			settings.options.path = settings.options.path || '//cdn.dashjs.org/latest/dash.mediaplayer.min.js';
 
-			if (isScriptLoaded(settings.options.path)) {
+			if (typeof dashjs !== 'undefined') {
 				NativeDash.createInstance(settings);
 			} else {
 				let

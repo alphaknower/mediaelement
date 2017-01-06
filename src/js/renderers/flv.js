@@ -4,7 +4,7 @@ import window from 'global/window';
 import document from 'global/document';
 import mejs from '../core/mejs';
 import {renderer} from '../core/renderer';
-import {createEvent, isScriptLoaded} from '../utils/dom';
+import {createEvent} from '../utils/dom';
 import {HAS_MSE} from '../utils/constants';
 import {typeChecks} from '../utils/media';
 
@@ -55,7 +55,7 @@ const NativeFlv = {
 
 			settings.options.path = settings.options.path || '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.1.0/flv.min.js';
 
-			if (isScriptLoaded(settings.options.path)) {
+			if (typeof flvjs !== 'undefined') {
 				NativeFlv.createInstance(settings);
 			} else {
 				let

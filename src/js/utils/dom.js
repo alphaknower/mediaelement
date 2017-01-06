@@ -78,21 +78,3 @@ export function isNodeAfter (sourceNode, targetNode) {
 		sourceNode.compareDocumentPosition(targetNode) && Node.DOCUMENT_POSITION_PRECEDING
 	);
 }
-
-/**
- * Check if script is already loaded on the page to avoid duplicity of scripts
- *
- * It accepts the full URL/path or part of it.
- * @see http://stackoverflow.com/questions/9659265/check-if-javascript-script-exists-on-page
- * @param {String} url
- * @returns {Boolean}
- */
-export function isScriptLoaded (url) {
-	const scripts = document.getElementsByTagName('script');
-	for (let script of scripts) {
-		if (script.src.indexOf(url) > -1) {
-			return true;
-		}
-	}
-	return false;
-}

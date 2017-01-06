@@ -10,12 +10,12 @@
  *   Sascha Greuel (Twitter: @SoftCreatR)
  *
  * @see
- *   mediaelement-i18n.js
+ *   core/i18n.js
  *
  * @params
  *  - exports - CommonJS, window ..
  */
-export const ZH_CN = {
+mejs.i18n['zh-cn'] = {
 	"mejs.plural-form": 0,
 
 	// me-shim

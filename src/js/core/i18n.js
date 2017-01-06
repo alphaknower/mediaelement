@@ -30,10 +30,13 @@ i18n.language = (...args) => {
 			throw new Error('Language code must have format `xx` or `xx-xx`');
 		}
 
-		args[1] = args[1] !== null && args[1] !== undefined && typeof args[1] === 'object' ? args[1] : {};
-
 		i18n.lang = args[0];
-		i18n[args[0]] = !isObjectEmpty(args[1]) ? args[1] : en;
+
+		// Check if language strings were added; otherwise, check the second argument or set to English as default
+		if (i18n[args[0]] === undefined) {
+			args[1] = args[1] !== null && args[1] !== undefined && typeof args[1] === 'object' ? args[1] : {};
+			i18n[args[0]] = !isObjectEmpty(args[1]) ? args[1] : en;
+		}
 	}
 
 	return i18n.lang;

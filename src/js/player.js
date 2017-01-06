@@ -1487,7 +1487,6 @@ export class MediaElementPlayer {
 			let $container = $(event.target).closest(`.${t.options.classPrefix}container`);
 			player.hasFocus = $container.length !== 0 &&
 				$container.attr('id') === player.$media.closest(`.${t.options.classPrefix}container`).attr('id');
-			console.log(2);
 			return t.onkeydown(player, media, event);
 		});
 

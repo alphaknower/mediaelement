@@ -9,12 +9,12 @@
  * 	Tongro
  *
  * @see
- *   mediaelement-i18n.js
+ *   core/i18n.js
  *
  * @params
  *  - exports - CommonJS, window ..
  */
-export const CA = {
+mejs.i18n.ca = {
 	"mejs.plural-form": 1,
 
 	// me-shim

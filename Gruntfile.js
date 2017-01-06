@@ -129,27 +129,7 @@ module.exports = function(grunt) {
 						'src/js/features/jumpforward.js',
 						'src/js/features/postroll.js',
 						'src/js/features/markers.js'
-					]),
-
-					//languages
-					'tmp/lang/ca.js': ['src/js/languages/ca.js'],
-					'tmp/lang/cs.js': ['src/js/languages/cs.js'],
-					'tmp/lang/de.js': ['src/js/languages/de.js'],
-					'tmp/lang/es.js': ['src/js/languages/es.js'],
-					'tmp/lang/fr.js': ['src/js/languages/fr.js'],
-					'tmp/lang/hu.js': ['src/js/languages/hu.js'],
-					'tmp/lang/it.js': ['src/js/languages/it.js'],
-					'tmp/lang/ja.js': ['src/js/languages/ja.js'],
-					'tmp/lang/ko.js': ['src/js/languages/ko.js'],
-					'tmp/lang/nl.js': ['src/js/languages/nl.js'],
-					'tmp/lang/pl.js': ['src/js/languages/pl.js'],
-					'tmp/lang/pt.js': ['src/js/languages/pt.js'],
-					'tmp/lang/pt-br.js': ['src/js/languages/pt-br.js'],
-					'tmp/lang/ro.js': ['src/js/languages/ro.js'],
-					'tmp/lang/ru.js': ['src/js/languages/ru.js'],
-					'tmp/lang/sk.js': ['src/js/languages/sk.js'],
-					'tmp/lang/zh.js': ['src/js/languages/zh.js'],
-					'tmp/lang/zh-cn.js': ['src/js/languages/zh-cn.js'],
+					])
 				}
 			}
 		},
@@ -239,7 +219,7 @@ module.exports = function(grunt) {
 			},
 			translation: {
 				expand  : true,
-				cwd     : 'tmp/lang/',
+				cwd     : 'src/js/lang/',
 				src     : ['*.js'],
 				dest    : 'build/lang/',
 				flatten : true,

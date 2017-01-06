@@ -4,7 +4,7 @@ import window from 'global/window';
 import document from 'global/document';
 import mejs from '../core/mejs';
 import {renderer} from '../core/renderer';
-import {createEvent, isScriptLoaded} from '../utils/dom';
+import {createEvent} from '../utils/dom';
 import {HAS_MSE} from '../utils/constants';
 import {typeChecks} from '../utils/media';
 
@@ -55,7 +55,7 @@ const NativeHls = {
 
 			settings.options.path = settings.options.path || '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
 
-			if (isScriptLoaded(settings.options.path)) {
+			if (typeof Hls !== 'undefined') {
 				NativeHls.createInstance(settings);
 			} else {
 				let
