@@ -9,11 +9,7 @@
  *   TBD
  *   Sascha Greuel (Twitter: @SoftCreatR)
  *
- * @see
- *   core/i18n.js
- *
- * @params
- *  - exports - CommonJS, window ..
+ * @see core/i18n.js
  */
 export const EN = {
 	"mejs.plural-form": 1,

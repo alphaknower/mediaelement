@@ -9,11 +9,7 @@
  *   Armando Meziat (Twitter: @odnamrataizem)
  *   Sascha Greuel (Twitter: @SoftCreatR)
  *
- * @see
- *   core/i18n.js
- *
- * @params
- *  - exports - CommonJS, window ..
+ * @see core/i18n.js
  */
 mejs.i18n['pt-br'] = {
 	"mejs.plural-form": 2,

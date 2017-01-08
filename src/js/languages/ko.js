@@ -9,11 +9,7 @@
  *   Jalios (Twitter: @Jalios)
  *   Sascha "SoftCreatR" Greuel
  *
- * @see
- *   core/i18n.js
- *
- * @params
- *  - exports - CommonJS, window ..
+ * @see core/i18n.js
  */
 mejs.i18n.ko = {
 	"mejs.plural-form": 0,

@@ -8,11 +8,7 @@
  * @author
  * 	Tongro
  *
- * @see
- *   core/i18n.js
- *
- * @params
- *  - exports - CommonJS, window ..
+ * @see core/i18n.js
  */
 mejs.i18n.ca = {
 	"mejs.plural-form": 1,

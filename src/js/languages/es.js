@@ -8,11 +8,7 @@
  *   Sascha Greuel (Twitter: @SoftCreatR)
  *   Rafael Miranda (GitHub: @ron666)
  *
- * @see
- *   core/i18n.js
- *
- * @params
- *  - exports - CommonJS, window ..
+ * @see core/i18n.js
  */
 mejs.i18n.es = {
 	"mejs.plural-form": 1,
