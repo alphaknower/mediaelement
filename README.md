@@ -10,6 +10,8 @@ One file. Any browser. Same UI.
 * Contributors: [all contributors](https://github.com/johndyer/mediaelement/graphs/contributors)
 
 [![GitHub version](https://badge.fury.io/gh/johndyer%2Fmediaelement.svg)](https://badge.fury.io/gh/johndyer%2Fmediaelement)
+[![Build Status](https://travis-ci.org/johndyer/mediaelement.svg?branch=mejs-es6)](https://travis-ci.org/johndyer/mediaelement)
+[![Coverage Status](https://coveralls.io/repos/github/johndyer/mediaelement/badge.svg?branch=mejs-es6)](https://coveralls.io/github/johndyer/mediaelement?branch=mejs-es6)
 
 # Table of Contents
 
