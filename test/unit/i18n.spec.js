@@ -60,11 +60,6 @@ describe('i18n', () => {
 			expect(i18n.t('mejs.time-skip-back', 1)).to.equal('1초 를 뒤로 건너뛰세요');
 			expect(i18n.t('mejs.time-skip-back', 30)).to.equal('30초 를 뒤로 건너뛰세요');
 
-			i18n.language('en');
-			expect(i18n.t('mejs.time-jump-forward', 1)).to.equal('Jump forward 1 second');
-			expect(i18n.t('mejs.time-jump-forward', 30)).to.equal('Jump forward 30 seconds');
-			expect(i18n.t('mejs.fullscreen-off', 400)).to.equal('Turn off Fullscreen');
-
 			i18n.language('es', es);
 			expect(i18n.t('mejs.time-jump-forward', 1)).to.equal('Adelantar 1 segundo');
 			expect(i18n.t('mejs.time-jump-forward', 30)).to.equal('Adelantar 30 segundos');

@@ -36,6 +36,8 @@ i18n.language = (...args) => {
 		if (i18n[args[0]] === undefined) {
 			args[1] = args[1] !== null && args[1] !== undefined && typeof args[1] === 'object' ? args[1] : {};
 			i18n[args[0]] = !isObjectEmpty(args[1]) ? args[1] : en;
+		} else if (args[1] !== null && args[1] !== undefined && typeof args[1] === 'object') {
+			i18n[args[0]] = args[1];
 		}
 	}
 
