@@ -3,6 +3,8 @@
 *3.0 (2017/??/??)*
 
 * Introduction of `Renderers`, pluggable code that allows the introduction of new media formats in an easier way @johndyer
+* Migrated code to `ES2015` (`ES6`) @ron666
+* Integrated Browserify, Unit Testing using Mocha and Chai, and other testing support via Travis and Coveralls @ron666
 * Ability to play Facebook, SoundCloud and YouTube @johndyer
 * Ability to play M(PEG)-DASH formats using [dash.js](https://github.com/Dash-Industry-Forum/dash.js) for native support and [dash.as](https://github.com/castlabs/dashas) for Flash fallback @ron666
 * Increased test suite by adding a file per renderer @johndyer and @ron666
