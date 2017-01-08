@@ -60,7 +60,7 @@ module.exports = function(grunt) {
 				},
 				files: {
 					// core element
-					'tmp/mediaelement.js': [
+					'build/mediaelement.js': [
 						'src/js/utils/legacy.js',
 						'src/js/core/mediaelement.js',
 						'src/js/renderers/html5.js',
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
 						'src/js/languages/en.js'
 					],
 					// just player
-					'tmp/mediaelementplayer.js': [
+					'build/mediaelementplayer.js': [
 						'src/js/library.js',
 						'src/js/player.js'
 					].concat(featureSources || [
@@ -97,7 +97,7 @@ module.exports = function(grunt) {
 						'src/js/features/markers.js'
 					]),
 					// all bundle
-					'tmp/mediaelement-and-player.js': [
+					'build/mediaelement-and-player.js': [
 						'src/js/utils/legacy.js',
 						'src/js/core/mediaelement.js',
 						'src/js/renderers/html5.js',
@@ -137,31 +137,31 @@ module.exports = function(grunt) {
 			me: {
 				src: [
 					'src/js/header.js',
-					'tmp/mediaelement.js'
+					'build/mediaelement.js'
 				],
-				dest: 'tmp/mediaelement.js'
+				dest: 'build/mediaelement.js'
 			},
 			mep: {
 				src: [
 					'src/js/header.js',
-					'tmp/mediaelementplayer.js'
+					'build/mediaelementplayer.js'
 				],
-				dest: 'tmp/mediaelementplayer.js'
+				dest: 'build/mediaelementplayer.js'
 			},
 			bundle: {
 				src: [
 					'src/js/header.js',
-					'tmp/mediaelement-and-player.js'
+					'build/mediaelement-and-player.js'
 				],
-				dest: 'tmp/mediaelement-and-player.js'
+				dest: 'build/mediaelement-and-player.js'
 			}
 		},
 		removelogging: {
 			dist: {
 				src: [
-					'tmp/mediaelement.js',
-					'tmp/mediaelementplayer.js',
-					'tmp/mediaelement-and-player.js'
+					'build/mediaelement.js',
+					'build/mediaelementplayer.js',
+					'build/mediaelement-and-player.js'
 				]
 			},
 			options: {
@@ -171,17 +171,17 @@ module.exports = function(grunt) {
 		},
 		uglify: {
 			me: {
-				src	   : ['tmp/mediaelement.js'],
+				src	   : ['build/mediaelement.js'],
 				dest   : 'build/mediaelement.min.js',
 				banner : 'src/js/header.js'
 			},
 			mep: {
-				src	   : ['tmp/mediaelementplayer.js'],
+				src	   : ['build/mediaelementplayer.js'],
 				dest   : 'build/mediaelementplayer.min.js',
 				banner : 'src/js/header.js'
 			},
 			bundle: {
-				src	 : ['tmp/mediaelement-and-player.js'],
+				src	 : ['build/mediaelement-and-player.js'],
 				dest : 'build/mediaelement-and-player.min.js',
 				banner : 'src/js/header.js'
 			},
@@ -221,7 +221,7 @@ module.exports = function(grunt) {
 				expand  : true,
 				cwd     : 'src/js/languages/',
 				src     : ['*.js'],
-				dest    : 'tmp/lang/',
+				dest    : 'build/lang/',
 				flatten : true,
 				filter  : 'isFile'
 			}
@@ -307,5 +307,4 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['jshint', 'browserify', 'concat', 'removelogging', 'uglify', 'postcss', 'shell', 'copy', 'clean:temp']);
 	grunt.registerTask('html5only', ['jshint', 'browserify', 'concat', 'removelogging', 'uglify', 'postcss', 'copy', 'clean:temp']);
 	grunt.registerTask('html5debug', ['jshint', 'browserify', 'concat', 'uglify', 'postcss', 'copy', 'clean:temp']);
-	grunt.registerTask('develop', ['jshint', 'browserify', 'concat', 'copy:translation']);
 };
