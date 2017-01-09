@@ -41,6 +41,8 @@ Instead of using Flash as a _fallback_, Flash is used to make the browser seem H
 
 * Introduction of `Renderers`, pluggable code that allows the introduction of new media formats in an easier way.
 
+* Refactor code in `ES2015` notation and added [Travis CI](https://travis-ci.org/johndyer/mediaelement) and [Coveralls](https://coveralls.io/github/johndyer/mediaelement) support
+
 * Ability to play Facebook, SoundCloud, M(PEG)-DASH using [dash.js](https://github.com/Dash-Industry-Forum/dash.js) for native support and [dash.as](https://github.com/castlabs/dashas) for Flash fallback.
 
 * Code completely documented using [JSDoc](http://usejsdoc.org/) notation.
