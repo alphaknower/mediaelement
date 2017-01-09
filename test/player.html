@@ -123,6 +123,7 @@
                     <option value="https://www.youtube.com/watch?v=twYp6W6vt2U">YouTube</option>
                     <option value="https://player.vimeo.com/video/108018156?title=0&amp;byline=0&amp;portrait=0&amp;badge=0">Vimeo</option>
                     <option value="https://www.facebook.com/johndyer/videos/10107816243681884/">Facebook</option>
+                    <!--<option value="https://googlevr.github.io/vrview/examples/video/congo_2048.mp4">360 Video (MP4)</option>-->
                 </select>
                 </label>
             </div>
@@ -304,7 +305,8 @@
 		    stretching: stretching,
 		    pluginPath: '../build/',
 		    markers: [2.5, 10, 35, 40.2],
-		    features: ['playpause', 'current', 'progress', 'duration', 'volume', 'speed', 'tracks', 'skipback', 'jumpforward', 'markers', 'fullscreen'],
+//            supportVR: true,
+		    features: ['playpause', 'current', 'progress', 'duration', 'volume', 'speed', 'tracks', 'skipback', 'jumpforward', 'markers', 'fullscreen'],//, 'vr'],
 		    success: function (media) {
 
 			    $(media).closest('.mejs-container').attr('lang', mejs.i18n.language());

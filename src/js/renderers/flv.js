@@ -67,9 +67,9 @@ const NativeFlv = {
 				script.src = settings.options.path;
 
 				// Attach handlers for all browsers
-				script.onload = script.onreadystatechange = () => {
-					if (!done && (!NativeFlv.readyState || NativeFlv.readyState === undefined ||
-						NativeFlv.readyState === 'loaded' || NativeFlv.readyState === 'complete')) {
+				script.onload = script.onreadystatechange = function() {
+					if (!done && (!this.readyState || this.readyState === undefined ||
+						this.readyState === 'loaded' || this.readyState === 'complete')) {
 						done = true;
 						NativeFlv.mediaReady();
 						script.onload = script.onreadystatechange = null;

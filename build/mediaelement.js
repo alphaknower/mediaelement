@@ -3168,7 +3168,7 @@ var NativeFlv = {
 
 					// Attach handlers for all browsers
 					script.onload = script.onreadystatechange = function () {
-						if (!done && (!NativeFlv.readyState || NativeFlv.readyState === undefined || NativeFlv.readyState === 'loaded' || NativeFlv.readyState === 'complete')) {
+						if (!done && (!this.readyState || this.readyState === undefined || this.readyState === 'loaded' || this.readyState === 'complete')) {
 							done = true;
 							NativeFlv.mediaReady();
 							script.onload = script.onreadystatechange = null;
@@ -3605,7 +3605,7 @@ var NativeHls = {
 
 					// Attach handlers for all browsers
 					script.onload = script.onreadystatechange = function () {
-						if (!done && (!NativeHls.readyState || NativeHls.readyState === undefined || NativeHls.readyState === 'loaded' || NativeHls.readyState === 'complete')) {
+						if (!done && (!this.readyState || this.readyState === undefined || this.readyState === 'loaded' || this.readyState === 'complete')) {
 							done = true;
 							NativeHls.mediaReady();
 							script.onload = script.onreadystatechange = null;
@@ -4317,7 +4317,7 @@ var NativeDash = {
 
 					// Attach handlers for all browsers
 					script.onload = script.onreadystatechange = function () {
-						if (!done && (!NativeDash.readyState || NativeDash.readyState === undefined || NativeDash.readyState === 'loaded' || NativeDash.readyState === 'complete')) {
+						if (!done && (!this.readyState || this.readyState === undefined || this.readyState === 'loaded' || this.readyState === 'complete')) {
 							done = true;
 							NativeDash.mediaReady();
 							script.onload = script.onreadystatechange = null;

@@ -63,9 +63,9 @@ const NativeDash = {
 				script.src = settings.options.path;
 
 				// Attach handlers for all browsers
-				script.onload = script.onreadystatechange = () => {
-					if (!done && (!NativeDash.readyState || NativeDash.readyState === undefined ||
-						NativeDash.readyState === 'loaded' || NativeDash.readyState === 'complete')) {
+				script.onload = script.onreadystatechange = function() {
+					if (!done && (!this.readyState || this.readyState === undefined ||
+						this.readyState === 'loaded' || this.readyState === 'complete')) {
 						done = true;
 						NativeDash.mediaReady();
 						script.onload = script.onreadystatechange = null;
