@@ -180,11 +180,15 @@ $.extend(MediaElementPlayer.prototype, {
 				switch (keyCode) {
 					case 37: // left
 					case 40: // Down
-						seekTime -= seekBackward;
+						if (media.duration !== Infinity && !isNaN(media.duration)) {
+							seekTime -= seekBackward;
+						}
 						break;
 					case 39: // Right
 					case 38: // Up
-						seekTime += seekForward;
+						if (media.duration !== Infinity && !isNaN(media.duration)) {
+							seekTime += seekForward;
+						}
 						break;
 					case 36: // Home
 						seekTime = 0;
@@ -230,16 +234,18 @@ $.extend(MediaElementPlayer.prototype, {
 			}
 		}).on('click', (e) => {
 
-			let paused = media.paused;
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				let paused = media.paused;
 
-			if (!paused) {
-				media.pause();
-			}
+				if (!paused) {
+					media.pause();
+				}
 
-			handleMouseMove(e);
+				handleMouseMove(e);
 
-			if (!paused) {
-				media.play();
+				if (!paused) {
+					media.play();
+				}
 			}
 
 			e.preventDefault();
@@ -249,55 +255,76 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// handle clicks
 		t.rail.on('mousedown touchstart', (e) => {
-			// only handle left clicks or touch
-			if (e.which === 1 || e.which === 0) {
-				mouseIsDown = true;
-				handleMouseMove(e);
-				t.globalBind('mousemove.dur touchmove.dur', (e) => {
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				// only handle left clicks or touch
+				if (e.which === 1 || e.which === 0) {
+					mouseIsDown = true;
+					handleMouseMove(e);
+					t.globalBind('mousemove.dur touchmove.dur', (e) => {
+						handleMouseMove(e);
+					});
+					t.globalBind('mouseup.dur touchend.dur', () => {
+						mouseIsDown = false;
+						if (t.timefloat !== undefined) {
+							t.timefloat.hide();
+						}
+						t.globalUnbind('mousemove.dur touchmove.dur mouseup.dur touchend.dur');
+					});
+				}
+			}
+		}).on('mouseenter', (e) => {
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				mouseIsOver = true;
+				t.globalBind('mousemove.dur', (e) => {
 					handleMouseMove(e);
 				});
-				t.globalBind('mouseup.dur touchend.dur', () => {
-					mouseIsDown = false;
+				if (t.timefloat !== undefined && !HAS_TOUCH) {
+					t.timefloat.show();
+				}
+			}
+		}).on('mouseleave', () => {
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				mouseIsOver = false;
+				if (!mouseIsDown) {
+					t.globalUnbind('mousemove.dur');
 					if (t.timefloat !== undefined) {
 						t.timefloat.hide();
 					}
-					t.globalUnbind('mousemove.dur touchmove.dur mouseup.dur touchend.dur');
-				});
-			}
-		}).on('mouseenter', (e) => {
-			mouseIsOver = true;
-			t.globalBind('mousemove.dur', (e) => {
-				handleMouseMove(e);
-			});
-			if (t.timefloat !== undefined && !HAS_TOUCH) {
-				t.timefloat.show();
-			}
-		}).on('mouseleave', () => {
-			mouseIsOver = false;
-			if (!mouseIsDown) {
-				t.globalUnbind('mousemove.dur');
-				if (t.timefloat !== undefined) {
-					t.timefloat.hide();
 				}
 			}
 		});
 
 		// loading
 		media.addEventListener('progress', (e) => {
-			player.setProgressRail(e);
-			player.setCurrentRail(e);
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				player.setProgressRail(e);
+				player.setCurrentRail(e);
+			}
 		}, false);
 
 		// current time
 		media.addEventListener('timeupdate', (e) => {
-			player.setProgressRail(e);
-			player.setCurrentRail(e);
-			updateSlider(e);
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				player.setProgressRail(e);
+				player.setCurrentRail(e);
+				updateSlider(e);
+			}
+		}, false);
+
+		// If media is does not have a finite duration, remove progress bar interaction
+		// and indicate that is a live broadcast
+		media.addEventListener('loadedmetadata', function (e) {
+			if (media.duration === Infinity) {
+				controls.find('.' + t.options.classPrefix + 'time-rail').empty()
+				.html('<span class="' + t.options.classPrefix + 'broadcast">' + mejs.i18n.t('mejs.live-broadcast') + '</span>');
+			}
 		}, false);
 
 		t.container.on('controlsresize', (e) => {
-			player.setProgressRail(e);
-			player.setCurrentRail(e);
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				player.setProgressRail(e);
+				player.setCurrentRail(e);
+			}
 		});
 	},
 

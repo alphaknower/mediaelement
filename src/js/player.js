@@ -1232,9 +1232,9 @@ export class MediaElementPlayer {
 
 		let
 			railMargin = parseFloat(t.rail.css('margin-left')) + parseFloat(t.rail.css('margin-right')),
-			totalMargin = parseFloat(t.total.css('margin-left')) + parseFloat(t.total.css('margin-right')),
+			totalMargin = parseFloat(t.total.css('margin-left')) + parseFloat(t.total.css('margin-right')) || 0,
 			siblingsWidth = 0
-			;
+		;
 
 		t.rail.siblings().each((index, object) => {
 			siblingsWidth += parseFloat($(object).outerWidth(true));
