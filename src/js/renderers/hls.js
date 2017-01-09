@@ -292,16 +292,10 @@ const HlsNativeRenderer = {
 			 * @see https://github.com/dailymotion/hls.js/blob/master/API.md#errors
 			 */
 			let assignHlsEvents = (e, data) => {
-				let event = createEvent(e, node);
-				mediaElement.dispatchEvent(event);
-
-				if (e === 'ERROR') {
-
-					// Destroy instance of player if unknown error found
-					if (data.fatal && e === Hls.ErrorTypes.OTHER_ERROR) {
-						hlsPlayer.destroy();
-					}
-
+				if (e !== 'ERROR') {
+					let event = createEvent(e, node);
+					mediaElement.dispatchEvent(event);
+				} else {
 					console.error(e, data);
 				}
 			};

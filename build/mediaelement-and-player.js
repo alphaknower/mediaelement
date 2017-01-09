@@ -9073,9 +9073,9 @@ var HlsNativeRenderer = {
 
 			try {
 				for (var _iterator3 = events[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var _event = _step3.value;
+					var _event2 = _step3.value;
 
-					assignEvents(_event);
+					assignEvents(_event2);
 				}
 
 				/**
@@ -9104,16 +9104,10 @@ var HlsNativeRenderer = {
 			}
 
 			var assignHlsEvents = function assignHlsEvents(e, data) {
-				var event = (0, _dom.createEvent)(e, node);
-				mediaElement.dispatchEvent(event);
-
-				if (e === 'ERROR') {
-
-					// Destroy instance of player if unknown error found
-					if (data.fatal && e === Hls.ErrorTypes.OTHER_ERROR) {
-						hlsPlayer.destroy();
-					}
-
+				if (e !== 'ERROR') {
+					var _event = (0, _dom.createEvent)(e, node);
+					mediaElement.dispatchEvent(_event);
+				} else {
 					console.error(e, data);
 				}
 			};
@@ -9741,9 +9735,9 @@ var DashNativeRenderer = {
 
 			try {
 				for (var _iterator3 = events[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var _event = _step3.value;
+					var _event2 = _step3.value;
 
-					assignEvents(_event);
+					assignEvents(_event2);
 				}
 
 				/**
@@ -9769,10 +9763,10 @@ var DashNativeRenderer = {
 			}
 
 			var assignMdashEvents = function assignMdashEvents(e, data) {
-				var event = (0, _dom.createEvent)(e.type, node);
-				mediaElement.dispatchEvent(event);
-
-				if (e === 'error') {
+				if (e !== 'error') {
+					var _event = (0, _dom.createEvent)(e.type, node);
+					mediaElement.dispatchEvent(_event);
+				} else {
 					console.error(e, data);
 				}
 			};

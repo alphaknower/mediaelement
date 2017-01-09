@@ -236,10 +236,10 @@ let DashNativeRenderer = {
 			 * @see http://cdn.dashjs.org/latest/jsdoc/MediaPlayerEvents.html
 			 */
 			let assignMdashEvents = (e, data) => {
-				let event = createEvent(e.type, node);
-				mediaElement.dispatchEvent(event);
-
-				if (e === 'error') {
+				if (e !== 'error') {
+					let event = createEvent(e.type, node);
+					mediaElement.dispatchEvent(event);
+				} else {
 					console.error(e, data);
 				}
 			};
