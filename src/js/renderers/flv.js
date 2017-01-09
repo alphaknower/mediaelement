@@ -53,12 +53,13 @@ const NativeFlv = {
 	loadScript: (settings) => {
 		if (!NativeFlv.isMediaStarted) {
 
-			settings.options.path = typeof settings.options.path === 'string' ?
-				settings.options.path : '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.1.0/flv.min.js';
-
 			if (typeof flvjs !== 'undefined') {
 				NativeFlv.createInstance(settings);
 			} else {
+
+				settings.options.path = typeof settings.options.path === 'string' ?
+					settings.options.path : '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.1.0/flv.min.js';
+
 				let
 					script = document.createElement('script'),
 					firstScriptTag = document.getElementsByTagName('script')[0],

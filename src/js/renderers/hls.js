@@ -53,12 +53,13 @@ const NativeHls = {
 	loadScript: (settings) => {
 		if (!NativeHls.isMediaStarted) {
 
-			settings.options.path = typeof settings.options.path === 'string' ?
-				settings.options.path : '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
-
 			if (typeof Hls !== 'undefined') {
 				NativeHls.createInstance(settings);
 			} else {
+
+				settings.options.path = typeof settings.options.path === 'string' ?
+					settings.options.path : '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
+
 				let
 					script = document.createElement('script'),
 					firstScriptTag = document.getElementsByTagName('script')[0],

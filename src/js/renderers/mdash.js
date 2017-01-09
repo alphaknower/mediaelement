@@ -49,12 +49,13 @@ const NativeDash = {
 	loadScript: (settings) => {
 		if (!NativeDash.isScriptLoaded) {
 
-			settings.options.path = typeof settings.options.path === 'string' ?
-				settings.options.path : '//cdn.dashjs.org/latest/dash.mediaplayer.min.js';
-
 			if (typeof dashjs !== 'undefined') {
 				NativeDash.createInstance(settings);
 			} else {
+
+				settings.options.path = typeof settings.options.path === 'string' ?
+					settings.options.path : '//cdn.dashjs.org/latest/dash.mediaplayer.min.js';
+
 				let
 					script = document.createElement('script'),
 					firstScriptTag = document.getElementsByTagName('script')[0],

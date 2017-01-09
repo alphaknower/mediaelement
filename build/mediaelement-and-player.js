@@ -8366,12 +8366,13 @@ var NativeFlv = {
 	loadScript: function loadScript(settings) {
 		if (!NativeFlv.isMediaStarted) {
 
-			settings.options.path = typeof settings.options.path === 'string' ? settings.options.path : '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.1.0/flv.min.js';
-
 			if (typeof flvjs !== 'undefined') {
 				NativeFlv.createInstance(settings);
 			} else {
 				(function () {
+
+					settings.options.path = typeof settings.options.path === 'string' ? settings.options.path : '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.1.0/flv.min.js';
+
 					var script = _document2.default.createElement('script'),
 					    firstScriptTag = _document2.default.getElementsByTagName('script')[0],
 					    done = false;
@@ -8803,12 +8804,13 @@ var NativeHls = {
 	loadScript: function loadScript(settings) {
 		if (!NativeHls.isMediaStarted) {
 
-			settings.options.path = typeof settings.options.path === 'string' ? settings.options.path : '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
-
 			if (typeof Hls !== 'undefined') {
 				NativeHls.createInstance(settings);
 			} else {
 				(function () {
+
+					settings.options.path = typeof settings.options.path === 'string' ? settings.options.path : '//cdn.jsdelivr.net/hls.js/latest/hls.min.js';
+
 					var script = _document2.default.createElement('script'),
 					    firstScriptTag = _document2.default.getElementsByTagName('script')[0],
 					    done = false;
@@ -9515,12 +9517,13 @@ var NativeDash = {
 	loadScript: function loadScript(settings) {
 		if (!NativeDash.isScriptLoaded) {
 
-			settings.options.path = typeof settings.options.path === 'string' ? settings.options.path : '//cdn.dashjs.org/latest/dash.mediaplayer.min.js';
-
 			if (typeof dashjs !== 'undefined') {
 				NativeDash.createInstance(settings);
 			} else {
 				(function () {
+
+					settings.options.path = typeof settings.options.path === 'string' ? settings.options.path : '//cdn.dashjs.org/latest/dash.mediaplayer.min.js';
+
 					var script = _document2.default.createElement('script'),
 					    firstScriptTag = _document2.default.getElementsByTagName('script')[0],
 					    done = false;
