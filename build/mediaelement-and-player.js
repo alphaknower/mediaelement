@@ -4824,7 +4824,7 @@ if (typeof jQuery !== 'undefined') {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.MediaElementPlayer = exports.config = undefined;
+exports.config = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -5084,7 +5084,7 @@ var config = exports.config = {
  * @return {?MediaElementPlayer}
  */
 
-var MediaElementPlayer = exports.MediaElementPlayer = function () {
+var MediaElementPlayer = function () {
 	function MediaElementPlayer(node, o) {
 		_classCallCheck(this, MediaElementPlayer);
 
@@ -6470,8 +6470,11 @@ var MediaElementPlayer = exports.MediaElementPlayer = function () {
 	return MediaElementPlayer;
 }();
 
-// turn into plugin
+_window2.default.MediaElementPlayer = MediaElementPlayer;
 
+exports.default = MediaElementPlayer;
+
+// turn into plugin
 
 (function ($) {
 

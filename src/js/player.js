@@ -249,7 +249,7 @@ export let config = {
  * @param {Object} o
  * @return {?MediaElementPlayer}
  */
-export class MediaElementPlayer {
+class MediaElementPlayer {
 
 	constructor (node, o) {
 
@@ -1610,6 +1610,10 @@ export class MediaElementPlayer {
 		delete t.node.player;
 	}
 }
+
+window.MediaElementPlayer = MediaElementPlayer;
+
+export default MediaElementPlayer;
 
 // turn into plugin
 (($) => {
