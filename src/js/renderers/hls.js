@@ -101,10 +101,12 @@ const NativeHls = {
 	 * Create a new instance of HLS player and trigger a custom event to initialize it
 	 *
 	 * @param {Object} settings - an object with settings needed to instantiate HLS object
+	 * @return {Hls}
 	 */
 	createInstance: (settings) => {
 		let player = new Hls(settings.options);
 		window['__ready__' + settings.id](player);
+		return player;
 	}
 };
 
@@ -207,9 +209,14 @@ const HlsNativeRenderer = {
 
 						if (propName === 'src') {
 
-							hlsPlayer.detachMedia();
-							hlsPlayer.attachMedia(node);
+							hlsPlayer.destroy();
+							hlsPlayer = null;
+							hlsPlayer = NativeHls.createInstance({
+								options: options.hls,
+								id: id
+							});
 
+							hlsPlayer.attachMedia(node);
 							hlsPlayer.on(Hls.Events.MEDIA_ATTACHED, () => {
 								hlsPlayer.loadSource(value);
 							});

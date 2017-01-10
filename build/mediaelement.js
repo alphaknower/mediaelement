@@ -3609,10 +3609,12 @@ var NativeHls = {
   * Create a new instance of HLS player and trigger a custom event to initialize it
   *
   * @param {Object} settings - an object with settings needed to instantiate HLS object
+  * @return {Hls}
   */
 	createInstance: function createInstance(settings) {
 		var player = new Hls(settings.options);
 		_window2.default['__ready__' + settings.id](player);
+		return player;
 	}
 };
 
@@ -3715,9 +3717,14 @@ var HlsNativeRenderer = {
 
 					if (propName === 'src') {
 
-						hlsPlayer.detachMedia();
-						hlsPlayer.attachMedia(node);
+						hlsPlayer.destroy();
+						hlsPlayer = null;
+						hlsPlayer = NativeHls.createInstance({
+							options: options.hls,
+							id: id
+						});
 
+						hlsPlayer.attachMedia(node);
 						hlsPlayer.on(Hls.Events.MEDIA_ATTACHED, function () {
 							hlsPlayer.loadSource(value);
 						});
