@@ -29,7 +29,35 @@ describe('MediaElement Player - Test Results', function() {
 					expect(container.find('.mejs__playpause-button').hasClass('mejs__play')).equal(true);
 				}, 300);
 			}, 250);
-		}, 100);
+		}, 150);
+
+	});
+
+	it('Can set different media types properly', function() {
+
+		var
+			selector = videoTag.closest('.players').find('select'),
+			error = videoTag.closest('.players').find('.error'),
+			hls = selector.find('option:eq(3)').attr('value'),
+			dash = selector.find('option:eq(4)').attr('value'),
+			youtube = selector.find('option:eq(7)').attr('value')
+		;
+
+		player.setSrc(hls.replace('&amp;', '&'));
+		player.load();
+		expect(error.html()).to.equal('');
+
+		player.setSrc(dash.replace('&amp;', '&'));
+		player.load();
+		expect(error.html()).to.equal('');
+
+		player.setSrc(youtube.replace('&amp;', '&'));
+		player.load();
+
+		setTimeout(function() {
+			expect(error.html()).to.equal('');
+			expect(container.find('iframe').length).to.equal(1);
+		}, 500);
 
 	});
 });
