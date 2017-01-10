@@ -2565,10 +2565,26 @@ $.extend(_player.MediaElementPlayer.prototype, {
 		});
 
 		// loading
+		// If media is does not have a finite duration, remove progress bar interaction
+		// and indicate that is a live broadcast
+		media.addEventListener('durationchange', function () {
+			if (media.duration !== Infinity && !isNaN(media.duration)) {
+				player.setProgressRail(e);
+				player.setCurrentRail(e);
+			} else {
+				if (!controls.find('.' + t.options.classPrefix + 'broadcast').length) {
+					controls.find('.' + t.options.classPrefix + 'time-rail').empty().html('<span class="' + t.options.classPrefix + 'broadcast">' + mejs.i18n.t('mejs.live-broadcast') + '</span>');
+				}
+			}
+		}, false);
 		media.addEventListener('progress', function (e) {
 			if (media.duration !== Infinity && !isNaN(media.duration)) {
 				player.setProgressRail(e);
 				player.setCurrentRail(e);
+			} else {
+				if (!controls.find('.' + t.options.classPrefix + 'broadcast').length) {
+					controls.find('.' + t.options.classPrefix + 'time-rail').empty().html('<span class="' + t.options.classPrefix + 'broadcast">' + mejs.i18n.t('mejs.live-broadcast') + '</span>');
+				}
 			}
 		}, false);
 
@@ -2578,14 +2594,10 @@ $.extend(_player.MediaElementPlayer.prototype, {
 				player.setProgressRail(e);
 				player.setCurrentRail(e);
 				updateSlider(e);
-			}
-		}, false);
-
-		// If media is does not have a finite duration, remove progress bar interaction
-		// and indicate that is a live broadcast
-		media.addEventListener('canplay', function (e) {
-			if (media.duration === Infinity) {
-				controls.find('.' + t.options.classPrefix + 'time-rail').empty().html('<span class="' + t.options.classPrefix + 'broadcast">' + mejs.i18n.t('mejs.live-broadcast') + '</span>');
+			} else {
+				if (!controls.find('.' + t.options.classPrefix + 'broadcast').length) {
+					controls.find('.' + t.options.classPrefix + 'time-rail').empty().html('<span class="' + t.options.classPrefix + 'broadcast">' + mejs.i18n.t('mejs.live-broadcast') + '</span>');
+				}
 			}
 		}, false);
 
