@@ -3407,44 +3407,14 @@ var FlvNativeRenderer = {
 			}
 		};
 
-		var filteredAttributes = ['id', 'src', 'style'];
-		var _iteratorNormalCompletion4 = true;
-		var _didIteratorError4 = false;
-		var _iteratorError4 = undefined;
-
-		try {
-			for (var _iterator4 = originalNode.attributes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var attribute = _step4.value;
-
-				if (attribute.specified && !filteredAttributes.includes(attribute.name)) {
-					node.setAttribute(attribute.name, attribute.value);
-				}
-			}
-		} catch (err) {
-			_didIteratorError4 = true;
-			_iteratorError4 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion4 && _iterator4.return) {
-					_iterator4.return();
-				}
-			} finally {
-				if (_didIteratorError4) {
-					throw _iteratorError4;
-				}
-			}
-		}
-
-		node.setAttribute('id', id);
-
 		if (mediaFiles && mediaFiles.length > 0) {
-			var _iteratorNormalCompletion5 = true;
-			var _didIteratorError5 = false;
-			var _iteratorError5 = undefined;
+			var _iteratorNormalCompletion4 = true;
+			var _didIteratorError4 = false;
+			var _iteratorError4 = undefined;
 
 			try {
-				for (var _iterator5 = mediaFiles[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-					var file = _step5.value;
+				for (var _iterator4 = mediaFiles[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+					var file = _step4.value;
 
 					if (_renderer.renderer.renderers[options.prefix].canPlayType(file.type)) {
 						node.src = file.src;
@@ -3452,22 +3422,22 @@ var FlvNativeRenderer = {
 					}
 				}
 			} catch (err) {
-				_didIteratorError5 = true;
-				_iteratorError5 = err;
+				_didIteratorError4 = true;
+				_iteratorError4 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion5 && _iterator5.return) {
-						_iterator5.return();
+					if (!_iteratorNormalCompletion4 && _iterator4.return) {
+						_iterator4.return();
 					}
 				} finally {
-					if (_didIteratorError5) {
-						throw _iteratorError5;
+					if (_didIteratorError4) {
+						throw _iteratorError4;
 					}
 				}
 			}
 		}
 
-		node.className = '';
+		node.setAttribute('id', id);
 
 		originalNode.parentNode.insertBefore(node, originalNode);
 		originalNode.removeAttribute('autoplay');
@@ -3863,9 +3833,9 @@ var HlsNativeRenderer = {
 
 			try {
 				for (var _iterator3 = events[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var _event2 = _step3.value;
+					var _event = _step3.value;
 
-					assignEvents(_event2);
+					assignEvents(_event);
 				}
 
 				/**
@@ -3894,11 +3864,28 @@ var HlsNativeRenderer = {
 			}
 
 			var assignHlsEvents = function assignHlsEvents(e, data) {
-				if (e !== 'ERROR') {
-					var _event = (0, _dom.createEvent)(e, node);
-					mediaElement.dispatchEvent(_event);
-				} else {
+				var event = (0, _dom.createEvent)(e, node);
+				event.data = data;
+				mediaElement.dispatchEvent(event);
+
+				if (e === 'hlsError') {
 					console.error(e, data);
+
+					// borrowed from http://dailymotion.github.io/hls.js/demo/
+					if (data.fatal) {
+						hlsPlayer.destroy();
+					} else {
+						switch (data.type) {
+							case 'mediaError':
+								hlsPlayer.recoverMediaError();
+								break;
+
+							case 'networkError':
+								hlsPlayer.startLoad();
+								break;
+
+						}
+					}
 				}
 			};
 
@@ -3909,44 +3896,14 @@ var HlsNativeRenderer = {
 			}
 		};
 
-		var filteredAttributes = ['id', 'src', 'style'];
-		var _iteratorNormalCompletion4 = true;
-		var _didIteratorError4 = false;
-		var _iteratorError4 = undefined;
-
-		try {
-			for (var _iterator4 = originalNode.attributes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var attribute = _step4.value;
-
-				if (attribute.specified && !filteredAttributes.includes(attribute.name)) {
-					node.setAttribute(attribute.name, attribute.value);
-				}
-			}
-		} catch (err) {
-			_didIteratorError4 = true;
-			_iteratorError4 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion4 && _iterator4.return) {
-					_iterator4.return();
-				}
-			} finally {
-				if (_didIteratorError4) {
-					throw _iteratorError4;
-				}
-			}
-		}
-
-		node.setAttribute('id', id);
-
 		if (mediaFiles && mediaFiles.length > 0) {
-			var _iteratorNormalCompletion5 = true;
-			var _didIteratorError5 = false;
-			var _iteratorError5 = undefined;
+			var _iteratorNormalCompletion4 = true;
+			var _didIteratorError4 = false;
+			var _iteratorError4 = undefined;
 
 			try {
-				for (var _iterator5 = mediaFiles[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-					var file = _step5.value;
+				for (var _iterator4 = mediaFiles[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+					var file = _step4.value;
 
 					if (_renderer.renderer.renderers[options.prefix].canPlayType(file.type)) {
 						node.src = file.src;
@@ -3954,22 +3911,22 @@ var HlsNativeRenderer = {
 					}
 				}
 			} catch (err) {
-				_didIteratorError5 = true;
-				_iteratorError5 = err;
+				_didIteratorError4 = true;
+				_iteratorError4 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion5 && _iterator5.return) {
-						_iterator5.return();
+					if (!_iteratorNormalCompletion4 && _iterator4.return) {
+						_iterator4.return();
 					}
 				} finally {
-					if (_didIteratorError5) {
-						throw _iteratorError5;
+					if (_didIteratorError4) {
+						throw _iteratorError4;
 					}
 				}
 			}
 		}
 
-		node.className = '';
+		node.setAttribute('id', id);
 
 		originalNode.parentNode.insertBefore(node, originalNode);
 		originalNode.removeAttribute('autoplay');
@@ -4526,9 +4483,9 @@ var DashNativeRenderer = {
 
 			try {
 				for (var _iterator3 = events[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var _event2 = _step3.value;
+					var _event = _step3.value;
 
-					assignEvents(_event2);
+					assignEvents(_event);
 				}
 
 				/**
@@ -4553,12 +4510,13 @@ var DashNativeRenderer = {
 				}
 			}
 
-			var assignMdashEvents = function assignMdashEvents(e, data) {
-				if (e !== 'error') {
-					var _event = (0, _dom.createEvent)(e.type, node);
-					mediaElement.dispatchEvent(_event);
-				} else {
-					console.error(e, data);
+			var assignMdashEvents = function assignMdashEvents(e) {
+				var event = (0, _dom.createEvent)(e.type, node);
+				event.data = e;
+				mediaElement.dispatchEvent(event);
+
+				if (e.type.toLowerCase() === 'error') {
+					console.error(e);
 				}
 			};
 
@@ -4569,44 +4527,14 @@ var DashNativeRenderer = {
 			}
 		};
 
-		var filteredAttributes = ['id', 'src', 'style'];
-		var _iteratorNormalCompletion4 = true;
-		var _didIteratorError4 = false;
-		var _iteratorError4 = undefined;
-
-		try {
-			for (var _iterator4 = originalNode.attributes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var attribute = _step4.value;
-
-				if (attribute.specified && !filteredAttributes.includes(attribute.name)) {
-					node.setAttribute(attribute.name, attribute.value);
-				}
-			}
-		} catch (err) {
-			_didIteratorError4 = true;
-			_iteratorError4 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion4 && _iterator4.return) {
-					_iterator4.return();
-				}
-			} finally {
-				if (_didIteratorError4) {
-					throw _iteratorError4;
-				}
-			}
-		}
-
-		node.setAttribute('id', id);
-
 		if (mediaFiles && mediaFiles.length > 0) {
-			var _iteratorNormalCompletion5 = true;
-			var _didIteratorError5 = false;
-			var _iteratorError5 = undefined;
+			var _iteratorNormalCompletion4 = true;
+			var _didIteratorError4 = false;
+			var _iteratorError4 = undefined;
 
 			try {
-				for (var _iterator5 = mediaFiles[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-					var file = _step5.value;
+				for (var _iterator4 = mediaFiles[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+					var file = _step4.value;
 
 					if (_renderer.renderer.renderers[options.prefix].canPlayType(file.type)) {
 						node.src = file.src;
@@ -4614,22 +4542,22 @@ var DashNativeRenderer = {
 					}
 				}
 			} catch (err) {
-				_didIteratorError5 = true;
-				_iteratorError5 = err;
+				_didIteratorError4 = true;
+				_iteratorError4 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion5 && _iterator5.return) {
-						_iterator5.return();
+					if (!_iteratorNormalCompletion4 && _iterator4.return) {
+						_iterator4.return();
 					}
 				} finally {
-					if (_didIteratorError5) {
-						throw _iteratorError5;
+					if (_didIteratorError4) {
+						throw _iteratorError4;
 					}
 				}
 			}
 		}
 
-		node.className = '';
+		node.setAttribute('id', id);
 
 		originalNode.parentNode.insertBefore(node, originalNode);
 		originalNode.removeAttribute('autoplay');

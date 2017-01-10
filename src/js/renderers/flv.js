@@ -249,15 +249,6 @@ const FlvNativeRenderer = {
 			}
 		};
 
-		let filteredAttributes = ['id', 'src', 'style'];
-		for (let attribute of originalNode.attributes) {
-			if (attribute.specified && !filteredAttributes.includes(attribute.name)) {
-				node.setAttribute(attribute.name, attribute.value);
-			}
-		}
-
-		node.setAttribute('id', id);
-
 		if (mediaFiles && mediaFiles.length > 0) {
 			for (let file of mediaFiles) {
 				if (renderer.renderers[options.prefix].canPlayType(file.type)) {
@@ -267,7 +258,7 @@ const FlvNativeRenderer = {
 			}
 		}
 
-		node.className = '';
+		node.setAttribute('id', id);
 
 		originalNode.parentNode.insertBefore(node, originalNode);
 		originalNode.removeAttribute('autoplay');

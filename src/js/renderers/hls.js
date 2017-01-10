@@ -292,12 +292,29 @@ const HlsNativeRenderer = {
 			 * @see https://github.com/dailymotion/hls.js/blob/master/API.md#runtime-events
 			 * @see https://github.com/dailymotion/hls.js/blob/master/API.md#errors
 			 */
-			let assignHlsEvents = (e, data) => {
-				if (e !== 'ERROR') {
-					let event = createEvent(e, node);
-					mediaElement.dispatchEvent(event);
-				} else {
+			const assignHlsEvents = function (e, data) {
+				let event = createEvent(e, node);
+				event.data = data;
+				mediaElement.dispatchEvent(event);
+
+				if (e === 'hlsError') {
 					console.error(e, data);
+
+					// borrowed from http://dailymotion.github.io/hls.js/demo/
+					if (data.fatal) {
+						hlsPlayer.destroy();
+					} else {
+						switch (data.type) {
+							case 'mediaError':
+								hlsPlayer.recoverMediaError();
+								break;
+
+							case 'networkError':
+								hlsPlayer.startLoad();
+								break;
+
+						}
+					}
 				}
 			};
 
@@ -308,15 +325,6 @@ const HlsNativeRenderer = {
 			}
 		};
 
-		let filteredAttributes = ['id', 'src', 'style'];
-		for (let attribute of originalNode.attributes) {
-			if (attribute.specified && !filteredAttributes.includes(attribute.name)) {
-				node.setAttribute(attribute.name, attribute.value);
-			}
-		}
-
-		node.setAttribute('id', id);
-
 		if (mediaFiles && mediaFiles.length > 0) {
 			for (let file of mediaFiles) {
 				if (renderer.renderers[options.prefix].canPlayType(file.type)) {
@@ -326,7 +334,7 @@ const HlsNativeRenderer = {
 			}
 		}
 
-		node.className = '';
+		node.setAttribute('id', id);
 
 		originalNode.parentNode.insertBefore(node, originalNode);
 		originalNode.removeAttribute('autoplay');

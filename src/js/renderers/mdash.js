@@ -236,12 +236,13 @@ let DashNativeRenderer = {
 			 * not using dashjs.MediaPlayer.events object
 			 * @see http://cdn.dashjs.org/latest/jsdoc/MediaPlayerEvents.html
 			 */
-			let assignMdashEvents = (e, data) => {
-				if (e !== 'error') {
-					let event = createEvent(e.type, node);
-					mediaElement.dispatchEvent(event);
-				} else {
-					console.error(e, data);
+			const assignMdashEvents = (e) => {
+				let event = createEvent(e.type, node);
+				event.data = e;
+				mediaElement.dispatchEvent(event);
+
+				if (e.type.toLowerCase() === 'error') {
+					console.error(e);
 				}
 			};
 
@@ -252,15 +253,6 @@ let DashNativeRenderer = {
 			}
 		};
 
-		let filteredAttributes = ['id', 'src', 'style'];
-		for (let attribute of originalNode.attributes) {
-			if (attribute.specified && !filteredAttributes.includes(attribute.name)) {
-				node.setAttribute(attribute.name, attribute.value);
-			}
-		}
-
-		node.setAttribute('id', id);
-
 		if (mediaFiles && mediaFiles.length > 0) {
 			for (let file of mediaFiles) {
 				if (renderer.renderers[options.prefix].canPlayType(file.type)) {
@@ -270,7 +262,7 @@ let DashNativeRenderer = {
 			}
 		}
 
-		node.className = '';
+		node.setAttribute('id', id);
 
 		originalNode.parentNode.insertBefore(node, originalNode);
 		originalNode.removeAttribute('autoplay');
