@@ -302,17 +302,16 @@ const FlashMediaElementRenderer = {
 			settings = [
 				'classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"',
 				'codebase="//download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab"',
-				'id="__' + flash.id + '"',
-				'width="' + flashWidth + '"',
-				'height="' + flashHeight + '"'
+				`id="__${flash.id }"`,
+				`width="${flashWidth}"`,
+				`height="${flashHeight}"`
 			];
 
 			if (!isVideo) {
 				settings.push('style="clip: rect(0 0 0 0); position: absolute;"');
 			}
 
-			specialIEContainer.outerHTML = `
-				<object ${settings.join(' ')}>
+			specialIEContainer.outerHTML = `<object ${settings.join(' ')}>
 				<param name="movie" value="${flash.options.pluginPath}${flash.options.filename}?x=${new Date()}" />' 
 				<param name="flashvars" value="${flashVars.join('&amp;')}" />
 				<param name="quality" value="high" />
@@ -321,7 +320,7 @@ const FlashMediaElementRenderer = {
 				<param name="allowScriptAccess" value="always" />
 				<param name="allowFullScreen" value="true" />
 				<div>${i18n.t('mejs.install-flash')}</div>
-				</object>`;
+			</object>`;
 
 		} else {
 
@@ -347,8 +346,7 @@ const FlashMediaElementRenderer = {
 				settings.push('style="clip: rect(0 0 0 0); position: absolute;"');
 			}
 
-			flash.flashWrapper.innerHTML =
-				`<embed ${settings.join(' ')}>`;
+			flash.flashWrapper.innerHTML = `<embed ${settings.join(' ')}>`;
 		}
 
 		flash.flashNode = flash.flashWrapper.lastChild;
