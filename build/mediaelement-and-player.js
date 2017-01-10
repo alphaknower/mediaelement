@@ -9282,9 +9282,7 @@ var HtmlMediaElement = {
 				return node[propName];
 			};
 
-			node['se' +
-			'' +
-			't' + capName] = function (value) {
+			node['set' + capName] = function (value) {
 				node[propName] = value;
 			};
 		};
