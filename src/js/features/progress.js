@@ -180,13 +180,13 @@ $.extend(MediaElementPlayer.prototype, {
 				switch (keyCode) {
 					case 37: // left
 					case 40: // Down
-						if (media.duration !== Infinity && !isNaN(media.duration)) {
+						if (media.duration !== Infinity) {
 							seekTime -= seekBackward;
 						}
 						break;
 					case 39: // Right
 					case 38: // Up
-						if (media.duration !== Infinity && !isNaN(media.duration)) {
+						if (media.duration !== Infinity) {
 							seekTime += seekForward;
 						}
 						break;
@@ -234,7 +234,7 @@ $.extend(MediaElementPlayer.prototype, {
 			}
 		}).on('click', (e) => {
 
-			if (media.duration !== Infinity && !isNaN(media.duration)) {
+			if (media.duration !== Infinity) {
 				let paused = media.paused;
 
 				if (!paused) {
@@ -255,7 +255,7 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// handle clicks
 		t.rail.on('mousedown touchstart', (e) => {
-			if (media.duration !== Infinity && !isNaN(media.duration)) {
+			if (media.duration !== Infinity) {
 				// only handle left clicks or touch
 				if (e.which === 1 || e.which === 0) {
 					mouseIsDown = true;
@@ -273,7 +273,7 @@ $.extend(MediaElementPlayer.prototype, {
 				}
 			}
 		}).on('mouseenter', (e) => {
-			if (media.duration !== Infinity && !isNaN(media.duration)) {
+			if (media.duration !== Infinity) {
 				mouseIsOver = true;
 				t.globalBind('mousemove.dur', (e) => {
 					handleMouseMove(e);
@@ -283,7 +283,7 @@ $.extend(MediaElementPlayer.prototype, {
 				}
 			}
 		}).on('mouseleave', () => {
-			if (media.duration !== Infinity && !isNaN(media.duration)) {
+			if (media.duration !== Infinity) {
 				mouseIsOver = false;
 				if (!mouseIsDown) {
 					t.globalUnbind('mousemove.dur');
@@ -298,7 +298,7 @@ $.extend(MediaElementPlayer.prototype, {
 		// If media is does not have a finite duration, remove progress bar interaction
 		// and indicate that is a live broadcast
 		media.addEventListener('progress', (e) => {
-			if (media.duration !== Infinity && !isNaN(media.duration)) {
+			if (media.duration !== Infinity) {
 				player.setProgressRail(e);
 				player.setCurrentRail(e);
 			} else if (!controls.find('.' + t.options.classPrefix + 'broadcast').length) {
@@ -309,7 +309,7 @@ $.extend(MediaElementPlayer.prototype, {
 
 		// current time
 		media.addEventListener('timeupdate', (e) => {
-			if (media.duration !== Infinity && !isNaN(media.duration)) {
+			if (media.duration !== Infinity ) {
 				player.setProgressRail(e);
 				player.setCurrentRail(e);
 				updateSlider(e);
@@ -320,7 +320,7 @@ $.extend(MediaElementPlayer.prototype, {
 		}, false);
 
 		t.container.on('controlsresize', (e) => {
-			if (media.duration !== Infinity && !isNaN(media.duration)) {
+			if (media.duration !== Infinity) {
 				player.setProgressRail(e);
 				player.setCurrentRail(e);
 			}
